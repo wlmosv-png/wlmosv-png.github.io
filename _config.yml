@@ -1,13 +1,13 @@
 # ============ 站点 ============
 title: 我们的倒数日
-subtitle: 1 月 24 日 · 我们的日子
-description: 1 月 24 日之后，日子开始有数。
+subtitle: 从 2026 年 1 月 24 日起，一天一天数。
+description: 这个站只做一件事：记录我们的点点滴滴。
 keywords:
   - 道歉
   - 我错了
   - 阳阳
   - 认错记录
-author: 一个知错就改的人
+author: PP&&YY
 language: zh-CN
 timezone: Asia/Shanghai
 
@@ -38,9 +38,10 @@ hidden_tags:
 
 # ============ 归档 ============
 index_generator:
-  path: ""
+  path: home
   per_page: 8
   order_by: -date
+
 
 archive_generator:
   per_page: 0
@@ -99,3 +100,6 @@ theme: butterfly
 
 # 部署不在这里。产物由 .github/workflows/deploy.yml 构建后交给 GitHub Pages，
 # 永远不要把 public/ 提交进仓库。
+
+skip_render:
+  - index.html

@@ -18,8 +18,8 @@ nav:
   fixed: false
 
 menu:
-  倒数日: /days/ || fas fa-heart
-  那封信: /posts/yangyang-i-am-sorry/#letter || fas fa-envelope-open-text
+  我们的日子: / || fas fa-heart
+
 
 # --------------------------------------
 # Code Blocks Settings
@@ -147,7 +147,7 @@ index_top_img_height:
 
 # The subtitle on homepage
 subtitle:
-  enable: true
+  enable: false
   effect: true
   typed_option:
     loop: true
@@ -252,13 +252,13 @@ noticeOutdate:
 footer:
   nav:
   owner:
-    enable: true
+    enable: false
     since: 2026
   # Copyright of theme and framework
   copyright:
     enable: true
     version: true
-  custom_text: 这个站点只做一件事 —— 把「我错了」说清楚
+  custom_text: PP&&YY
 
 # --------------------------------------
 # Aside Settings
@@ -278,7 +278,7 @@ aside:
     category: true
   card_author:
     enable: true
-    description:
+    description: 1 月 24 日之后，日子开始有数。
     button:
       enable: false
       icon: fab fa-github
