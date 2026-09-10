@@ -56,7 +56,7 @@ body::after{
 @keyframes tw{0%,100%{opacity:.05;transform:scale(.8)}50%{opacity:var(--star-op);transform:scale(1)}}
 main{position:relative;z-index:2;max-width:660px;margin:0 auto;padding:0 26px 88px}
 html.js .rise{opacity:0;transform:translateY(18px);
-  transition:opacity .9s var(--ease),transform .9s var(--ease)}
+  transition:opacity .75s var(--ease),transform .75s var(--ease)}
 html.js .rise.in{opacity:1;transform:none}
 .top{display:flex;align-items:center;justify-content:space-between;padding:26px 0 0}
 .brand{font-size:11px;letter-spacing:.34em;color:var(--ink2);font-weight:600}
@@ -295,7 +295,8 @@ html[data-theme="day"] #tbtn .moon{display:none}
   /* ---------- reveal ---------- */
   (function(){
     var els=[].slice.call(document.querySelectorAll('.rise'));
-    els.forEach(function(el,i){ el.style.transitionDelay=(0.06*i).toFixed(2)+'s'; });
+    els.forEach(function(el,i){ el.style.transitionDelay=(0.05*i).toFixed(2)+'s'; });
+    els.slice(0,4).forEach(function(el){ el.classList.add('in'); });
     if(!('IntersectionObserver' in window)||SYN){ els.forEach(function(el){el.classList.add('in');}); return; }
     var io=new IntersectionObserver(function(en){
       en.forEach(function(x){ if(x.isIntersecting){ x.target.classList.add('in'); io.unobserve(x.target); } });
