@@ -170,11 +170,54 @@
   if (!reduce) { driftLoop(); }
 })();
 
+
 /* ---------- 倒数日 ---------- */
 (function () {
   var q1 = function (s) { return document.querySelector(s); };
   var qAll = function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
   var DAY = 864e5;
+  var MARKUP = '<div class="ap-page" data-page data-anchor="2026-01-24T00:00:00+08:00">'
+    + '<div class="ap-aurora"><i></i><i></i><i></i></div><div class="ap-grain"></div>'
+    + '<section class="ap-stage"><p class="ap-kicker">JANUARY 24</p>'
+    + '<h2 class="ap-big"><span data-days>--</span><em>天</em></h2>'
+    + '<p class="ap-cap">认识你，到今天</p>'
+    + '<div class="ap-clock" data-clock><b>--</b><i>时</i><b>--</b><i>分</i><b>--</b><i>秒</i></div>'
+    + '<p class="ap-line" data-warn></p></section>'
+    + '<section class="ap-grid">'
+    + '<div class="ap-cell"><b data-stat="weeks">--</b><i>周</i></div>'
+    + '<div class="ap-cell"><b data-stat="hours">--</b><i>小时</i></div>'
+    + '<div class="ap-cell"><b data-stat="months">--</b><i>个月</i></div>'
+    + '<div class="ap-cell"><b data-stat="beats">--</b><i>次心跳</i></div></section>'
+    + '<section class="ap-next"><div class="ap-next-row"><span>下一个 1 月 24 日</span><b data-next>--</b><em>天</em></div>'
+    + '<div class="ap-bar"><i data-bar></i></div>'
+    + '<div class="ap-barfoot"><span data-passed>--%</span><span>这一轮已经走过</span></div></section>'
+    + '<a class="ap-jump" href="#letter" aria-label="往下">↓</a></div>';
+
+  function inject() {
+    if (q1('[data-page]')) return true;
+    var home = q1('.recent-posts'), art = q1('#article-container') || q1('#post');
+    if (!home && !art) return false;
+    var box = document.createElement('div');
+    box.innerHTML = MARKUP;
+    var node = box.firstChild;
+    if (home) { home.parentNode.insertBefore(node, home); home.style.display = 'none'; }
+    else { art.parentNode.insertBefore(node, art); }
+    if (!document.getElementById('letter')) {
+      var j = node.querySelector('.ap-jump');
+      if (j) j.setAttribute('href', '/posts/yangyang-i-am-sorry/');
+    }
+    return true;
+  }
+  if (!inject()) return;
+  document.body.classList.add('ap-day');
+  var page = q1('[data-page]');
+  var anchor = new Date(page.getAttribute('data-anchor') || '2026-01-24T00:00:00+08:00');
+  var bigEl = q1('[data-days]'), clockEl = q1('[data-clock]'), nextEl = q1('[data-next]');
+  var barEl = q1('[data-bar]'), passEl = q1('[data-passed]'), warnEl = q1('[data-warn]');
+  var cells = {};
+  qAll('[data-stat]').forEach(function (el) { cells[el.getAttribute('data-stat')] = el; });
+  if (warnEl) warnEl.textContent = anchor.getFullYear() + ' 年 1 月 24 日 · 起算';
+  var cb = clockEl ? qAll('[data-clock] b') : [];
   function p2(n) { return n < 10 ? '0' + n : '' + n; }
   function cm(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
   function monthSpan(a, b) {
@@ -183,58 +226,46 @@
     return m < 0 ? 0 : m;
   }
   function set(el, v) { if (el && el.textContent !== v) el.textContent = v; }
-  var page = q1('[data-page]');
-  document.body.classList.add('ap-day');
-  if (page) {
-    document.body.classList.add('ap-day');
-    var anchor = new Date(page.getAttribute('data-anchor') || '2026-01-24T00:00:00+08:00');
-    var bigEl = q1('[data-days]'), clockEl = q1('[data-clock]'), nextEl = q1('[data-next]');
-    var barEl = q1('[data-bar]'), passEl = q1('[data-passed]'), warnEl = q1('[data-warn]');
-    var cells = {};
-    qAll('[data-stat]').forEach(function (el) { cells[el.getAttribute('data-stat')] = el; });
-    if (warnEl) warnEl.textContent = anchor.getFullYear() + ' 年 1 月 24 日 · 起算';
-    var cb = clockEl ? qAll('[data-clock] b') : [];
-    (function tick() {
-      var now = new Date(), diff = now - anchor;
-      if (diff > 0) {
-        var days = Math.floor(diff / DAY);
-        if (bigEl && bigEl.textContent !== String(days)) {
-          bigEl.textContent = String(days);
-          bigEl.classList.remove('tick'); void bigEl.offsetWidth; bigEl.classList.add('tick');
-        }
-        var rest = diff - days * DAY;
-        if (cb[0]) cb[0].textContent = p2(Math.floor(rest / 36e5));
-        if (cb[1]) cb[1].textContent = p2(Math.floor(rest % 36e5 / 6e4));
-        if (cb[2]) cb[2].textContent = p2(Math.floor(rest % 6e4 / 1e3));
-        if (cells.weeks) cells.weeks.textContent = cm(Math.floor(days / 7));
-        if (cells.hours) cells.hours.textContent = cm(Math.floor(diff / 36e5));
-        if (cells.months) cells.months.textContent = cm(monthSpan(anchor, now));
-        if (cells.beats) cells.beats.textContent = cm(Math.floor(diff / 6e4 * 72));
-        var y = now.getFullYear(), next = new Date(y, 0, 24), prev = new Date(y, 0, 24);
-        if (next < now) next = new Date(y + 1, 0, 24);
-        prev = new Date(next.getFullYear() - 1, 0, 24);
-        set(nextEl, String(Math.ceil((next - now) / DAY)));
-        var pct = (now - prev) / (next - prev) * 100;
-        if (barEl) barEl.style.width = pct.toFixed(2) + '%';
-        set(passEl, pct.toFixed(1) + '%');
+  (function tick() {
+    var now = new Date(), diff = now - anchor;
+    if (diff > 0) {
+      var days = Math.floor(diff / DAY);
+      if (bigEl && bigEl.textContent !== String(days)) {
+        bigEl.textContent = String(days);
+        bigEl.classList.remove('tick'); void bigEl.offsetWidth; bigEl.classList.add('tick');
       }
-      setTimeout(tick, 1000);
-    })();
-    if (!window.matchMedia || !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      var stage = q1('.ap-page');
-      if (stage) {
-        var puff = function () {
-          var d = document.createElement('span');
-          d.className = 'ap-dust';
-          d.style.left = (Math.random() * 100) + '%';
-          d.style.animationDuration = (16 + Math.random() * 14) + 's';
-          d.style.opacity = (0.25 + Math.random() * 0.5).toFixed(2);
-          stage.appendChild(d);
-          setTimeout(function () { if (d.parentNode) d.parentNode.removeChild(d); }, 31000);
-          setTimeout(puff, 900 + Math.random() * 1400);
-        };
-        puff();
-      }
+      var rest = diff - days * DAY;
+      if (cb[0]) cb[0].textContent = p2(Math.floor(rest / 36e5));
+      if (cb[1]) cb[1].textContent = p2(Math.floor(rest % 36e5 / 6e4));
+      if (cb[2]) cb[2].textContent = p2(Math.floor(rest % 6e4 / 1e3));
+      if (cells.weeks) cells.weeks.textContent = cm(Math.floor(days / 7));
+      if (cells.hours) cells.hours.textContent = cm(Math.floor(diff / 36e5));
+      if (cells.months) cells.months.textContent = cm(monthSpan(anchor, now));
+      if (cells.beats) cells.beats.textContent = cm(Math.floor(diff / 6e4 * 72));
+      var y = now.getFullYear(), next = new Date(y, 0, 24);
+      if (next < now) next = new Date(y + 1, 0, 24);
+      var prev = new Date(next.getFullYear() - 1, 0, 24);
+      set(nextEl, String(Math.ceil((next - now) / DAY)));
+      var pct = (now - prev) / (next - prev) * 100;
+      if (barEl) barEl.style.width = pct.toFixed(2) + '%';
+      set(passEl, pct.toFixed(1) + '%');
+    }
+    setTimeout(tick, 1000);
+  })();
+  if (!window.matchMedia || !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    var stage = q1('.ap-page');
+    if (stage) {
+      var puff = function () {
+        var d = document.createElement('span');
+        d.className = 'ap-dust';
+        d.style.left = (Math.random() * 100) + '%';
+        d.style.animationDuration = (16 + Math.random() * 14) + 's';
+        d.style.opacity = (0.25 + Math.random() * 0.5).toFixed(2);
+        stage.appendChild(d);
+        setTimeout(function () { if (d.parentNode) d.parentNode.removeChild(d); }, 31000);
+        setTimeout(puff, 900 + Math.random() * 1400);
+      };
+      puff();
     }
   }
 })();

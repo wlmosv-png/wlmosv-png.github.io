@@ -171,3 +171,6 @@ body.ap-day .ap-toast{background:rgba(20,18,26,.92);color:#fff}
 @media (prefers-reduced-motion:reduce){body.ap-day .ap-big,body.ap-day .ap-aurora i,body.ap-day .ap-jump,body.ap-day .ap-big span.tick{animation:none!important}body.ap-day .ap-bar i{transition:none}}
 .ap-dust{position:absolute;top:-4%;left:50%;width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,.92);box-shadow:0 0 9px 1px rgba(255,190,205,.8);animation-name:apDust;animation-timing-function:linear;animation-fill-mode:forwards;pointer-events:none}
 @keyframes apDust{0%{transform:translateY(0) scale(.5);opacity:0}12%{opacity:.85}100%{transform:translateY(112vh) scale(1);opacity:0}}
+body.ap-day #recent-posts{display:none}
+body.ap-day #mobile-toc-button{display:none}
+body.ap-day #content_wrapper{padding-top:0}

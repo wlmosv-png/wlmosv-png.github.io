@@ -8,38 +8,9 @@ tags:
   - 给阳阳
 categories:
   - 只给你看
+description: 1 月 24 日 · 我们的日子
 comments: false
 ---
-
-<div class="ap-page" data-page data-anchor="2026-01-24T00:00:00+08:00">
-<div class="ap-aurora"><i></i><i></i><i></i></div>
-<div class="ap-grain"></div>
-
-<section class="ap-stage">
-<p class="ap-kicker">JANUARY 24</p>
-<h2 class="ap-big"><span data-days>--</span><em>天</em></h2>
-<p class="ap-cap">认识你，到今天</p>
-<div class="ap-clock" data-clock><b>--</b><i>时</i><b>--</b><i>分</i><b>--</b><i>秒</i></div>
-<p class="ap-line" data-warn></p>
-</section>
-
-<section class="ap-grid">
-<div class="ap-cell"><b data-stat="weeks">--</b><i>周</i></div>
-<div class="ap-cell"><b data-stat="hours">--</b><i>小时</i></div>
-<div class="ap-cell"><b data-stat="months">--</b><i>个月</i></div>
-<div class="ap-cell"><b data-stat="beats">--</b><i>次心跳</i></div>
-</section>
-
-<section class="ap-next">
-<div class="ap-next-row"><span>下一个 1 月 24 日</span><b data-next>--</b><em>天</em></div>
-<div class="ap-bar"><i data-bar></i></div>
-<div class="ap-barfoot"><span data-passed>--%</span><span>这一轮已经走过</span></div>
-</section>
-
-<a class="ap-jump" href="#letter" aria-label="往下">↓</a>
-</div>
-
-<!-- more -->
 
 <div class="ap-letter" id="letter">
 
