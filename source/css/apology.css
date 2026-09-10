@@ -174,3 +174,15 @@ body.ap-day .ap-toast{background:rgba(20,18,26,.92);color:#fff}
 body.ap-day #recent-posts{display:none}
 body.ap-day #mobile-toc-button{display:none}
 body.ap-day #content_wrapper{padding-top:0}
+/* 修正：露出导航、极光无接缝、整屏居中 */
+body.ap-day #page-header{display:block;background:transparent;min-height:0;height:auto;box-shadow:none}
+body.ap-day #page-site-info,body.ap-day #page-header .site-social,body.ap-day #page-header #page-post-title{display:none}
+body.ap-day #nav{background:transparent}
+body.ap-day #nav a,body.ap-day #nav .site-page{color:#efeae4}
+.ap-page{min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:12vh 6vw 6vh}
+.ap-aurora{inset:-60% -45% auto;height:230%;opacity:.42}
+.ap-aurora i{width:74vw;height:74vw}
+.ap-stage{padding:2vh 0 1vh}
+.ap-grid{margin:5vh auto 0}
+.ap-next{margin:4vh auto 0}
+.ap-jump{margin:5vh auto 0}
