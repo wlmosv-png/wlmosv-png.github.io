@@ -39,6 +39,8 @@ comments: false
 <a class="ap-jump" href="#letter" aria-label="往下">↓</a>
 </div>
 
+<!-- more -->
+
 <div class="ap-letter" id="letter">
 
 <div class="ap-hero"><span>阳</span><span>阳</span><span>，</span><span>我</span><span>错</span><span>了</span></div>
