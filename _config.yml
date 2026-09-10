@@ -1,17 +1,13 @@
 # ============ 站点 ============
-title: 运行时之下
-subtitle: Android ART / Xposed / MCP
-description: 把 Android 运行时的改造与验证做成可复现的工程记录。
+title: 阳阳，我错了
+subtitle: 一份公开的认错记录
+description: 写给阳阳的道歉站。这里没有技术文章，只有一句说了很多遍的话：我错了。
 keywords:
-  - Android
-  - Xposed
-  - LSPosed
-  - LibXposed
-  - ART
-  - DEX
-  - MCP
-  - 逆向
-author: wlmosv-png
+  - 道歉
+  - 我错了
+  - 阳阳
+  - 认错记录
+author: 一个知错就改的人
 language: zh-CN
 timezone: Asia/Shanghai
 

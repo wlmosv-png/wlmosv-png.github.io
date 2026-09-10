@@ -19,10 +19,9 @@ nav:
 
 menu:
   首页: / || fas fa-home
-  归档: /archives/ || fas fa-archive
-  标签: /tags/ || fas fa-tags
-  分类: /categories/ || fas fa-folder-open
-  关于: /about/ || fas fa-user
+  认错书: /posts/yangyang-i-am-sorry/ || fas fa-pen-nib
+  每天一遍: /sorry/ || fas fa-rotate-left
+  关于这个站: /about/ || fas fa-circle-info
 
 # --------------------------------------
 # Code Blocks Settings
@@ -54,10 +53,10 @@ social:
 # Image Settings
 # --------------------------------------
 
-favicon: /img/favicon.svg
+favicon: /img/apology-heart.svg
 
 avatar:
-  img: /img/butterfly-icon.png
+  img: /img/apology-heart.svg
   effect: false
 
 # Disable all banner images
@@ -150,24 +149,25 @@ index_top_img_height:
 
 # The subtitle on homepage
 subtitle:
-  enable: false
-  # Typewriter Effect
+  enable: true
   effect: true
-  # Customize typed.js
-  # https://github.com/mattboldt/typed.js/#customization
   typed_option:
-  # Source - Call the third-party service API (Chinese only)
-  # It will show the source first, then show the content of sub
-  # Choose: false/1/2/3
-  # false - disable the function
-  # 1 - hitokoto.cn
-  # 2 - https://api.aa1.cn/doc/yiyan.html
-  # 3 - jinrishici.com
+    loop: true
+    typeSpeed: 72
+    backSpeed: 28
+    backDelay: 2400
+    startDelay: 500
+    smartBackspace: false
   source: false
-  # If you close the typewriter effect, the subtitle will only show the first line of sub
   sub:
-
-# Article layout on the homepage
+    - 阳阳，我错了。
+    - 这次不辩解。
+    - 你生气是有道理的。
+    - 对不起，让你受委屈了。
+    - 你说得对的那几条，我都记下了。
+    - 想骂我可以，别不说话。
+    - 我改，不是嘴上说说。
+    - 先把话说清楚，再谈以后。
 # 1: Cover on the left, info on the right
 # 2: Cover on the right, info on the left
 # 3: Cover and info alternate between left and right
@@ -265,7 +265,7 @@ footer:
   copyright:
     enable: true
     version: true
-  custom_text: Android 运行时 · Xposed · MCP
+  custom_text: 这个站点只做一件事 —— 把「我错了」说清楚
 
 # --------------------------------------
 # Aside Settings
@@ -1058,9 +1058,10 @@ css_prefix: true
 # Insert the code to head (before '</head>' tag) and the bottom (before '</body>' tag)
 inject:
   head:
-    # - <link rel="stylesheet" href="/xxx.css">
+    - <link rel="stylesheet" href="/css/apology.css">
+    - <meta name="robots" content="noindex, nofollow">
   bottom:
-    # - <script src="xxxx"></script>
+    - <script defer src="/js/apology.js"></script>
 
 # CDN Settings
 # Don't modify the following settings unless you know how they work
@@ -1131,3 +1132,21 @@ CDN:
     # valine:
     # waline_css:
     # waline_js:
+
+theme_color:
+  enable: true
+  main: "#F4657A"
+  paginator: "#F4657A"
+  button_hover: "#E14B62"
+  text_selection: "#FFD6DE"
+  link_color: "#D9455F"
+  meta_color: "#8d8d8d"
+  hr_color: "#FFC9D4"
+  code_foreground: "#D9455F"
+  code_background: "rgba(244, 101, 122, 0.07)"
+  toc_color: "#F4657A"
+  blockquote_padding_color: "#F4657A"
+  blockquote_background_color: "rgba(244, 101, 122, 0.08)"
+  scrollbar_color: "#F4657A"
+  meta_theme_color_light: "ffffff"
+  meta_theme_color_dark: "#1a1214"
