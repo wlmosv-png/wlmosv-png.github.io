@@ -6,7 +6,7 @@
   --ap-hand: "Kaiti SC", "STKaiti", "KaiTi", "Songti SC", "PingFang SC", "Hiragino Sans GB", serif;
 }
 ::selection { background: rgba(244, 101, 122, 0.24); }
-#web_bg { background: linear-gradient(180deg, rgba(255, 226, 232, 0.55) 0%, rgba(255, 255, 255, 0) 420px), radial-gradient(900px 480px at 92% -6%, rgba(255, 196, 154, 0.30), rgba(255, 255, 255, 0) 62%); }
+#body-wrap { background: linear-gradient(180deg, rgba(255, 226, 232, 0.55) 0%, rgba(255, 255, 255, 0) 420px), radial-gradient(900px 480px at 92% -6%, rgba(255, 196, 154, 0.30), rgba(255, 255, 255, 0) 62%); }
 #site-title { font-family: var(--ap-hand); letter-spacing: .02em; }
 #subtitle { font-family: var(--ap-hand); font-size: 1.16em !important; opacity: .95; }
 #recent-posts > .recent-post-item {
