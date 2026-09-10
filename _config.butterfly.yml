@@ -18,7 +18,7 @@ nav:
   fixed: false
 
 menu:
-  倒数日: / || fas fa-heart
+  倒数日: /days/ || fas fa-heart
   那封信: /posts/yangyang-i-am-sorry/#letter || fas fa-envelope-open-text
 
 # --------------------------------------

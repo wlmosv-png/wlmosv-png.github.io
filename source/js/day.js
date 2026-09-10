@@ -48,3 +48,15 @@
   }
   tick(); setInterval(tick, 1000);
 })();
+
+(function () {
+  if (document.getElementById('days')) return;
+  var info = document.getElementById('site-info');
+  if (!info) return;
+  var b = document.createElement('p');
+  b.className = 'day-badge';
+  info.appendChild(b);
+  var A = Date.parse('2026-01-24T00:00:00+08:00');
+  var t = function () { b.textContent = '第 ' + Math.max(0, Math.floor((Date.now() - A) / 864e5)) + ' 天'; };
+  t(); setInterval(t, 6e4);
+})();
