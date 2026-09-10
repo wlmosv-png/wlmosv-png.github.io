@@ -55,18 +55,19 @@ body::after{
   animation-name:tw;animation-iteration-count:infinite;animation-timing-function:ease-in-out}
 @keyframes tw{0%,100%{opacity:.05;transform:scale(.8)}50%{opacity:var(--star-op);transform:scale(1)}}
 main{position:relative;z-index:2;max-width:660px;margin:0 auto;padding:0 26px 88px}
-.rise{opacity:0;transform:translateY(18px);
+html.js .rise{opacity:0;transform:translateY(18px);
   transition:opacity .9s var(--ease),transform .9s var(--ease)}
-.rise.in{opacity:1;transform:none}
+html.js .rise.in{opacity:1;transform:none}
 .top{display:flex;align-items:center;justify-content:space-between;padding:26px 0 0}
 .brand{font-size:11px;letter-spacing:.34em;color:var(--ink2);font-weight:600}
 #tbtn{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:transparent;
   color:var(--ink2);cursor:pointer;display:grid;place-items:center;padding:0;
   transition:border-color .25s,color .25s,transform .55s var(--ease)}
 #tbtn:hover{border-color:var(--line2);color:var(--ink);transform:rotate(-22deg)}
-#tbtn svg{width:17px;height:17px;display:block}
-html[data-theme="night"] .sun{display:none}
-html[data-theme="day"] .moon{display:none}
+#tbtn svg{width:17px;height:17px}
+#tbtn .ico{display:block}
+html[data-theme="night"] #tbtn .sun{display:none}
+html[data-theme="day"] #tbtn .moon{display:none}
 .eyebrow{margin:74px 0 0;font-size:11px;letter-spacing:.32em;color:var(--ink3);font-weight:500}
 .big{display:flex;align-items:flex-start;gap:.12em;margin:14px 0 0;line-height:.9;
   letter-spacing:-.03em;font-weight:200;font-variant-numeric:tabular-nums}
@@ -103,9 +104,10 @@ html[data-theme="day"] .moon{display:none}
 .ml.done .d{color:var(--ink3)}
 .ml.done .t::before{content:"";display:inline-block;width:9px;height:1px;background:var(--accent-dim);
   vertical-align:middle;margin-right:5px}
-.ml.next{border-color:var(--accent-dim);background:transparent}
+.ml.next{border-color:var(--accent-dim);background:transparent;animation:np 3.4s ease-in-out infinite}
 .ml.next .d{color:var(--accent)}
 .ml.next .t{color:var(--ink2)}
+@keyframes np{0%,100%{border-color:var(--accent-dim)}50%{border-color:var(--accent)}}
 .moons{margin:22px 0 0;font-size:13.5px;color:var(--ink3);letter-spacing:.02em}
 .moons b{font-family:var(--num);font-weight:500;color:var(--ink2)}
 /* ---- typewriter ---- */
@@ -129,7 +131,7 @@ html[data-theme="day"] .moon{display:none}
   .rise{opacity:1;transform:none}
 }
 </style>
-<script>(function(){try{var t=localStorage.getItem('ppyy-theme');if(!t){t=(window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches)?'day':'night'}document.documentElement.setAttribute('data-theme',t)}catch(e){}})();</script>
+<script>(function(){try{var t=localStorage.getItem('ppyy-theme');if(!t){t=(window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches)?'day':'night'}var r=document.documentElement;r.setAttribute('data-theme',t);r.className+=' js'}catch(e){}})();</script>
 </head>
 <body>
 <div id="sky" aria-hidden="true"></div>
@@ -137,8 +139,8 @@ html[data-theme="day"] .moon{display:none}
   <header class="top">
     <span class="brand">PP&amp;&amp;YY</span>
     <button id="tbtn" type="button" aria-label="切换白天黑夜主题">
-      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5z"/></svg>
-      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.4v2.2M12 19.4v2.2M2.4 12h2.2M19.4 12h2.2M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M18.8 5.2l-1.6 1.6M6.8 17.2l-1.6 1.6"/></svg>
+      <svg class="moon ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5z"/></svg>
+      <svg class="sun ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.4v2.2M12 19.4v2.2M2.4 12h2.2M19.4 12h2.2M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M18.8 5.2l-1.6 1.6M6.8 17.2l-1.6 1.6"/></svg>
     </button>
   </header>
 
@@ -297,8 +299,11 @@ html[data-theme="day"] .moon{display:none}
     if(!('IntersectionObserver' in window)||SYN){ els.forEach(function(el){el.classList.add('in');}); return; }
     var io=new IntersectionObserver(function(en){
       en.forEach(function(x){ if(x.isIntersecting){ x.target.classList.add('in'); io.unobserve(x.target); } });
-    },{rootMargin:'0px 0px -6% 0px',threshold:.12});
+    },{rootMargin:'0px 0px -8% 0px',threshold:0});
     els.forEach(function(el){io.observe(el);});
+    setTimeout(function(){els.forEach(function(el){el.classList.add('in');});},2200);
+    var un=function(){els.forEach(function(el){if(el.getBoundingClientRect().top<innerHeight*0.94){el.classList.add('in');}})};
+    addEventListener('scroll',un,{passive:true}); un();
   })();
 
   /* ---------- typewriter ---------- */
