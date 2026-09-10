@@ -1,1 +1,53 @@
-bmFtZTogZGVwbG95CgpvbjoKICBwdXNoOgogICAgYnJhbmNoZXM6IFttYWluXQogIHdvcmtmbG93X2Rpc3BhdGNoOgoKcGVybWlzc2lvbnM6CiAgY29udGVudHM6IHJlYWQKICBwYWdlczogd3JpdGUKICBpZC10b2tlbjogd3JpdGUKCmNvbmN1cnJlbmN5OgogIGdyb3VwOiBwYWdlcwogIGNhbmNlbC1pbi1wcm9ncmVzczogdHJ1ZQoKam9iczoKICBidWlsZDoKICAgIHJ1bnMtb246IHVidW50dS1sYXRlc3QKICAgIHN0ZXBzOgogICAgICAtIG5hbWU6IGNoZWNrb3V0CiAgICAgICAgdXNlczogYWN0aW9ucy9jaGVja291dEB2NAoKICAgICAgLSBuYW1lOiBzZXR1cCBub2RlCiAgICAgICAgdXNlczogYWN0aW9ucy9zZXR1cC1ub2RlQHY0CiAgICAgICAgd2l0aDoKICAgICAgICAgIG5vZGUtdmVyc2lvbjogMjQKICAgICAgICAgIGNhY2hlOiBucG0KCiAgICAgIC0gbmFtZTogaW5zdGFsbAogICAgICAgIHJ1bjogbnBtIGNpIC0tbm8tZnVuZCAtLW5vLWF1ZGl0CgogICAgICAtIG5hbWU6IGJ1aWxkCiAgICAgICAgcnVuOiBucHggaGV4byBjbGVhbiAmJiBucHggaGV4byBnZW5lcmF0ZQoKICAgICAgLSBuYW1lOiBzZXR1cCBwYWdlcwogICAgICAgIHVzZXM6IGFjdGlvbnMvY29uZmlndXJlLXBhZ2VzQHY1CgogICAgICAtIG5hbWU6IHVwbG9hZCBhcnRpZmFjdAogICAgICAgIHVzZXM6IGFjdGlvbnMvdXBsb2FkLXBhZ2VzLWFydGlmYWN0QHYzCiAgICAgICAgd2l0aDoKICAgICAgICAgIHBhdGg6IHB1YmxpYwoKICBkZXBsb3k6CiAgICBuZWVkczogYnVpbGQKICAgIHJ1bnMtb246IHVidW50dS1sYXRlc3QKICAgIGVudmlyb25tZW50OgogICAgICBuYW1lOiBnaXRodWItcGFnZXMKICAgICAgdXJsOiAke3sgc3RlcHMuZGVwbG95bWVudC5vdXRwdXRzLnBhZ2VfdXJsIH19CiAgICBzdGVwczoKICAgICAgLSBuYW1lOiBkZXBsb3kKICAgICAgICBpZDogZGVwbG95bWVudAogICAgICAgIHVzZXM6IGFjdGlvbnMvZGVwbG95LXBhZ2VzQHY0Cg==
+name: deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: install
+        run: npm ci --no-fund --no-audit
+
+      - name: build
+        run: npx hexo clean && npx hexo generate
+
+      - name: setup pages
+        uses: actions/configure-pages@v5
+
+      - name: upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

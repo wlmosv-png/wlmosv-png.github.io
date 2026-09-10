@@ -1,1 +1,101 @@
-IyA9PT09PT09PT09PT0g56uZ54K5ID09PT09PT09PT09PQp0aXRsZTog6Ziz6Ziz77yM5oiR6ZSZ5LqGCnN1YnRpdGxlOiDlj6rnu5nkvaDkuIDkuKrkurrnmoTorqTplJnorrDlvZUKZGVzY3JpcHRpb246IOWGmee7memYs+mYs+eahOmBk+atieermeOAgui/memHjOayoeacieaKgOacr+aWh+eroO+8jOWPquacieS4gOWPpeivtOS6huW+iOWkmumBjeeahOivne+8muaIkemUmeS6huOAggprZXl3b3JkczoKICAtIOmBk+atiQogIC0g5oiR6ZSZ5LqGCiAgLSDpmLPpmLMKICAtIOiupOmUmeiusOW9lQphdXRob3I6IOS4gOS4quefpemUmeWwseaUueeahOS6ugpsYW5ndWFnZTogemgtQ04KdGltZXpvbmU6IEFzaWEvU2hhbmdoYWkKCiMgPT09PT09PT09PT09IOWcsOWdgCA9PT09PT09PT09PT0KIyDnlKjmiLfpobXku5PlupPvvIzmjILlnKjmoLnot6/lvoTkuIvvvIzkuI3pnIDopoHliY3nvIAKdXJsOiBodHRwczovL3dsbW9zdi1wbmcuZ2l0aHViLmlvCnJvb3Q6IC8KIyDmjaLoh6rlrprkuYnln5/lkI3vvIjkvovlpoIgZnJvc3Rtb3VybmUueHl677yJ5pe25Y+q5pS56L+Z5Lik6KGM77yM5YW25L2Z5LiN5YqoCiMgdXJsOiBodHRwczovL2Zyb3N0bW91cm5lLnh5egojIHJvb3Q6IC8KCiMgPT09PT09PT09PT09IOebruW9lSA9PT09PT09PT09PT0KbmV3X3Bvc3RfbmFtZTogOnRpdGxlLm1kCmRlZmF1bHRfbGF5b3V0OiBwb3N0CnRpdGxlY2FzZTogZmFsc2UKZXh0ZXJuYWxfbGluazoKICBlbmFibGU6IHRydWUKICBmaWVsZDogc2l0ZQogIGV4Y2x1ZGU6CiAgICAtIGxvY2FsaG9zdApmaWxlbmFtZV9jYXNlOiAwCnJlbmRlcl9kcmFmdHM6IGZhbHNlCnBvc3RfYXNzZXRfZm9sZGVyOiBmYWxzZQpyZWxhdGl2ZV9saW5rOiBmYWxzZQpmdXR1cmU6IHRydWUKaGlkZGVuX3RhZ3M6CiAgLSBkcmFmdAoKIyA9PT09PT09PT09PT0g5b2S5qGjID09PT09PT09PT09PQppbmRleF9nZW5lcmF0b3I6CiAgcGF0aDogIiIKICBwZXJfcGFnZTogOAogIG9yZGVyX2J5OiAtZGF0ZQoKYXJjaGl2ZV9nZW5lcmF0b3I6CiAgcGVyX3BhZ2U6IDAKICB5ZWFybHk6IGZhbHNlCiAgbW9udGhseTogZmFsc2UKICBkYWlseTogZmFsc2UKCmRhdGVfZm9ybWF0OiBZWVlZLU1NLURECnRpbWVfZm9ybWF0OiBISDptbTpzcwp1cGRhdGVkX3NpbmNlOiAyMDI2LTA5LTAxCnVwZGF0ZWRfb3B0aW9uOiAzME0KCiMgPT09PT09PT09PT09IOaWh+eroCA9PT09PT09PT09PT0KcGVybWFsaW5rOiBwb3N0cy86dGl0bGUvCnBlcm1hbGlua19kZWZhdWx0czoKcHJldHR5X3VybHM6CiAgdHJhaWxpbmdfaW5kZXg6IHRydWUKICB0cmFpbGluZ19odG1sOiB0cnVlCgojID09PT09PT09PT09PSDku6PnoIHlnZcgPT09PT09PT09PT09CmhpZ2hsaWdodDoKICBlbmFibGU6IHRydWUKICBsaW5lX251bWJlcjogdHJ1ZQogIGhsanNfc2V0dGluZ3M6CiAgICBjb3B5OiB0cnVlCiAgICBsYW5nOiB0cnVlCiAgYXV0b19kZXRlY3Q6IGZhbHNlCiAgdGFiX3JlcGxhY2U6ICIiCiAgd3JhcDogdHJ1ZQogIHByZV9jbGFzczogaGlnaGxpZ2h0CgojID09PT09PT09PT09PSDliIbnsbsgLyDmoIfnrb4gPT09PT09PT09PT09CmNhdGVnb3J5X21hcDogY2F0ZWdvcmllcwp0YWdfbWFwOiB0YWdzCmRlZmF1bHRfY2F0ZWdvcnk6IOacquWIhuexuwoKIyA9PT09PT09PT09PT0g5YiG6aG15LiOZmVlZCA9PT09PT09PT09PT0KcGVyX3BhZ2U6IDgKcGFnaW5hdGlvbl9kaXI6IHBhZ2UKCnNpdGVtYXA6CiAgcGF0aDogc2l0ZW1hcC54bWwKZmVlZDoKICB0eXBlOiBhdG9tCiAgcGF0aDogYXRvbS54bWwKICBsaW1pdDogMjAKICBodWI6CgpzZWFyY2g6CiAgcGF0aDogbG9jYWwtc2VhcmNoLnhtbAogIGZpZWxkOiBwb3N0CiAgZm9ybWF0OiBoaXQKCiMgPT09PT09PT09PT09IOS4u+mimCA9PT09PT09PT09PT0KdGhlbWU6IGJ1dHRlcmZseQoKIyDpg6jnvbLkuI3lnKjov5nph4zjgILkuqfniannlLEgLmdpdGh1Yi93b3JrZmxvd3MvZGVwbG95LnltbCDmnoTlu7rlkI7kuqTnu5kgR2l0SHViIFBhZ2Vz77yMCiMg5rC46L+c5LiN6KaB5oqKIHB1YmxpYy8g5o+Q5Lqk6L+b5LuT5bqT44CCCg==
+# ============ 站点 ============
+title: 阳阳，我错了
+subtitle: 只给你一个人的认错记录
+description: 写给阳阳的道歉站。这里没有技术文章，只有一句说了很多遍的话：我错了。
+keywords:
+  - 道歉
+  - 我错了
+  - 阳阳
+  - 认错记录
+author: 一个知错就改的人
+language: zh-CN
+timezone: Asia/Shanghai
+
+# ============ 地址 ============
+# 用户页仓库，挂在根路径下，不需要前缀
+url: https://wlmosv-png.github.io
+root: /
+# 换自定义域名（例如 frostmourne.xyz）时只改这两行，其余不动
+# url: https://frostmourne.xyz
+# root: /
+
+# ============ 目录 ============
+new_post_name: :title.md
+default_layout: post
+titlecase: false
+external_link:
+  enable: true
+  field: site
+  exclude:
+    - localhost
+filename_case: 0
+render_drafts: false
+post_asset_folder: false
+relative_link: false
+future: true
+hidden_tags:
+  - draft
+
+# ============ 归档 ============
+index_generator:
+  path: ""
+  per_page: 8
+  order_by: -date
+
+archive_generator:
+  per_page: 0
+  yearly: false
+  monthly: false
+  daily: false
+
+date_format: YYYY-MM-DD
+time_format: HH:mm:ss
+updated_since: 2026-09-01
+updated_option: 30M
+
+# ============ 文章 ============
+permalink: posts/:title/
+permalink_defaults:
+pretty_urls:
+  trailing_index: true
+  trailing_html: true
+
+# ============ 代码块 ============
+highlight:
+  enable: true
+  line_number: true
+  hljs_settings:
+    copy: true
+    lang: true
+  auto_detect: false
+  tab_replace: ""
+  wrap: true
+  pre_class: highlight
+
+# ============ 分类 / 标签 ============
+category_map: categories
+tag_map: tags
+default_category: 未分类
+
+# ============ 分页与feed ============
+per_page: 8
+pagination_dir: page
+
+sitemap:
+  path: sitemap.xml
+feed:
+  type: atom
+  path: atom.xml
+  limit: 20
+  hub:
+
+search:
+  path: local-search.xml
+  field: post
+  format: hit
+
+# ============ 主题 ============
+theme: butterfly
+
+# 部署不在这里。产物由 .github/workflows/deploy.yml 构建后交给 GitHub Pages，
+# 永远不要把 public/ 提交进仓库。

@@ -1,1 +1,8 @@
-LS0tCnRpdGxlOiB7eyB0aXRsZSB9fQpkYXRlOiB7eyBkYXRlIH19CmNvbW1lbnRzOiBmYWxzZQpkZXNjcmlwdGlvbjoKLS0tCgoK
+---
+title: {{ title }}
+date: {{ date }}
+comments: false
+description:
+---
+
+

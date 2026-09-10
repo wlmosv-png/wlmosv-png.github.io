@@ -1,1 +1,5 @@
-PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCIgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0Ij4KICA8cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHJ4PSIxNCIgZmlsbD0iI2ZmZjFmMyIvPgogIDxwYXRoIGQ9Ik0zMiA1MUMyMCA0MyAxMiAzNi40IDEyIDI3LjYgMTIgMjEuMiAxNyAxNi41IDIyLjkgMTYuNWMzLjcgMCA3IDIgOS4xIDUgMi4xLTMgNS40LTUgOS4xLTVDNDcgMTYuNSA1MiAyMS4yIDUyIDI3LjYgNTIgMzYuNCA0NCA0MyAzMiA1MXoiIGZpbGw9IiNmNDY1N2EiLz4KICA8dGV4dCB4PSIzMiIgeT0iMzgiIGZvbnQtc2l6ZT0iMTMiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNmZmYiIGZvbnQtZmFtaWx5PSJQaW5nRmFuZyBTQywgSGVsdmV0aWNhLCBzYW5zLXNlcmlmIj7plJnkuoY8L3RleHQ+Cjwvc3ZnPgo=
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" rx="14" fill="#fff1f3"/>
+  <path d="M32 51C20 43 12 36.4 12 27.6 12 21.2 17 16.5 22.9 16.5c3.7 0 7 2 9.1 5 2.1-3 5.4-5 9.1-5C47 16.5 52 21.2 52 27.6 52 36.4 44 43 32 51z" fill="#f4657a"/>
+  <text x="32" y="38" font-size="13" text-anchor="middle" fill="#fff" font-family="PingFang SC, Helvetica, sans-serif">错了</text>
+</svg>

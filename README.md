@@ -1,1 +1,17 @@
-IyDpmLPpmLPvvIzmiJHplJnkuoYKCuS4gOS4quWPquWBmuiupOmUmeiusOW9leeahOermeeCueOAgkhleG8gOCArIEJ1dHRlcmZseSA177yMcHVzaCBtYWluIOiHquWKqOmDqOe9suOAggoKLSDpppbpobXvvJrkuIDlsIHpgJDmnaHorqTpoobnmoTkv6EKLSAvc29ycnkvIO+8muS4gOaVtOWxj+OAjOaIkemUmeS6huOAje+8jOeCueS4gOS4i+WKoOS4gOWPpQotIOWOn+iwheWAvOWPque7n+iuoe+8jOS4jeiHquWKqOa2qOa7oQoKIyMg5pS55paH5qGICgrlhoXlrrnpg73lnKggc291cmNlLyDkuIvvvIzmlLnlrozmjqggbWFpbiDljbPlj6/jgIIKCiMjIOmDqOe9sgoKR2l0SHViIEFjdGlvbnPvvJouZ2l0aHViL3dvcmtmbG93cy9kZXBsb3kueW1sIOi3kSBoZXhvIGdlbmVyYXRl77yM5Lqn54mp5Y+R5YiwIFBhZ2Vz44CCCgrmlbTnq5nlr7nmkJzntKLlvJXmk47lhbPpl63mlLblvZXvvIhtZXRhIHJvYm90cyBub2luZGV477yJ44CCCg==
+# 阳阳，我错了
+
+一个只做认错记录的站点。Hexo 8 + Butterfly 5，push main 自动部署。
+
+- 首页：一封逐条认领的信
+- /sorry/ ：一整屏「我错了」，点一下加一句
+- 原谅值只统计，不自动涨满
+
+## 改文案
+
+内容都在 source/ 下，改完推 main 即可。
+
+## 部署
+
+GitHub Actions：.github/workflows/deploy.yml 跑 hexo generate，产物发到 Pages。
+
+整站对搜索引擎关闭收录（meta robots noindex）。

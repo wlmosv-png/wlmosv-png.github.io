@@ -1,1 +1,29 @@
-ewogICJuYW1lIjogIndsbW9zdi1wbmcuZ2l0aHViLmlvIiwKICAidmVyc2lvbiI6ICIxLjAuMCIsCiAgInByaXZhdGUiOiB0cnVlLAogICJkZXNjcmlwdGlvbiI6ICJIZXhvIHNvdXJjZSBmb3IgdGhlIHdsbW9zdi1wbmcgR2l0SHViIFBhZ2VzIHNpdGUuIiwKICAiaGV4byI6IHsKICAgICJ2ZXJzaW9uIjogIjguMS4yIgogIH0sCiAgInNjcmlwdHMiOiB7CiAgICAiYnVpbGQiOiAiaGV4byBjbGVhbiAmJiBoZXhvIGdlbmVyYXRlIiwKICAgICJkZXYiOiAiaGV4byBzZXJ2ZXIgLXAgNDAwMCIsCiAgICAibmV3IjogImhleG8gbmV3IgogIH0sCiAgImRlcGVuZGVuY2llcyI6IHsKICAgICJoZXhvIjogIl44LjEuMiIsCiAgICAiaGV4by1nZW5lcmF0b3ItYXJjaGl2ZSI6ICJeMi4wLjAiLAogICAgImhleG8tZ2VuZXJhdG9yLWNhdGVnb3J5IjogIl4yLjAuMCIsCiAgICAiaGV4by1nZW5lcmF0b3ItZmVlZCI6ICJeNC4wLjAiLAogICAgImhleG8tZ2VuZXJhdG9yLWluZGV4IjogIl40LjAuMCIsCiAgICAiaGV4by1nZW5lcmF0b3Itc2VhcmNoZGIiOiAiXjEuNS4wIiwKICAgICJoZXhvLWdlbmVyYXRvci1zaXRlbWFwIjogIl4zLjAuMSIsCiAgICAiaGV4by1nZW5lcmF0b3ItdGFnIjogIl4yLjAuMCIsCiAgICAiaGV4by1yZW5kZXJlci1tYXJrZWQiOiAiXjcuMC4xIiwKICAgICJoZXhvLXJlbmRlcmVyLXB1ZyI6ICJeMy4wLjAiLAogICAgImhleG8tcmVuZGVyZXItc3R5bHVzIjogIl4zLjAuMSIsCiAgICAiaGV4by1zZXJ2ZXIiOiAiXjMuMC4wIiwKICAgICJoZXhvLXRoZW1lLWJ1dHRlcmZseSI6ICJeNS43LjAiCiAgfQp9Cg==
+{
+  "name": "wlmosv-png.github.io",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Hexo source for the wlmosv-png GitHub Pages site.",
+  "hexo": {
+    "version": "8.1.2"
+  },
+  "scripts": {
+    "build": "hexo clean && hexo generate",
+    "dev": "hexo server -p 4000",
+    "new": "hexo new"
+  },
+  "dependencies": {
+    "hexo": "^8.1.2",
+    "hexo-generator-archive": "^2.0.0",
+    "hexo-generator-category": "^2.0.0",
+    "hexo-generator-feed": "^4.0.0",
+    "hexo-generator-index": "^4.0.0",
+    "hexo-generator-searchdb": "^1.5.0",
+    "hexo-generator-sitemap": "^3.0.1",
+    "hexo-generator-tag": "^2.0.0",
+    "hexo-renderer-marked": "^7.0.1",
+    "hexo-renderer-pug": "^3.0.0",
+    "hexo-renderer-stylus": "^3.0.1",
+    "hexo-server": "^3.0.0",
+    "hexo-theme-butterfly": "^5.7.0"
+  }
+}

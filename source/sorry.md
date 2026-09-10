@@ -1,1 +1,28 @@
-LS0tCnRpdGxlOiDmr4/lpKnkuIDpgY0KZGF0ZTogMjAyNi0wOS0xMCAxNTo0MDowMApwZXJtYWxpbms6IHNvcnJ5L2luZGV4Lmh0bWwKY29tbWVudHM6IGZhbHNlCnRvcF9pbWc6IGZhbHNlCmRlc2NyaXB0aW9uOiDmiJHlj6ror7Tov5nkuIDlj6XvvIzor7TliLDkvaDlkKzop4HkuLrmraLjgIIKLS0tCgo8ZGl2IGNsYXNzPSJhcC1oZXJvIHNtYWxsIj48c3Bhbj7miJE8L3NwYW4+PHNwYW4+5LiNPC9zcGFuPjxzcGFuPuivtDwvc3Bhbj48c3Bhbj7liIY8L3NwYW4+PHNwYW4+5omLPC9zcGFuPjwvZGl2PgoKPHAgY2xhc3M9InNvcnJ5LW5vdGUiPuaIkeiDveivtOeahOWwsei/meS4gOWPpeOAguS9oOimgeaIkeW/teWHoOmBjemDveihjO+8jOW/teWIsOS9oOiAs+actei1t+iMp+S4uuatouOAgjwvcD4KCjxkaXYgY2xhc3M9InNvcnJ5LWJveCIgZGF0YS13b3JkPgo8cCBjbGFzcz0ic29ycnktd29yZCIgZGF0YS13b3JkLXRleHQ+6Ziz6Ziz77yM5oiR5oOz5L2g44CCPC9wPgo8ZGl2IGNsYXNzPSJzb3JyeS1hY3RzIj4KPGJ1dHRvbiB0eXBlPSJidXR0b24iIGNsYXNzPSJzb3JyeS1idG4iIGRhdGEtYWN0PSJ3b3JkIj7lho3or7TkuIDlj6U8L2J1dHRvbj4KPGJ1dHRvbiB0eXBlPSJidXR0b24iIGNsYXNzPSJzb3JyeS1idG4gZ2hvc3QiIGRhdGEtYWN0PSJtaW5lIj7ov5nmmK/miJHmrKDkvaDnmoQ8L2J1dHRvbj4KPC9kaXY+CjxwIGNsYXNzPSJhcC1kYXlzIiBkYXRhLWRheXM+PC9wPgo8L2Rpdj4KCjxkaXYgY2xhc3M9IndhbGwtaGVhZCI+PHNwYW4gZGF0YS13YWxsY291bnQ+5oiR6ZSZ5LqGIMOXIDA8L3NwYW4+PHNwYW4+5q+P5LiA5Y+l6YO9566X5pWwPC9zcGFuPjwvZGl2Pgo8ZGl2IGNsYXNzPSJ3YWxsIiBkYXRhLXdhbGw+PC9kaXY+CjxkaXYgY2xhc3M9IndhbGwtY3RsIj4KPGJ1dHRvbiB0eXBlPSJidXR0b24iIGNsYXNzPSJzb3JyeS1idG4iIGRhdGEtYWN0PSJtb3JlIj7lho3liqDkuInljYHlj6U8L2J1dHRvbj4KPGJ1dHRvbiB0eXBlPSJidXR0b24iIGNsYXNzPSJzb3JyeS1idG4gZ2hvc3QiIGRhdGEtYWN0PSJjbGVhciI+5riF56m6PC9idXR0b24+CjwvZGl2Pgo=
+---
+title: 每天一遍
+date: 2026-09-10 15:40:00
+permalink: sorry/index.html
+comments: false
+top_img: false
+description: 我只说这一句，说到你听见为止。
+---
+
+<div class="ap-hero small"><span>我</span><span>不</span><span>说</span><span>分</span><span>手</span></div>
+
+<p class="sorry-note">我能说的就这一句。你要我念几遍都行，念到你耳朵起茧为止。</p>
+
+<div class="sorry-box" data-word>
+<p class="sorry-word" data-word-text>阳阳，我想你。</p>
+<div class="sorry-acts">
+<button type="button" class="sorry-btn" data-act="word">再说一句</button>
+<button type="button" class="sorry-btn ghost" data-act="mine">这是我欠你的</button>
+</div>
+<p class="ap-days" data-days></p>
+</div>
+
+<div class="wall-head"><span data-wallcount>我错了 × 0</span><span>每一句都算数</span></div>
+<div class="wall" data-wall></div>
+<div class="wall-ctl">
+<button type="button" class="sorry-btn" data-act="more">再加三十句</button>
+<button type="button" class="sorry-btn ghost" data-act="clear">清空</button>
+</div>

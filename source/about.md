@@ -1,1 +1,16 @@
-LS0tCnRpdGxlOiDlhbPkuo7ov5nkuKrnq5kKZGF0ZTogMjAyNi0wOS0xMCAxMDowMDowMApwZXJtYWxpbms6IGFib3V0L2luZGV4Lmh0bWwKY29tbWVudHM6IGZhbHNlCmRlc2NyaXB0aW9uOiDkuIDkuKrlj6roo4XlvpfkuIvkuIDlj6Xor53nmoTlsI/nq5njgIIKLS0tCgrlroPlvojlsI/vvIzoo4XkuI3kuIvliKvnmoTjgIIKCuaIkee7memYs+mYs+W7uuS6huS4quWcsOaWue+8jOS4k+mXqOaUvuaIkeW9k+mdouivtOS4jeWujOeahOivneOAgui/memHjOS4jeabtOaWsOaKgOacr++8jOS4jeWGmemaj+eslO+8jOS4jeaUvuS7u+S9lee7meWIq+S6uueci+eahOS4nOilv+OAggoK5ZOq5aSp5L2g5omT5byA5a6D77yM55yL6KeB55qE6L+Y5piv6L+Z5Yeg5Y+l77yM6YKj5bCx5piv5oiR6L+Y5Zyo6K+05ZCM5LiA5Y+l6K+d44CCCgotIFvorqTplJnkuaZdKC9wb3N0cy95YW5neWFuZy1pLWFtLXNvcnJ5Lykg4oCU4oCUIOaIkeaKiuivneS4gOasoeivtOWFqAotIFvmr4/lpKnkuIDpgY1dKC9zb3JyeS8pIOKAlOKAlCDmiJHlj6rlpI3or7vpgqPkuIDlj6UK
+---
+title: 关于这个站
+date: 2026-09-10 10:00:00
+permalink: about/index.html
+comments: false
+description: 一个只装得下一句话的小站。
+---
+
+它很小，装不下别的。
+
+我给阳阳建了个地方，专门放我当面说不完的话。这里不更新技术，不写随笔，不放任何给别人看的东西。
+
+哪天你打开它，看见的还是这几句，那就是我还在说同一句话。
+
+- [认错书](/posts/yangyang-i-am-sorry/) —— 我把话一次说全
+- [每天一遍](/sorry/) —— 我只复读那一句
