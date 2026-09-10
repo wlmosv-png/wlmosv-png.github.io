@@ -1,17 +1,1 @@
----
-title: {{ title }}
-date: {{ date }}
-tags:
-categories:
-cover:
-description:
-# cover 留空则文章页无封面；description 手写成一句人话，别让它退化成正文前 200 字
----
-
-<!--
-写之前三条：
-1. 第一段给结论或者给事故现场，不要给背景。
-2. 每个数字标来源和时间（"采自 2026-09-09 01:35"），没有来源的数字删掉。
-3. 结尾留一个没解决的问题。全篇都想明白了说明这篇不该发。
-删掉这三行注释再提交。正文 ≤ 1800 字。
--->
+LS0tCnRpdGxlOiB7eyB0aXRsZSB9fQpkYXRlOiB7eyBkYXRlIH19CnRhZ3M6CmNhdGVnb3JpZXM6CmNvdmVyOgpkZXNjcmlwdGlvbjoKIyBjb3ZlciDnlZnnqbrliJnmlofnq6DpobXml6DlsIHpnaLvvJtkZXNjcmlwdGlvbiDmiYvlhpnmiJDkuIDlj6Xkurror53vvIzliKvorqnlroPpgIDljJbmiJDmraPmlofliY0gMjAwIOWtlwotLS0KCjwhLS0K5YaZ5LmL5YmN5LiJ5p2h77yaCjEuIOesrOS4gOautee7mee7k+iuuuaIluiAhee7meS6i+aVheeOsOWcuu+8jOS4jeimgee7meiDjOaZr+OAggoyLiDmr4/kuKrmlbDlrZfmoIfmnaXmupDlkozml7bpl7TvvIgi6YeH6IeqIDIwMjYtMDktMDkgMDE6MzUi77yJ77yM5rKh5pyJ5p2l5rqQ55qE5pWw5a2X5Yig5o6J44CCCjMuIOe7k+WwvueVmeS4gOS4quayoeino+WGs+eahOmXrumimOOAguWFqOevh+mDveaDs+aYjueZveS6huivtOaYjui/meevh+S4jeivpeWPkeOAggrliKDmjonov5nkuInooYzms6jph4rlho3mj5DkuqTjgILmraPmlocg4omkIDE4MDAg5a2X44CCCi0tPgo=
