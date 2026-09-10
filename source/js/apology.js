@@ -7,6 +7,9 @@
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var LINES = ["我错了", "我不分", "我想你", "对不起", "你回来", "别不说话", "我爱你", "我接着", "不怪你", "是我不好"];
   var WORDS = [
+    "我以后想要什么直接讲，不让你猜。",
+    "你递上来的台阶，我以后都踩着下来。",
+    "我那些脾气在你那儿要付多少利息，昨晚才算清。",
     "阳阳，我想你。",
     "我不分。这句话我一个字都不改。",
     "对不起，昨晚是我把你推远的。",
@@ -24,7 +27,6 @@
     "我昨晚没拦你。今天不犯这个错。",
     "你妈最近身体怎么样，这个月手头紧不紧——我都想接着问。",
     "我手机第一屏是你的照片，我不想换。",
-    "你哭了也不给我看那次，我到现在都心疼。",
     "原谅我不着急，你先把自己气顺。",
     "阳阳，我们把昨晚那句重说一次。"];
   var order = [], oi = 0;
@@ -88,7 +90,7 @@
       var mins = Math.floor(m / 60000), days = Math.floor(mins / 1440),
         hrs = Math.floor((mins % 1440) / 60), mm = mins % 60;
       host.className = "ap-since";
-      host.innerHTML = "从昨晚那句话到现在，已经 <b>" + days + "</b> 天 <b>" + hrs + "</b> 小时 <b>" + two(mm) + "</b> 分。"
+      host.innerHTML = "从凌晨那句话到现在，已经 <b>" + days + "</b> 天 <b>" + hrs + "</b> 小时 <b>" + two(mm) + "</b> 分。"
         + "<span class=\"ap-since-sub\">这段时间里我没有改过一次主意。</span>";
     }
     tick(); setInterval(tick, 20000);
