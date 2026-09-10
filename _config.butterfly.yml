@@ -160,6 +160,7 @@ subtitle:
   sub:
     - 1 月 24 日
     - 我们的日子
+    - 我不说分手。
 # 1: Cover on the left, info on the right
 # 2: Cover on the right, info on the left
 # 3: Cover and info alternate between left and right
@@ -279,12 +280,12 @@ aside:
     enable: true
     description:
     button:
-      enable: true
+      enable: false
       icon: fab fa-github
       text: Follow Me
       link: https://github.com/xxxxxx
   card_announcement:
-    enable: true
+    enable: false
     content: This is my Blog
   card_recent_post:
     enable: true
@@ -1051,9 +1052,11 @@ css_prefix: true
 inject:
   head:
     - <link rel="stylesheet" href="/css/apology.css">
+    - <link rel="stylesheet" href="/css/day.css">
     - <meta name="robots" content="noindex, nofollow">
   bottom:
     - <script defer src="/js/apology.js"></script>
+    - <script defer src="/js/day.js"></script>
 
 # CDN Settings
 # Don't modify the following settings unless you know how they work

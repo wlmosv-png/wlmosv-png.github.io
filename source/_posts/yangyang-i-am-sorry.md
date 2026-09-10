@@ -1,14 +1,13 @@
 ---
-title: 我们的倒数日
+title: 阳阳，我错了
 date: 2026-09-10 05:40:00
 updated: 2026-09-10 16:00:00
-sticky: 1
 top_img: false
 tags:
   - 给阳阳
 categories:
   - 只给你看
-description: 1 月 24 日 · 我们的日子
+description: 我不分。
 comments: false
 ---
 
@@ -21,6 +20,12 @@ comments: false
 > 凌晨五点多的时候，你说了一句分手。你说完就侧过身去，我一个人睁着眼到天亮。
 > 我这一整天没干什么，就把昨晚从头到尾想了几遍，想明白一件以前没细想过的事：你不是当场说的，你是熬了一整夜才说的。
 > 那中间隔了多少东西，我不敢数。
+
+</div>
+
+<!-- more -->
+
+<div class="ap-letter">
 
 ## 「分手」这两个字，我不接
 
