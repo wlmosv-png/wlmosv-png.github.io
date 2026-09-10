@@ -1,0 +1,105 @@
+# ============ 站点 ============
+title: 运行时之下
+subtitle: Android ART / Xposed / MCP
+description: 把 Android 运行时的改造与验证做成可复现的工程记录。
+keywords:
+  - Android
+  - Xposed
+  - LSPosed
+  - LibXposed
+  - ART
+  - DEX
+  - MCP
+  - 逆向
+author: wlmosv-png
+language: zh-CN
+timezone: Asia/Shanghai
+
+# ============ 地址 ============
+# 用户页仓库，挂在根路径下，不需要前缀
+url: https://wlmosv-png.github.io
+root: /
+# 换自定义域名（例如 frostmourne.xyz）时只改这两行，其余不动
+# url: https://frostmourne.xyz
+# root: /
+
+# ============ 目录 ============
+new_post_name: :title.md
+default_layout: post
+titlecase: false
+external_link:
+  enable: true
+  field: site
+  exclude:
+    - localhost
+filename_case: 0
+render_drafts: false
+post_asset_folder: false
+relative_link: false
+future: true
+hidden_tags:
+  - draft
+
+# ============ 归档 ============
+index_generator:
+  path: ""
+  per_page: 8
+  order_by: -date
+
+archive_generator:
+  per_page: 0
+  yearly: false
+  monthly: false
+  daily: false
+
+date_format: YYYY-MM-DD
+time_format: HH:mm:ss
+updated_since: 2026-09-01
+updated_option: 30M
+
+# ============ 文章 ============
+permalink: posts/:title/
+permalink_defaults:
+pretty_urls:
+  trailing_index: true
+  trailing_html: true
+
+# ============ 代码块 ============
+highlight:
+  enable: true
+  line_number: true
+  hljs_settings:
+    copy: true
+    lang: true
+  auto_detect: false
+  tab_replace: ""
+  wrap: true
+  pre_class: highlight
+
+# ============ 分类 / 标签 ============
+category_map: categories
+tag_map: tags
+default_category: 未分类
+
+# ============ 分页与feed ============
+per_page: 8
+pagination_dir: page
+
+sitemap:
+  path: sitemap.xml
+feed:
+  type: atom
+  path: atom.xml
+  limit: 20
+  hub:
+
+search:
+  path: local-search.xml
+  field: post
+  format: hit
+
+# ============ 主题 ============
+theme: butterfly
+
+# 部署不在这里。产物由 .github/workflows/deploy.yml 构建后交给 GitHub Pages，
+# 永远不要把 public/ 提交进仓库。

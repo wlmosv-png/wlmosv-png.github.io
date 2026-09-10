@@ -1,0 +1,29 @@
+{
+  "name": "wlmosv-png.github.io",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Hexo source for the wlmosv-png GitHub Pages site.",
+  "hexo": {
+    "version": "8.1.2"
+  },
+  "scripts": {
+    "build": "hexo clean && hexo generate",
+    "dev": "hexo server -p 4000",
+    "new": "hexo new"
+  },
+  "dependencies": {
+    "hexo": "^8.1.2",
+    "hexo-generator-archive": "^2.0.0",
+    "hexo-generator-category": "^2.0.0",
+    "hexo-generator-feed": "^4.0.0",
+    "hexo-generator-index": "^4.0.0",
+    "hexo-generator-searchdb": "^1.5.0",
+    "hexo-generator-sitemap": "^3.0.1",
+    "hexo-generator-tag": "^2.0.0",
+    "hexo-renderer-marked": "^7.0.1",
+    "hexo-renderer-pug": "^3.0.0",
+    "hexo-renderer-stylus": "^3.0.1",
+    "hexo-server": "^3.0.0",
+    "hexo-theme-butterfly": "^5.7.0"
+  }
+}
