@@ -186,3 +186,24 @@ body.ap-day #nav a,body.ap-day #nav .site-page{color:#efeae4}
 .ap-grid{margin:5vh auto 0}
 .ap-next{margin:4vh auto 0}
 .ap-jump{margin:5vh auto 0}
+/* 极光改为纯渐变（去掉 blur 滤镜，消除裁切接缝）+ 露出导航 */
+.ap-aurora{position:absolute;inset:0;filter:none;opacity:1;pointer-events:none}
+.ap-aurora i{position:absolute;left:-10%;top:-25%;width:120%;height:130%;border-radius:0;background:radial-gradient(38% 26% at 18% 26%,rgba(255,104,138,.30),transparent 70%),radial-gradient(34% 24% at 82% 20%,rgba(92,110,255,.26),transparent 70%),radial-gradient(44% 30% at 55% 66%,rgba(206,142,78,.15),transparent 72%);animation:apHue 26s ease-in-out infinite alternate}
+.ap-aurora i:nth-child(2){top:-15%;opacity:.75;animation-delay:-9s}
+.ap-aurora i:nth-child(3){top:-5%;opacity:.55;animation-delay:-17s}
+@keyframes apHue{0%{transform:translate3d(0,0,0) scale(1)}100%{transform:translate3d(-3%,2.5%,0) scale(1.07)}}
+.ap-grain{mix-blend-mode:normal;opacity:.09}
+.ap-clock{align-items:baseline}
+.ap-clock i{align-self:flex-end;padding-bottom:.4em;margin-right:.3em}
+.ap-page{padding:9vh 6vw 5vh;justify-content:center}
+.ap-big{font-size:clamp(84px,23vw,224px)}
+.ap-stage{padding:1vh 0}
+.ap-grid{margin:5vh auto 0;gap:10px}
+.ap-cell{padding:15px 6px;border-radius:16px}
+.ap-next{margin:4vh auto 0}
+.ap-jump{margin:4vh auto 0;width:42px;height:42px;line-height:40px}
+body.ap-day #page-header{display:block!important;background:transparent!important;min-height:0!important;height:auto!important;box-shadow:none!important}
+body.ap-day #page-site-info,body.ap-day #page-header .site-social,body.ap-day #page-header #site-title{display:none!important}
+body.ap-day #nav{background:transparent!important;box-shadow:none!important}
+body.ap-day #nav a,body.ap-day #nav .site-page,body.ap-day #nav #blog-info a{color:#efeae4!important}
+body.ap-day #nav .menus_item a:hover{color:#fff!important}
