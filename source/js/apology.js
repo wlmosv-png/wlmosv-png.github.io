@@ -167,5 +167,74 @@
   });
   initHearts(); initSince(); initWord(); initFlip();
   if (!reduce && document.querySelector("[data-word]")) { setInterval(rotateWord, 13000); }
-  if (!reduce && !navigator.userAgent.match(/Android|iPhone|iPad/)) { driftLoop(); }
+  if (!reduce) { driftLoop(); }
+})();
+
+/* ---------- 倒数日 ---------- */
+(function () {
+  var q1 = function (s) { return document.querySelector(s); };
+  var qAll = function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
+  var DAY = 864e5;
+  function p2(n) { return n < 10 ? '0' + n : '' + n; }
+  function cm(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+  function monthSpan(a, b) {
+    var m = (b.getFullYear() - a.getFullYear()) * 12 + (b.getMonth() - a.getMonth());
+    if (b.getDate() < a.getDate()) m--;
+    return m < 0 ? 0 : m;
+  }
+  function set(el, v) { if (el && el.textContent !== v) el.textContent = v; }
+  var page = q1('[data-page]');
+  document.body.classList.add('ap-day');
+  if (page) {
+    document.body.classList.add('ap-day');
+    var anchor = new Date(page.getAttribute('data-anchor') || '2026-01-24T00:00:00+08:00');
+    var bigEl = q1('[data-days]'), clockEl = q1('[data-clock]'), nextEl = q1('[data-next]');
+    var barEl = q1('[data-bar]'), passEl = q1('[data-passed]'), warnEl = q1('[data-warn]');
+    var cells = {};
+    qAll('[data-stat]').forEach(function (el) { cells[el.getAttribute('data-stat')] = el; });
+    if (warnEl) warnEl.textContent = anchor.getFullYear() + ' 年 1 月 24 日 · 起算';
+    var cb = clockEl ? qAll('[data-clock] b') : [];
+    (function tick() {
+      var now = new Date(), diff = now - anchor;
+      if (diff > 0) {
+        var days = Math.floor(diff / DAY);
+        if (bigEl && bigEl.textContent !== String(days)) {
+          bigEl.textContent = String(days);
+          bigEl.classList.remove('tick'); void bigEl.offsetWidth; bigEl.classList.add('tick');
+        }
+        var rest = diff - days * DAY;
+        if (cb[0]) cb[0].textContent = p2(Math.floor(rest / 36e5));
+        if (cb[1]) cb[1].textContent = p2(Math.floor(rest % 36e5 / 6e4));
+        if (cb[2]) cb[2].textContent = p2(Math.floor(rest % 6e4 / 1e3));
+        if (cells.weeks) cells.weeks.textContent = cm(Math.floor(days / 7));
+        if (cells.hours) cells.hours.textContent = cm(Math.floor(diff / 36e5));
+        if (cells.months) cells.months.textContent = cm(monthSpan(anchor, now));
+        if (cells.beats) cells.beats.textContent = cm(Math.floor(diff / 6e4 * 72));
+        var y = now.getFullYear(), next = new Date(y, 0, 24), prev = new Date(y, 0, 24);
+        if (next < now) next = new Date(y + 1, 0, 24);
+        prev = new Date(next.getFullYear() - 1, 0, 24);
+        set(nextEl, String(Math.ceil((next - now) / DAY)));
+        var pct = (now - prev) / (next - prev) * 100;
+        if (barEl) barEl.style.width = pct.toFixed(2) + '%';
+        set(passEl, pct.toFixed(1) + '%');
+      }
+      setTimeout(tick, 1000);
+    })();
+    if (!window.matchMedia || !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      var stage = q1('.ap-page');
+      if (stage) {
+        var puff = function () {
+          var d = document.createElement('span');
+          d.className = 'ap-dust';
+          d.style.left = (Math.random() * 100) + '%';
+          d.style.animationDuration = (16 + Math.random() * 14) + 's';
+          d.style.opacity = (0.25 + Math.random() * 0.5).toFixed(2);
+          stage.appendChild(d);
+          setTimeout(function () { if (d.parentNode) d.parentNode.removeChild(d); }, 31000);
+          setTimeout(puff, 900 + Math.random() * 1400);
+        };
+        puff();
+      }
+    }
+  }
 })();

@@ -18,10 +18,8 @@ nav:
   fixed: false
 
 menu:
-  首页: / || fas fa-home
-  认错书: /posts/yangyang-i-am-sorry/ || fas fa-pen-nib
-  每天一遍: /sorry/ || fas fa-rotate-left
-  关于这个站: /about/ || fas fa-circle-info
+  倒数日: / || fas fa-heart
+  那封信: /posts/yangyang-i-am-sorry/#letter || fas fa-envelope-open-text
 
 # --------------------------------------
 # Code Blocks Settings
@@ -160,16 +158,8 @@ subtitle:
     smartBackspace: false
   source: false
   sub:
-    - 我不说分手。
-    - 我以后不跟你玩猜心游戏。
-    - 阳阳，我错了。
-    - 这次不辩解。
-    - 你生气是有道理的。
-    - 对不起，让你受委屈了。
-    - 你说得对的那几条，我都记下了。
-    - 想骂我可以，别不说话。
-    - 我改，不是嘴上说说。
-    - 先把话说清楚，再谈以后。
+    - 1 月 24 日
+    - 我们的日子
 # 1: Cover on the left, info on the right
 # 2: Cover on the right, info on the left
 # 3: Cover and info alternate between left and right
