@@ -182,7 +182,9 @@ html.js .rise.in,html.js .rise.now{opacity:1;transform:none}
 html.js .rise.now{transition:none}
 
 html[data-sky="night"] #cast{opacity:1}
-html[data-theme="day"] #cast{opacity:.2}
+html[data-theme="day"] #cast{opacity:0}
+html[data-theme="day"][data-sky="evening"] #cast{opacity:.45}
+html[data-theme="day"][data-sky="night"] #cast{opacity:.75}
 html[data-sky="day"] #cast{opacity:0}
 html[data-sky="day"] #sky{opacity:0}
 html[data-wx="rain"] .arc,html[data-wx="snow"] .arc{opacity:.4}
@@ -290,6 +292,55 @@ html[data-theme="night"][data-sky="night"]{
   --haze:rgba(80,110,220,.09); --starglow:rgba(205,222,255,.50);
 }
 html[data-sky] body{transition:background .9s linear,color .9s linear}
+
+/* day-sky: 白天主题跟随光照五档（晨光/正午/晚霞/灯下/月光） */
+html[data-theme="day"][data-sky="dawn"]{
+  --bg:#fbf1e7; --bg2:#fff9f1; --panel:#fffaf4; --ink:#26201a; --ink2:#6d5f51; --ink3:#a8977f;
+  --line:rgba(70,45,20,.10); --edge:rgba(70,45,20,.17); --land:rgba(70,45,20,.05);
+  --rose:#c05f4a55; --rose2:#c05f4a; --accent:#c17b4c; --heart:#c2513e; --moon:#4d4032;
+  --ring1:#c05f4a; --ring2:#c99a68; --glow:0 0 46px 4px rgba(226,150,96,.15);
+  --shadow:0 20px 46px -28px rgba(90,55,20,.28); --star:transparent; --starglow:transparent;
+  --avring:rgba(70,45,20,.34); --haze:rgba(255,168,96,.32);
+}
+html[data-theme="day"][data-sky="day"]{
+  --bg:#edf3f8; --bg2:#fafcff; --panel:#ffffff; --ink:#16222d; --ink2:#52616e; --ink3:#8998a6;
+  --line:rgba(20,45,65,.10); --edge:rgba(20,45,65,.18); --land:rgba(20,45,65,.045);
+  --rose:#b0505e55; --rose2:#b0505e; --accent:#4a7fa3; --heart:#bd4e5c; --moon:#35414e;
+  --ring1:#b0505e; --ring2:#4a86ab; --glow:0 0 46px 4px rgba(95,155,195,.16);
+  --shadow:0 20px 46px -30px rgba(25,50,75,.26); --star:transparent; --starglow:transparent;
+  --avring:rgba(20,45,65,.32); --avring2:#c05a66; --haze:rgba(150,198,238,.30);
+}
+html[data-theme="day"][data-sky="dusk"]{
+  --bg:#f7ebe4; --bg2:#fff5ee; --panel:#fffaf5; --ink:#271a18; --ink2:#6f5754; --ink3:#a88883;
+  --line:rgba(70,30,35,.10); --edge:rgba(70,30,35,.17); --land:rgba(70,30,35,.05);
+  --rose:#b64f6255; --rose2:#b64f62; --accent:#c46a50; --heart:#b84558; --moon:#4a352f;
+  --ring1:#b64f62; --ring2:#c98a5e; --glow:0 0 46px 4px rgba(226,125,110,.16);
+  --shadow:0 20px 46px -28px rgba(75,35,30,.30); --star:transparent; --starglow:transparent;
+  --avring:rgba(70,30,35,.34); --haze:rgba(255,125,95,.30);
+}
+html[data-theme="day"][data-sky="evening"]{
+  --bg:#f0ede5; --bg2:#faf6ec; --panel:#fffdf5; --ink:#20222b; --ink2:#5d606b; --ink3:#94959d;
+  --line:rgba(55,50,30,.10); --edge:rgba(55,50,30,.16); --land:rgba(55,50,30,.045);
+  --rose:#b34f5d55; --rose2:#b34f5d; --accent:#a95763; --heart:#b84a56; --moon:#8a7f68;
+  --ring1:#b34f5d; --ring2:#8b74a8; --glow:0 0 46px 4px rgba(210,160,90,.14);
+  --shadow:0 20px 46px -28px rgba(60,50,25,.26); --star:#b09255; --starglow:rgba(195,165,105,.40);
+  --avring:rgba(55,50,30,.32); --haze:rgba(255,185,95,.24);
+}
+html[data-theme="day"][data-sky="night"]{
+  --bg:#e7ebf2; --bg2:#f2f5fa; --panel:#f9fbfe; --ink:#1c212c; --ink2:#59606d; --ink3:#8f95a2;
+  --line:rgba(35,45,75,.10); --edge:rgba(35,45,75,.16); --land:rgba(35,45,75,.045);
+  --rose:#b34f5d55; --rose2:#b34f5d; --accent:#a95763; --heart:#b84a56; --moon:#7c86a0;
+  --ring1:#b34f5d; --ring2:#7d84a8; --glow:0 0 46px 4px rgba(120,135,190,.14);
+  --shadow:0 20px 46px -28px rgba(40,50,80,.24); --star:#7d7ba8; --starglow:rgba(130,128,190,.35);
+  --avring:rgba(35,45,75,.30); --haze:rgba(110,130,200,.17);
+}
+/* 白天主题：太阳更亮，月亮改银灰剪影，流星变深色 */
+html[data-theme="day"] #skyorb{box-shadow:0 0 42px 14px rgba(233,196,106,.32)}
+html[data-theme="day"] #skyorb.moon{
+  background:radial-gradient(circle at 46% 42%,#b8c0d0,#8d97ab 60%,rgba(141,151,171,0) 76%);
+  box-shadow:0 0 22px 7px rgba(120,132,160,.25)}
+html[data-theme="day"] #meteor{background:#5c6675;box-shadow:0 0 6px 1px rgba(110,122,140,.40)}
+
 /* map: per-city celestial marker (her sky / my sky) */
 .cel{cursor:default}
 .cel .cbody{fill:var(--moon)}
