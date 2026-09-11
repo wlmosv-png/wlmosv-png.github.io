@@ -592,6 +592,16 @@ html[data-wxm] .wxc2{opacity:1}
     if(t>s.s-30)return 'dusk';
     return 'day';
   }
+  /* 真实天文时段 → data-sky（含 evening 暮光段；solar 失败回退白天） */
+  function astroSky(now){
+    var s=solar(CZ,now);if(!s)return 'day';
+    var m=bjMin(now);
+    if(m<s.r-30||m>=s.s+150)return 'night';
+    if(m<s.r+30)return 'dawn';
+    if(m<s.s-30)return 'day';
+    if(m<s.s+30)return 'dusk';
+    return 'evening';
+  }
   function el(id){return D.getElementById(id)}
   var dnum=el('dnum'),alive=D.querySelector('.alive b'),you=el('you'),dc=el('dc'),
       bar=el('bar'),pct=el('pct'),to=el('to'),pmeta=el('pmeta'),mls=el('mls'),moons=el('moons'),tw=el('tw');
@@ -759,11 +769,19 @@ html[data-wxm] .wxc2{opacity:1}
     else if(forced==='evening'){apply(orb,0,0);apply(orb2,1,.34);t=.34}
     else if(forced==='night'){apply(orb,0,0);apply(orb2,1,.5);t=.5}
     else{
-      var h=now.getHours()+now.getMinutes()/60;
-      day=h>=5.75&&h<18.25;moon=h>=17.75||h<6.25;
+      var m=bjMin(now),sr=solar(CZ,now);
+      if(sr){
+        var r=sr.r,ss=sr.s;
+        day=m>=r-30&&m<ss+30;moon=m>=ss-30||m<r+30;
+        t=day?(m-(r-30))/((ss+30)-(r-30)):0;t=Math.max(0,Math.min(1,t));
+        var pd=1500+r-ss;
+        mt=m>=ss-30?(m-(ss-30))/pd:(m+1440-(ss-30))/pd;mt=Math.max(0,Math.min(1,mt));
+      }else{
+        day=m>=345&&m<1095;moon=m>=1065||m<375;
+        t=day?(m-345)/750:0;t=Math.max(0,Math.min(1,t));
+        mt=m>=1065?(m-1065)/750:(m+375)/750;mt=Math.max(0,Math.min(1,mt));
+      }
       if(!day&&!moon){orb.style.opacity='0';orb2.style.opacity='0';return}
-      t=day?(h-5.75)/12.5:0;t=Math.max(0,Math.min(1,t));
-      mt=h>=17.75?(h-17.75)/12.5:(h+6.25)/12.5;mt=Math.max(0,Math.min(1,mt));
       if(day)apply(orb,1,t);else apply(orb,0,0);
       if(moon)apply(orb2,1,mt);else apply(orb2,0,0);
       if(!day)t=mt;
@@ -810,8 +828,8 @@ html[data-wxm] .wxc2{opacity:1}
     if(dnum)dnum.textContent=String(idx);
     if(alive)alive.textContent=fmt(+now-START);
     if(you)you.innerHTML=hourLine();
-    var hh=now.getHours(),fm=(location.hash||'').match(/sky=(dawn|day|dusk|evening|night)/);
-    H.setAttribute('data-sky',fm?fm[1]:(hh<5?'night':hh<8?'dawn':hh<16?'day':hh<19?'dusk':hh<23?'evening':'night'));
+    var fm=(location.hash||'').match(/sky=(dawn|day|dusk|evening|night)/);
+    H.setAttribute('data-sky',fm?fm[1]:astroSky(now));
     orbTick(now,fm&&fm[1]);
     if(dc&&S.km)dc.textContent=S.km.toLocaleString('en-US')+' 公里';
     if(bar){var c=+now-START,y=Math.floor(c/(365.2425*864e5)),
