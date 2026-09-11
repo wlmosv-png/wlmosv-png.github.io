@@ -3,11 +3,33 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="preconnect" href="https://api.open-meteo.com" crossorigin>
+<link rel="preconnect" href="https://wttr.in" crossorigin>
+<link rel="preconnect" href="https://p1.music.126.net">
+<link rel="preconnect" href="https://p2.music.126.net">
+<link rel="dns-prefetch" href="//api.open-meteo.com">
+<link rel="dns-prefetch" href="//wttr.in">
+<link rel="dns-prefetch" href="//p1.music.126.net">
+<link rel="dns-prefetch" href="//p2.music.126.net">
 <meta name="theme-color" content="#07080c">
 <meta name="color-scheme" content="dark light">
 <title>我们的日子</title>
   <link rel="stylesheet" href="./fonts/fonts.css">
 <meta name="description" content="从 2026 年 1 月 24 日开始，一天一天数。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="我们的日子">
+<meta property="og:title" content="我们的日子">
+<meta property="og:description" content="一千一百八十八公里，一天一天数。两城的天气与天色，同一页里同步。">
+<meta property="og:url" content="https://wlmosv-png.github.io/">
+<meta property="og:image" content="https://wlmosv-png.github.io/icons/icon-512.png">
+<meta property="og:image:width" content="512">
+<meta property="og:image:height" content="512">
+<meta property="og:image:alt" content="我们的日子">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="我们的日子">
+<meta name="twitter:description" content="一千一百八十八公里，一天一天数。">
+<meta name="twitter:image" content="https://wlmosv-png.github.io/icons/icon-512.png">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23b0646d' d='M12 21s-7.5-4.9-9.3-9.1C1.2 8.4 3.2 5 6.6 5c2 0 3.4 1.1 4.2 2.3L12 9.6l1.2-2.3C14 6.1 15.4 5 17.4 5c3.4 0 5.4 3.4 3.9 6.9C19.5 16.1 12 21 12 21z'/%3E%3C/svg%3E">
 <style>
 *,*::before,*::after{box-sizing:border-box}
@@ -742,7 +764,7 @@ html[data-wxm] .wxc2{opacity:1}
   setInterval(function(){if(!D.hidden)loadWX(1)},600000);
 })();
 </script>
-<div id="mdock"><div id="dcard" role="button" aria-label="播放今日歌曲"><img id="dcover" alt="封面" referrerpolicy="no-referrer"><div class="dmeta"><span id="dtitle"></span><span id="dartist"></span></div><span class="dplay">&#9654;</span></div><div id="dnow" role="button" aria-label="暂停或继续" hidden><img id="dcover2" alt="封面" referrerpolicy="no-referrer"><div class="dmeta"><span id="dnowtitle"></span><div class="dbars"><i></i><i></i><i></i><i></i></div></div><span id="dpp">&#10074;&#10074;</span></div><div id="dprog"><i></i></div><audio id="daudio" preload="none"></audio></div>
+<div id="mdock"><div id="dcard" role="button" aria-label="播放今日歌曲"><img id="dcover" alt="封面" loading="lazy" referrerpolicy="no-referrer"><div class="dmeta"><span id="dtitle"></span><span id="dartist"></span></div><span class="dplay">&#9654;</span></div><div id="dnow" role="button" aria-label="暂停或继续" hidden><img id="dcover2" alt="封面" loading="lazy" referrerpolicy="no-referrer"><div class="dmeta"><span id="dnowtitle"></span><div class="dbars"><i></i><i></i><i></i><i></i></div></div><span id="dpp">&#10074;&#10074;</span></div><div id="dprog"><i></i></div><audio id="daudio" preload="none"></audio></div>
 <script>
 (function(){
   var MZ=[{"id": 1403318151, "t": "把回忆拼好给你", "a": "王贰浪", "c": "https://p1.music.126.net/CBx2K_jEN3SNWwYztagPPw==/109951164485969446.jpg"}, {"id": 475479888, "t": "在你的身边", "a": "盛哲", "c": "https://p1.music.126.net/AYNBdRxJ8EdZo4xFjp7b4Q==/109951163191178425.jpg"}, {"id": 2025533834, "t": "我们的歌", "a": "刘大拿", "c": "https://p1.music.126.net/Gm2v1KrDe2TwplzxcmTxYg==/109951168428025131.jpg"}, {"id": 488249475, "t": "哪里都是你", "a": "队长", "c": "https://p1.music.126.net/lnOnBbP_H-052Hv5ls-QjA==/109951162964628408.jpg"}, {"id": 865632948, "t": "若把你", "a": "Kirsty刘瑾睿", "c": "https://p2.music.126.net/M877M2-VhWZiLPVFORf9iQ==/109951163401482434.jpg"}, {"id": 2043112316, "t": "Don't Go Back Tonight", "a": "TizzyT", "c": "https://p2.music.126.net/ABq_jZDJDcTY-vIHoe6hUQ==/109951169770889971.jpg"}, {"id": 1500569811, "t": "阿拉斯加海湾", "a": "蓝心羽", "c": "https://p2.music.126.net/j9P19hOTNbYxLZDJB9bJag==/109951169385715334.jpg"}, {"id": 1303027499, "t": "总有一天你会出现在我身边", "a": "棱镜乐队", "c": "https://p2.music.126.net/RfUHXkanpxImcaGqFNWBeA==/109951163598901405.jpg"}, {"id": 1336856864, "t": "形容", "a": "沈以诚", "c": "https://p2.music.126.net/1iLwRvMtUMYLZUNR-HQW7Q==/109951163957708692.jpg"}, {"id": 1359356908, "t": "晚安", "a": "颜人中", "c": "https://p2.music.126.net/-rC55JsnmEWvafJQsAZaWw==/109951170473693123.jpg"}, {"id": 1436709403, "t": "夏天的风", "a": "火羊瞌睡了", "c": "https://p2.music.126.net/rFUKVdOjqxgwAT6Zi6qv7A==/109951164906689206.jpg"}, {"id": 1426112587, "t": "下雨天", "a": "与少年他/芝麻Mochi", "c": "https://p2.music.126.net/qRfggLX2Va3Wslqjr7FxSg==/109951164742550320.jpg"}];
