@@ -261,6 +261,14 @@ main{padding-bottom:88px}
 #dpp{width:34px;height:34px;border-radius:50%;background:#f2eee8;color:#14161c;display:flex;align-items:center;justify-content:center;font-size:10px;flex:none;box-shadow:0 2px 8px rgba(0,0,0,.3)}
 #dprog{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(242,238,232,.12)}
 #dprog i{display:block;height:100%;width:0;background:#f2eee8;border-radius:0 2px 2px 0;transition:width .3s linear}
+/* 白天主题：dock 浅底深字，跟随主题变量 */
+html[data-theme="day"] #mdock{background:rgba(255,255,255,.66);box-shadow:0 8px 28px rgba(20,45,70,.16)}
+html[data-theme="day"] #dtitle,html[data-theme="day"] #dnowtitle{color:var(--ink)}
+html[data-theme="day"] #dartist{color:var(--ink2)}
+html[data-theme="day"] .dbars i{background:var(--ink2)}
+html[data-theme="day"] .dplay,html[data-theme="day"] #dpp{background:var(--ink);color:var(--bg2)}
+html[data-theme="day"] #dprog{background:var(--line)}
+html[data-theme="day"] #dprog i{background:var(--rose2)}
 .caret{display:inline-block;width:2px;height:1em;background:#f2eee8;margin-left:2px;vertical-align:-2px;animation:blink .9s steps(1) infinite}
 @keyframes blink{50%{opacity:0}}
 
@@ -373,7 +381,7 @@ html[data-theme="day"][data-sky="night"]{
 /* 白天主题：太阳更亮，月亮改银灰剪影，流星变深色 */
 html[data-theme="day"] #skyorb{box-shadow:0 0 18px 6px rgba(255,238,180,.6),0 0 42px 18px rgba(255,225,145,.25)}
 html[data-theme="day"] #skyorb:not(.moon)::before{background:radial-gradient(circle,rgba(255,246,210,.38) 0%,rgba(255,230,155,.18) 45%,rgba(255,218,125,.06) 62%,transparent 74%)}
-html[data-theme="day"] #skyorb.moon{
+html[data-theme="day"] #skyorb2{
   background:radial-gradient(circle at 46% 42%,#b8c0d0,#8d97ab 60%,rgba(141,151,171,0) 76%);
   box-shadow:0 0 22px 7px rgba(120,132,160,.25)}
 html[data-theme="day"] #meteor{background:#5c6675;box-shadow:0 0 6px 1px rgba(110,122,140,.40)}
@@ -428,7 +436,9 @@ html[data-sky="dawn"] #skyorb,html[data-sky="dusk"] #skyorb{
   box-shadow:0 0 16px 5px rgba(255,196,140,.5)}
 html[data-sky="dawn"] #skyorb:not(.moon)::before,html[data-sky="dusk"] #skyorb:not(.moon)::before{
   background:radial-gradient(circle,rgba(255,200,140,.36) 0%,rgba(255,160,105,.16) 45%,rgba(255,140,90,.06) 62%,transparent 74%)}
-#skyorb.moon{background:radial-gradient(circle at 46% 42%,#f7f4ea,#d9d5c5 60%,rgba(216,212,196,0) 76%);
+#skyorb2{position:fixed;z-index:0;width:34px;height:34px;border-radius:50%;pointer-events:none;left:0;top:0;
+  opacity:0;transition:opacity 1.4s linear;
+  background:radial-gradient(circle at 46% 42%,#f7f4ea,#d9d5c5 60%,rgba(216,212,196,0) 76%);
   box-shadow:0 0 26px 7px rgba(232,226,212,.14);
   -webkit-mask:radial-gradient(circle at 30% 30%,transparent 0 42%,#000 43%);
   mask:radial-gradient(circle at 30% 30%,transparent 0 42%,#000 43%)}
@@ -734,26 +744,29 @@ html[data-wxm] .wxc2{opacity:1}
   }
 
 /* 太阳与月亮：按你的时间在天上走 */
-  var orb=null;
+  var orb=null,orb2=null;
   function orbTick(now,forced){
     if(!orb){orb=D.createElement('div');orb.id='skyorb';D.body.appendChild(orb);}
-    var day,moon,t;
-    if(forced==='day'){day=1;t=.5}
-    else if(forced==='dawn'){day=1;t=.14}
-    else if(forced==='dusk'){day=1;t=.86}
-    else if(forced==='evening'){moon=1;t=.34}
-    else if(forced==='night'){moon=1;t=.5}
+    if(!orb2){orb2=D.createElement('div');orb2.id='skyorb2';D.body.appendChild(orb2);}
+    function apply(o,on,tt){
+      o.style.opacity=on?(o===orb?'.95':'.85'):'0';
+      if(on){o.style.left=(8+tt*80)+'vw';o.style.top=(17-Math.sin(Math.PI*tt)*8)+'vh';}
+    }
+    var day,moon,t,mt;
+    if(forced==='day'){apply(orb,1,.5);apply(orb2,0,0);t=.5}
+    else if(forced==='dawn'){apply(orb,1,.14);apply(orb2,1,.86);t=.14}
+    else if(forced==='dusk'){apply(orb,1,.86);apply(orb2,1,.14);t=.86}
+    else if(forced==='evening'){apply(orb,0,0);apply(orb2,1,.34);t=.34}
+    else if(forced==='night'){apply(orb,0,0);apply(orb2,1,.5);t=.5}
     else{
       var h=now.getHours()+now.getMinutes()/60;
-      day=h>=6&&h<18;moon=h>=18.5||h<5.5;
-      if(!day&&!moon){orb.style.opacity='0';return}
-      t=day?(h-6)/12:(h>=18.5?(h-18.5)/11:(h+5.5)/11);
-      t=Math.max(0,Math.min(1,t));
+      day=h>=6&&h<18;moon=h>=17.75||h<6.25;
+      if(!day&&!moon){orb.style.opacity='0';orb2.style.opacity='0';return}
+      t=day?(h-6)/12:0;t=Math.max(0,Math.min(1,t));
+      mt=h>=17.75?(h-17.75)/12.5:(h+6.25)/12.5;mt=Math.max(0,Math.min(1,mt));
+      if(day)apply(orb,1,t);else apply(orb,0,0);
+      if(moon)apply(orb2,1,mt);else apply(orb2,0,0);
     }
-    orb.className=day?'':'moon';
-    orb.style.opacity=day?'.95':'.85';
-    orb.style.left=(8+t*80)+'vw';
-    orb.style.top=(17-Math.sin(Math.PI*t)*8)+'vh';
     H.style.setProperty('--sx',(8+t*80)+'vw');H.style.setProperty('--sy',(17-Math.sin(Math.PI*t)*8)+'vh');
   }
   /* 地图两城天体：她那边什么天，点就长什么样 */
