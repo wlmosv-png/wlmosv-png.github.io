@@ -69,10 +69,6 @@ html[data-theme="night"]{
   --avring:rgba(255,255,255,.52); --avring2:var(--rose); --haze:rgba(255,255,255,.05);
 }
 html[data-theme="day"]{
-html[data-theme="day"] body{
-  background:
-    radial-gradient(36% 26% at var(--sx,50%) var(--sy,12%),var(--skylight,rgba(233,196,106,.18)) 0%,transparent 72%),
-    radial-gradient(120% 80% at 50% -10%,var(--bg2) 0%,var(--bg) 62%)}
   --bg:#f6f3ed; --bg2:#fffdf9; --panel:#ffffff; --ink:#181c23; --ink2:#5f6570; --ink3:#98a0aa;
   --line:rgba(24,28,35,.10); --edge:rgba(24,28,35,.17); --land:rgba(24,28,35,.045);
   --rose:#c0505c55; --rose2:#b8525e; --accent:#a95763; --heart:#c04a56; --moon:#3a3f49;
@@ -80,6 +76,10 @@ html[data-theme="day"] body{
   --shadow:0 20px 46px -28px rgba(24,28,35,.35); --star:transparent; --starglow:transparent;
   --avring:rgba(24,28,35,.34); --avring2:var(--accent); --haze:rgba(255,170,90,.10);
 }
+html[data-theme="day"] body{
+  background:
+    radial-gradient(36% 26% at var(--sx,50%) var(--sy,12%),var(--skylight,rgba(255,220,150,.30)) 0%,transparent 72%),
+    radial-gradient(120% 80% at 50% -10%,var(--bg2) 0%,var(--bg) 62%)}
 html{background:var(--bg)}
 body{
   margin:0;background:
@@ -90,7 +90,17 @@ body{
 main{position:relative;z-index:2;max-width:660px;margin:0 auto;padding:0 22px 88px}
 #sky{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.55;transition:opacity 2.4s linear;
   background:radial-gradient(90% 60% at 50% 0%,transparent 20%,var(--bg) 100%)}
-#cast,#rain,#flash{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+#cast,#rain,#flash,#motes{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+#motes{opacity:0;transition:opacity 2.4s linear}
+html[data-theme="day"][data-sky="dawn"] #motes,html[data-theme="day"][data-sky="day"] #motes,
+html[data-theme="day"][data-sky="dusk"] #motes{opacity:.9}
+#motes i{position:absolute;width:var(--w);height:var(--w);border-radius:50%;
+  background:radial-gradient(circle,rgba(255,238,190,.9),rgba(255,214,140,.25) 70%);
+  box-shadow:0 0 6px 1px rgba(255,210,120,.30);
+  animation:mote var(--d) ease-in-out infinite alternate}
+@keyframes mote{0%{transform:translateY(0) translateX(0) scale(.8);opacity:0}
+  15%{opacity:.75}85%{opacity:.55}
+  100%{transform:translateY(-7vh) translateX(3vw) scale(1.15);opacity:0}}
 #flash{background:radial-gradient(80% 46% at 50% 6%,rgba(255,255,255,.17),transparent 70%);opacity:0}
 #cast i{position:absolute;top:-3px;border-radius:50%;background:var(--star);opacity:0;
   animation:cast var(--d) linear var(--t) infinite}
@@ -226,7 +236,7 @@ html[data-wx="cloud"],html[data-wx="rain"],html[data-wx="snow"],html[data-wx="fo
   html.js .rise{opacity:1;transform:none}
   #cast,#rain{display:none}
 }
-html.no-motion #cast,html.no-motion #rain,html.no-motion #flash{display:none}
+html.no-motion #cast,html.no-motion #rain,html.no-motion #flash,html.no-motion #motes{display:none}
 main{padding-bottom:88px}
 #mdock{position:fixed;left:50%;transform:translateX(-50%);bottom:10px;width:min(88vw,420px);z-index:80;border-radius:34px;overflow:hidden;background:rgba(120,124,150,.14);box-shadow:0 8px 28px rgba(0,0,0,.38);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 #mdock iframe{display:block;width:100%;height:66px;border:0}
@@ -334,7 +344,7 @@ html[data-theme="day"][data-sky="day"]{
   --rose:#b0505e55; --rose2:#b0505e; --accent:#4a7fa3; --heart:#bd4e5c; --moon:#35414e;
   --ring1:#b0505e; --ring2:#4a86ab; --glow:0 0 46px 4px rgba(95,155,195,.16);
   --shadow:0 20px 46px -30px rgba(25,50,75,.26); --star:transparent; --starglow:transparent;
-  --avring:rgba(20,45,65,.32); --avring2:#c05a66; --haze:rgba(150,198,238,.30); --skylight:rgba(150,205,240,.28);
+  --avring:rgba(20,45,65,.32); --avring2:#c05a66; --haze:rgba(150,198,238,.30); --skylight:rgba(255,220,150,.34);
 }
 html[data-theme="day"][data-sky="dusk"]{
   --bg:#f7ebe4; --bg2:#fff5ee; --panel:#fffaf5; --ink:#271a18; --ink2:#6f5754; --ink3:#a88883;
@@ -403,6 +413,16 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 #skyorb:not(.moon)::before{content:'';position:absolute;inset:-110%;border-radius:50%;pointer-events:none;
   background:radial-gradient(circle,rgba(255,244,205,.30) 0%,rgba(255,228,150,.14) 46%,rgba(255,215,120,.05) 62%,transparent 74%);
   transition:background 1.4s linear,opacity 1.4s linear}
+#skyorb:not(.moon)::after{content:'';position:absolute;inset:-95%;border-radius:50%;pointer-events:none;
+  opacity:0;transition:opacity 1.4s linear;
+  background:repeating-conic-gradient(rgba(255,236,170,.60) 0deg 3deg,transparent 3deg 45deg);
+  -webkit-mask:radial-gradient(circle,transparent 30%,#000 33% 62%,transparent 72%);
+  mask:radial-gradient(circle,transparent 30%,#000 33% 62%,transparent 72%);
+  animation:rayspin 70s linear infinite}
+html[data-sky="day"] #skyorb:not(.moon)::after{opacity:.8}
+html[data-sky="dawn"] #skyorb:not(.moon)::after,html[data-sky="dusk"] #skyorb:not(.moon)::after{
+  opacity:.65;background:repeating-conic-gradient(rgba(255,196,130,.55) 0deg 3deg,transparent 3deg 45deg)}
+@keyframes rayspin{to{transform:rotate(360deg)}}
 html[data-sky="dawn"] #skyorb,html[data-sky="dusk"] #skyorb{
   background:radial-gradient(circle at 44% 40%,#fff7ea 0%,#ffe3b2 28%,#f5a25e 55%,rgba(245,162,94,0) 72%);
   box-shadow:0 0 16px 5px rgba(255,196,140,.5)}
@@ -442,6 +462,7 @@ html[data-wxm] .wxc2{opacity:1}
 <body>
 <div id="sky" aria-hidden="true"></div>
 <div id="cast" aria-hidden="true"></div>
+<div id="motes" aria-hidden="true"></div>
 <div id="rain" aria-hidden="true"></div>
 <div id="flash" aria-hidden="true"></div>
 <main>
@@ -823,6 +844,14 @@ html[data-wxm] .wxc2{opacity:1}
     type(WISH[i],0);
   }
   /* ---------- 星空（夜里更亮，白天基本收起来） ---------- */
+  function motes(){
+    var c=el('motes');if(!c||SYN)return;var n=16,h='';
+    for(var i=0;i<n;i++){
+      var x=Math.random()*100,y=Math.random()*100,d=14+Math.random()*26,w=(1.4+Math.random()*2.2).toFixed(1);
+      h+='<i style="left:'+x.toFixed(1)+'%;top:'+y.toFixed(1)+'%;--d:'+d.toFixed(1)+'s;--w:'+w+'px;animation-delay:-'+(Math.random()*30).toFixed(1)+'s"></i>';
+    }
+    c.innerHTML=h;
+  }
   function stars(){
     var c=el('cast');if(!c||SYN)return;c.className='stars';var n=62,h='';
     for(var i=0;i<n;i++){h+='<i style="--t:'+(-Math.random()*6).toFixed(2)+'s;--d:'+(4+Math.random()*7).toFixed(2)+
@@ -853,7 +882,7 @@ html[data-wxm] .wxc2{opacity:1}
     addEventListener('scroll',un,{passive:true});
   }else{els.forEach(force)}
   setTimeout(function(){els.forEach(force)},2200);
-  paint();wishLoop();stars();loadWX();
+  paint();wishLoop();stars();motes();loadWX();
   setTimeout(loadWX,6e5);setTimeout(loadWXM,1200);setInterval(function(){if(!D.hidden)loadWXM()},600000);
   setInterval(paint,1000);setInterval(meteorTick,9000);meteorTick();
   S.km=1188;
