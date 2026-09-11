@@ -238,7 +238,12 @@ main{padding-bottom:88px}
 #missbtn,#flybtn{background:none;border:1px solid var(--line);color:var(--ink2);font-family:var(--serif);font-size:12px;letter-spacing:.14em;padding:8px 18px;border-radius:999px;cursor:pointer;transition:color .3s,border-color .3s,transform .12s;-webkit-tap-highlight-color:transparent}
 #missbtn:active,#flybtn:active{transform:scale(.92);color:var(--rose2);border-color:var(--rose2)}
 #missrow .cnt,#flybox .cnt{font-family:var(--serif);font-size:11px;color:var(--ink3);letter-spacing:.06em;white-space:nowrap}
-.plane{font-size:21px;fill:var(--rose2);filter:drop-shadow(0 0 3px rgba(217,85,95,.55))}
+#flybox{position:relative;z-index:3}
+.plane{filter:drop-shadow(0 1px 2px rgba(217,85,95,.45))}
+.flytrail{fill:none;stroke:var(--rose2);stroke-width:1.4;stroke-linecap:round;opacity:.5;pointer-events:none}
+.ring{fill:none;stroke:var(--rose2);stroke-width:1;pointer-events:none}
+.arrive{font-size:26px;fill:var(--rose2);transform-origin:center;transform-box:fill-box;animation:arrive .95s ease-out forwards;pointer-events:none}
+@keyframes arrive{0%{opacity:0;transform:scale(.3)}35%{opacity:1;transform:scale(1.3)}100%{opacity:0;transform:scale(.85) translateY(-10px)}}
 #mswrap{position:fixed;inset:0;z-index:80;background:rgba(4,5,9,.72);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 #mswrap.show{opacity:1;pointer-events:auto}
 #mscard{width:min(86vw,360px);background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:26px 24px;transform:translateY(14px) scale(.97);transition:transform .3s}
@@ -806,7 +811,7 @@ html[data-wxm] .wxc2{opacity:1}
   if(wishEl){
         wishEl.insertAdjacentHTML('afterend','<div id="todaybox"><button id="todaybtn" type="button">今日份想念 ✦</button><div id="todaycard"></div><div id="missrow"><button id="missbtn" type="button">❤ 想你</button><span class="cnt" id="misstxt">今天 0 次</span></div></div>');
     var mapEl=document.getElementById('map');
-    if(mapEl)mapEl.insertAdjacentHTML('afterend','<div id="flybox"><button id="flybtn" type="button">✈ 寄想念</button><span class="cnt" id="flytxt">已寄 0 架</span></div>');
+    if(mapEl)mapEl.insertAdjacentHTML('afterend','<div id="flybox"><button id="flybtn" type="button">✈ 收想念</button><span class="cnt" id="flytxt">已收 0 架</span></div>');
     var b=document.getElementById('todaybtn'),c=document.getElementById('todaycard');
     var ann=new Date(2026,0,24);
     function didx(){var n=new Date();n.setHours(12,0,0,0);var d=new Date(ann);d.setHours(12,0,0,0);return Math.floor((n-d)/864e5)}
@@ -854,21 +859,51 @@ html[data-wxm] .wxc2{opacity:1}
     if(fb)fb.addEventListener('click',function(){
       var arc=document.getElementById('arc'),svg=document.getElementById('msvg');
       if(arc&&svg){
-        var NS='http://www.w3.org/2000/svg',el=document.createElementNS(NS,'text');
-        el.setAttribute('x','0');el.setAttribute('y','0');el.setAttribute('text-anchor','middle');
-        el.setAttribute('class','plane');el.textContent='✈';
+        var NS='http://www.w3.org/2000/svg';
+        var L=arc.getTotalLength();
+        var trail=document.createElementNS(NS,'path');
+        trail.setAttribute('d',arc.getAttribute('d'));trail.setAttribute('class','flytrail');
+        trail.setAttribute('stroke-dasharray',L);trail.setAttribute('stroke-dashoffset',L);
+        svg.appendChild(trail);
+        var el=document.createElementNS(NS,'path');
+        el.setAttribute('d','M11 0 L0 -7 L3.4 0 L0 7 Z');
+        el.setAttribute('fill','var(--rose2)');
+        el.setAttribute('stroke','rgba(255,255,255,.85)');
+        el.setAttribute('stroke-width','.8');
+        el.setAttribute('class','plane');
         svg.appendChild(el);
-        var L=arc.getTotalLength(),t0=performance.now(),D=2600;
+        var p0=arc.getPointAtLength(L);
+        var ring=document.createElementNS(NS,'circle');
+        ring.setAttribute('cx',p0.x);ring.setAttribute('cy',p0.y);
+        ring.setAttribute('r','2');ring.setAttribute('class','ring');
+        svg.appendChild(ring);
+        var t0=performance.now(),D=2600;
         (function step(now){
           var k=Math.min(1,(now-t0)/D),ek=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
-          var pt=arc.getPointAtLength(ek*L);
-          el.setAttribute('x',pt.x);el.setAttribute('y',pt.y);
+          var at=(1-ek)*L;
+          var pt=arc.getPointAtLength(at);
+          var ak=Math.max(0.001,Math.min(0.999,ek+0.004));
+          var p2=arc.getPointAtLength((1-ak)*L);
+          var ang=Math.atan2(p2.y-pt.y,p2.x-pt.x)*180/Math.PI;
+          el.setAttribute('transform','translate('+pt.x.toFixed(1)+','+pt.y.toFixed(1)+') rotate('+ang.toFixed(1)+')');
+          trail.setAttribute('stroke-dashoffset',at.toFixed(1));
+          if(k<0.25){ring.setAttribute('r',(2+k*30).toFixed(1));ring.setAttribute('opacity',(0.7-k*2.8).toFixed(2))}
           if(k<1)requestAnimationFrame(step);
-          else{el.remove();try{navigator.vibrate&&navigator.vibrate(12)}catch(e){}}
+          else{
+            el.remove();trail.remove();ring.remove();
+            var pe=arc.getPointAtLength(0);
+            var hx=document.createElementNS(NS,'text');
+            hx.setAttribute('x',pe.x);hx.setAttribute('y',pe.y);
+            hx.setAttribute('text-anchor','middle');hx.setAttribute('class','arrive');
+            hx.textContent='❤';
+            svg.appendChild(hx);
+            setTimeout(function(){hx.remove()},1000);
+            try{navigator.vibrate&&navigator.vibrate(12)}catch(e){}
+          }
         })(t0);
       }
       ptot++;try{localStorage.setItem('ourdays_plane',String(ptot))}catch(e){}
-      if(fs)fs.textContent='已寄 '+ptot+' 架';
+      if(fs)fs.textContent='已收 '+ptot+' 架';
     });
     var pt=null;
     wishEl.addEventListener('pointerdown',function(){
