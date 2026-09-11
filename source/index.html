@@ -855,7 +855,7 @@ html[data-wxm] .wxc2{opacity:1}
       document.body.appendChild(hp);setTimeout(function(){hp.remove()},980);
     });
     var ptot=0;try{ptot=+localStorage.getItem('ourdays_plane')||0}catch(e){}
-    if(fs)fs.textContent='已寄 '+ptot+' 架';
+    if(fs)fs.textContent='已收 '+ptot+' 架';
     if(fb)fb.addEventListener('click',function(){
       var arc=document.getElementById('arc'),svg=document.getElementById('msvg');
       if(arc&&svg){
