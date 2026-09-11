@@ -222,6 +222,7 @@ html[data-theme="day"] #cast{opacity:0}
 html[data-theme="day"][data-sky="evening"] #cast{opacity:.45}
 html[data-theme="day"][data-sky="night"] #cast{opacity:.75}
 html[data-sky="day"] #cast{opacity:0}
+   html[data-theme="night"][data-sky="dawn"] #cast,html[data-theme="night"][data-sky="dusk"] #cast{opacity:.3}
 html[data-sky="day"] #sky{opacity:0}
 html[data-wx="rain"] .arc,html[data-wx="snow"] .arc{opacity:.4}
 html[data-wx="cloud"],html[data-wx="rain"],html[data-wx="snow"],html[data-wx="fog"]{--glow:0 0 44px 4px rgba(150,150,160,.10)}
@@ -616,7 +617,7 @@ html[data-wxm] .wxc2{opacity:1}
     if(!mls)return;var h='';
     for(var i=0;i<MS.length;i++){
       var t=START+MS[i][0]*864e5,done=now>=t,nx=!done;
-      for(var k=0;k<i;k++){if(now>=START+MS[k][0]*864e5)nx=false}
+      for(var k=0;k<i;k++){if(now<START+MS[k][0]*864e5)nx=false}
       h+='<div class="mrow'+(done?' done':'')+(nx?' next':'')+'">'+
          '<span class="d">'+dstr(t)+'</span><span class="n">'+MS[i][1]+'</span>'+
          '<span class="c">'+(done?'已走过 '+(day-MS[i][0])+' 天':'还有 '+(MS[i][0]-day)+' 天')+'</span></div>';
@@ -637,8 +638,7 @@ html[data-wxm] .wxc2{opacity:1}
     if(!moons)return;var a=moonAge(now),h='',step=(29.530588853/8),b=Math.ceil(a/step)*step;
     for(var i=0;i<6&&i<8;i++){
       var age=b+i*step-a,ms=+now+age*864e5;
-      if(i===0){h+='<figure>'+MOON+'<circle cx="12" cy="12" r="11" fill="currentColor"/></svg>'+
-        '<figcaption><b>今夜</b>同一轮</figcaption></figure>';continue;}
+      if(i===0){h+='<figure>'+moonSVG(a)+'<figcaption><b>今夜</b>同一轮</figcaption></figure>';continue;}
       var d=new Date(ms),mm=moonAge(ms);
       h+='<figure>'+moonSVG(mm)+'<figcaption><b>'+(d.getMonth()+1)+'/'+d.getDate()+'</b>'+
         ['新月','娥眉月','上弦','盈凸','满月','亏凸','下弦','残月'][Math.round((mm/29.53)*8)%8]+'</figcaption></figure>';
