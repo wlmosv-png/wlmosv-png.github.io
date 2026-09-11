@@ -6,14 +6,15 @@
 <meta name="theme-color" content="#07080c">
 <meta name="color-scheme" content="dark light">
 <title>我们的日子</title>
+  <link rel="stylesheet" href="./fonts/fonts.css">
 <meta name="description" content="从 2026 年 1 月 24 日开始，一天一天数。">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23b0646d' d='M12 21s-7.5-4.9-9.3-9.1C1.2 8.4 3.2 5 6.6 5c2 0 3.4 1.1 4.2 2.3L12 9.6l1.2-2.3C14 6.1 15.4 5 17.4 5c3.4 0 5.4 3.4 3.9 6.9C19.5 16.1 12 21 12 21z'/%3E%3C/svg%3E">
 <style>
 *,*::before,*::after{box-sizing:border-box}
 :root{
-  --num:ui-monospace,"SF Mono","Roboto Mono",Menlo,monospace;
-  --serif:"Songti SC","Noto Serif SC","Source Han Serif SC","Noto Serif CJK SC",Georgia,"Times New Roman",serif;
-  --sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans CJK SC",system-ui,sans-serif;
+  --num:"LXGW WenKai Mono","LXGW WenKai",ui-monospace,Menlo,monospace;
+  --serif:"LXGW WenKai","Songti SC","Noto Serif SC",Georgia,serif;
+  --sans:"LXGW WenKai","LXGW WenKai Mono",-apple-system,"PingFang SC","Noto Sans CJK SC",system-ui,sans-serif;
 }
 html[data-theme="night"]{
   --bg:#07080c; --bg2:#0c0e14; --panel:#101319; --ink:#f1eee8; --ink2:#a3a09a; --ink3:#6b6862;
@@ -35,7 +36,7 @@ html{background:var(--bg)}
 body{
   margin:0;background:
     radial-gradient(120% 80% at 50% -10%,var(--bg2) 0%,var(--bg) 62%);
-  color:var(--ink);font-family:var(--sans);font-weight:300;line-height:1.75;
+  color:var(--ink);font-family:var(--sans);font-weight:400;line-height:1.9;
   -webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background .9s linear,color .9s linear;
 }
 main{position:relative;z-index:2;max-width:660px;margin:0 auto;padding:0 22px 88px}
@@ -176,6 +177,115 @@ html.no-motion #cast,html.no-motion #rain,html.no-motion #flash{display:none}
 main{padding-bottom:88px}
 #mdock{position:fixed;left:50%;transform:translateX(-50%);bottom:10px;width:min(88vw,420px);z-index:80;border-radius:34px;overflow:hidden;background:rgba(120,124,150,.14);box-shadow:0 8px 28px rgba(0,0,0,.38);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 #mdock iframe{display:block;width:100%;height:66px;border:0}
+#mcover{position:absolute;left:0;top:0;right:0;bottom:0;z-index:2;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(22,26,44,.94),rgba(10,12,20,.9));color:#e6e3dc;font-size:13px;letter-spacing:2px;cursor:pointer}
+#mdock{height:66px}
+#dcard{display:flex;align-items:center;gap:10px;padding:8px 12px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+#dcover{width:50px;height:50px;border-radius:12px;object-fit:cover;background:#22263a;flex:none;box-shadow:0 2px 8px rgba(0,0,0,.35)}
+.dmeta{display:flex;flex-direction:column;min-width:0;flex:1;gap:2px}
+#dtitle{font-size:14px;font-weight:600;color:#f2eee8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#dartist{font-size:11px;color:rgba(242,238,232,.62);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dplay{width:34px;height:34px;border-radius:50%;background:#f2eee8;color:#14161c;display:flex;align-items:center;justify-content:center;font-size:12px;flex:none;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+#mdock iframe[hidden]{display:none}
+#mdock{overflow:hidden}
+#dnow{display:flex;align-items:center;gap:10px;padding:8px 12px;cursor:pointer}
+#dcover2{width:50px;height:50px;border-radius:12px;object-fit:cover;flex:none;box-shadow:0 2px 8px rgba(0,0,0,.35)}
+#dnowtitle{font-size:13px;font-weight:600;color:#f2eee8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dbars{display:flex;align-items:flex-end;gap:3px;height:14px;margin-top:3px}
+.dbars i{width:3px;height:6px;background:#f2eee8;border-radius:2px;animation:eq 1s ease-in-out infinite}
+.dbars i:nth-child(2){animation-delay:.18s}.dbars i:nth-child(3){animation-delay:.36s}.dbars i:nth-child(4){animation-delay:.54s}
+.dbars.paused i{animation-play-state:paused;height:4px}
+@keyframes eq{0%,100%{height:4px}50%{height:14px}}
+#dpp{width:34px;height:34px;border-radius:50%;background:#f2eee8;color:#14161c;display:flex;align-items:center;justify-content:center;font-size:10px;flex:none;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+#dprog{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(242,238,232,.12)}
+#dprog i{display:block;height:100%;width:0;background:#f2eee8;border-radius:0 2px 2px 0;transition:width .3s linear}
+.caret{display:inline-block;width:2px;height:1em;background:#f2eee8;margin-left:2px;vertical-align:-2px;animation:blink .9s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* interactive add-ons */
+#todaybox{margin:26px auto 0;text-align:center}
+#todaybtn{background:none;border:1px solid var(--line);color:var(--ink2);font-family:var(--serif);font-size:12px;letter-spacing:.18em;padding:9px 22px;border-radius:999px;cursor:pointer;transition:color .3s,border-color .3s}
+#todaybtn:active{color:var(--ink);border-color:var(--rose2)}
+#todaybtn.done{color:var(--ink3);border-color:transparent;letter-spacing:.14em}
+#todaycard{max-width:340px;margin:16px auto 0;padding:14px 18px;border:1px solid var(--line);border-radius:14px;background:var(--panel);font-family:var(--serif);font-size:14.5px;color:var(--ink2);letter-spacing:.05em;opacity:0;transform:translateY(8px);transition:opacity .45s,transform .45s;display:none}
+#todaycard.show{display:block;opacity:1;transform:translateY(0)}
+#mswrap{position:fixed;inset:0;z-index:80;background:rgba(4,5,9,.72);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+#mswrap.show{opacity:1;pointer-events:auto}
+#mscard{width:min(86vw,360px);background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:26px 24px;transform:translateY(14px) scale(.97);transition:transform .3s}
+#mswrap.show #mscard{transform:none}
+.mstitle{font-family:var(--num);font-size:11px;letter-spacing:.3em;color:var(--ink3);text-transform:uppercase;text-align:center}
+.msrow{display:flex;justify-content:space-between;align-items:baseline;padding:13px 0;border-bottom:1px solid var(--line)}
+.msrow:last-of-type{border-bottom:none}
+.msrow .md{font-size:15px;color:var(--ink);font-family:var(--serif)}
+.msrow .mn2{display:block;font-size:10.5px;color:var(--ink3);letter-spacing:.12em;margin-top:4px}
+.msrow .mr{font-size:12px;color:var(--rose2);font-family:var(--num)}
+.mshint{margin-top:14px;text-align:center;font-size:10px;letter-spacing:.2em;color:var(--ink3)}
+.spark{position:fixed;z-index:99;pointer-events:none;font-size:12px;color:var(--moon);animation:sparkup .95s ease-out forwards;text-shadow:0 0 8px var(--rose)}
+.spark.heart{color:var(--rose2)}
+@keyframes sparkup{0%{opacity:0;transform:translateY(0) scale(.5)}18%{opacity:1}100%{opacity:0;transform:translateY(-52px) scale(1.2)}}
+.wish.skipfx #tw{opacity:.35}
+
+/* sky-tinted palettes (auto, follows her sky) */
+html[data-theme="night"][data-sky="dawn"]{
+  --bg:#0a0f13; --bg2:#141d22; --panel:#111820; --ink:#f3efe6; --ink2:#a8a396; --ink3:#6e6c63;
+  --rose:#e8926a58; --rose2:#e8906a; --accent:#d98a5f; --moon:#f0e3c8;
+  --glow:0 0 54px 6px rgba(232,144,106,.15); --starglow:rgba(240,225,195,.32);
+}
+html[data-theme="night"][data-sky="day"]{
+  --bg:#0c1319; --bg2:#152028; --panel:#121a22; --ink2:#a6a8a2; --ink3:#6d7069; --moon:#e8e2d4;
+  --starglow:rgba(255,255,255,.16);
+}
+html[data-theme="night"][data-sky="dusk"]{
+  --bg:#0f0b14; --bg2:#1a1322; --panel:#151020; --ink:#f2eef0; --ink2:#a39ba6; --ink3:#6c6570;
+  --rose:#d4708f58; --rose2:#d4708f; --accent:#c06a92; --heart:#cf5f83; --moon:#ecd9d2;
+  --glow:0 0 54px 6px rgba(212,112,143,.16); --starglow:rgba(236,217,210,.35);
+}
+html[data-sky] body{transition:background .9s linear,color .9s linear}
+/* map: per-city celestial marker (her sky / my sky) */
+.cel{cursor:default}
+.cel .cbody{fill:var(--moon)}
+.cel .cbody.sunb{fill:#e9c46a}
+.cel .cbody.dawnb{fill:#e9a06a}
+.cel .cbody.duskb{fill:#d98a9f}
+.cel .cray{stroke:#e9c46a;stroke-width:1.4;stroke-linecap:round}
+.cel .celword{font-family:var(--serif);font-size:21px;letter-spacing:.1em;fill:var(--ink3)}
+/* twin-night line */
+.you .duo{display:block;margin-top:6px;font-size:11px;letter-spacing:.16em;color:var(--rose2)}
+/* meteor */
+#meteor{position:fixed;width:2px;height:2px;border-radius:50%;background:#fff;
+  box-shadow:0 0 7px 2px rgba(255,255,255,.75);opacity:0;pointer-events:none;z-index:1}
+#meteor.go{animation:meteor .9s ease-out 1}
+@keyframes meteor{0%{opacity:0;transform:translate(0,0) rotate(35deg)}8%{opacity:.9}
+  100%{opacity:0;transform:translate(-40vw,24vh) rotate(35deg)}}
+
+html[data-theme="night"][data-sky="evening"]{
+  --bg:#090d14; --bg2:#101627; --panel:#0f1520; --ink:#f2efe9; --ink2:#a5a49d; --ink3:#6c6b64;
+  --moon:#ece7d9; --starglow:rgba(255,255,255,.30);
+}
+html[data-sky] body{transition:background .9s linear,color .9s linear}
+/* sun / moon arc */
+#skyorb{position:fixed;z-index:0;width:46px;height:46px;border-radius:50%;pointer-events:none;left:0;top:0;
+  opacity:0;transition:opacity 1.4s linear,background 1.4s linear;
+  background:radial-gradient(circle at 42% 38%,#fbe6b0,#e9c46a 58%,rgba(233,196,106,0) 74%);
+  box-shadow:0 0 46px 14px rgba(233,196,106,.20)}
+#skyorb.moon{background:radial-gradient(circle at 60% 62%,#f6f3ea,#d8d4c4 58%,rgba(216,212,196,0) 74%);
+  box-shadow:0 0 38px 10px rgba(232,226,212,.16)}
+/* per-city weather fx on the map */
+.cityfx .fxr{stroke:var(--rose2);stroke-width:1.6;stroke-linecap:round;opacity:0;
+  animation:fxdrop var(--d) linear var(--t) infinite}
+.cityfx .fxs{fill:#fff;opacity:0;animation:fxdrop var(--d) linear var(--t) infinite}
+.cityfx .fxcl{fill:var(--ink3);opacity:.26;animation:fxdrift 15s ease-in-out infinite alternate}
+.cityfx .fxcl.d2{opacity:.18;animation-delay:-7.5s}
+.cityfx .fxf{fill:var(--ink3);opacity:.16;animation:fxdrift 9s ease-in-out infinite alternate}
+.cityfx .fxc{fill:none;stroke:#e9c46a;stroke-width:1.6;transform-box:fill-box;transform-origin:center;
+  animation:fxpulse 3.6s ease-in-out infinite}
+.cityfx .fxb{fill:#f0d060;opacity:0;animation:fxflash 5.5s linear infinite}
+@keyframes fxdrop{0%{opacity:0;transform:translateY(0)}12%{opacity:.75}100%{opacity:0;transform:translateY(84px)}}
+@keyframes fxdrift{from{transform:translateX(-13px)}to{transform:translateX(13px)}}
+@keyframes fxpulse{0%,100%{opacity:.14;transform:scale(.88)}50%{opacity:.42;transform:scale(1.1)}}
+@keyframes fxflash{0%,88%,96%,100%{opacity:0}91%,94%{opacity:.8}}
+.wxc2{opacity:0;transition:opacity 1.4s linear}
+html[data-wxm] .wxc2{opacity:1}
+.cel .celword{font-size:23px}
 </style>
 <script>document.documentElement.className+=' js';</script>
 <link rel="manifest" href="manifest.webmanifest">
@@ -212,7 +322,7 @@ main{padding-bottom:88px}
 
   <section class="map rise" id="map">
     <div class="cap"><span>距离阻止不了我爱你</span><span class="r" id="dc">1,188 公里</span></div>
-    <div class="mapwrap" id="mapwrap" tabindex="0" role="img" aria-label="中国轮廓上，常州处是你的头像，佛山处是她的头像，两个头像之间有一条连线，她头像边上有一颗心">
+    <div class="mapwrap" id="mapwrap" tabindex="0" role="img" aria-label="中国轮廓上，常州处是你的头像，顺德处是她的头像，两个头像之间有一条连线，她头像边上有一颗心">
       <svg id="msvg" viewBox="118 22 733 640" preserveAspectRatio="xMidYMid meet" role="presentation" aria-hidden="true">
         <defs><clipPath id="avM"><circle cx="747.4" cy="404.5" r="40.0"/></clipPath>
         <clipPath id="avF"><circle cx="639.2" cy="562.3" r="40.0"/></clipPath>
@@ -228,9 +338,14 @@ main{padding-bottom:88px}
         <g class="av av-f"><image href="data:image/jpeg;base64,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" x="599.2" y="522.3" width="80.0" height="80.0" clip-path="url(#avF)" preserveAspectRatio="xMidYMid slice"/><circle class="avring" cx="639.2" cy="562.3" r="40.0"/></g>
         <text class="lab" x="747.4" y="352.5" text-anchor="middle">我</text>
         <text class="lab" x="590.2" y="566.3" text-anchor="end">你</text>
+        <g class="cel" id="celM" transform="translate(786,349)" data-p=""></g>
+        <g class="cel" id="celF" transform="translate(556,563)" data-p=""></g>
+        <g class="cityfx" id="fxM" transform="translate(747.4,404.5)" data-w=""></g>
+        <g class="cityfx" id="fxF" transform="translate(639.2,562.3)" data-w=""></g>
+        <g class="wxc2" transform="translate(747.4,462)"><text class="wxstate" id="mwxt" text-anchor="middle"></text></g>
         
         <g class="wxc" transform="translate(639.2 618.3)">
-          <text class="city" id="wxg" text-anchor="middle">佛山</text>
+          <text class="city" id="wxg" text-anchor="middle">顺德</text>
           <text class="wxstate" id="wxt" y="29" text-anchor="middle"></text>
         </g>
         <g class="wxf"><line class="flyline" id="flyl" x1="747.4" y1="404.5" x2="639.2" y2="562.3"/>
@@ -264,8 +379,6 @@ main{padding-bottom:88px}
   <hr class="rule">
 
   <section class="wish rise"><span id="tw"></span><span class="c" aria-hidden="true"></span></section>
-  <section class="wish rise"><span id="dailine"></span></section>
-
   <footer class="foot rise">这个站只做一件事：记录我们的点点滴滴<span class="sig">PP &amp;&amp; YY</span></footer>
 </main>
 <script>
@@ -273,7 +386,7 @@ main{padding-bottom:88px}
   var D=document,H=D.documentElement,SYN=!!(navigator.connection&&navigator.connection.saveData);
   if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches){H.classList.add('no-motion');}
   var START=+new Date(2026,0,24,0,0,0);
-  var CZ={lat:31.93,lon:119.95,n:'常州'},FS={lat:23.02,lon:113.12,n:'佛山'};
+  var CZ={lat:31.93,lon:119.95,n:'常州'},FS={lat:22.84,lon:113.25,n:'顺德'};
   var PHASES={day:'白天',night:'夜里',dawn:'日出时分',dusk:'日落时分'};
   function pad(n){return (n<10?'0':'')+n}
   function fmt(ms){var s=Math.floor(ms/1000),d=Math.floor(s/86400);s-=d*86400;
@@ -348,13 +461,14 @@ main{padding-bottom:88px}
     moons.innerHTML=h;
   }
   /* ---------- 天气（失败只降级，不影响天色与时钟） ---------- */
+  var WXL={clear:'晴',cloud:'多云',rain:'有雨',snow:'下雪',fog:'有雾',thunder:'雷雨'};
   function wx2code(t){t=(t||'').toLowerCase();
     if(/thunder|雷/.test(t))return 'thunder';if(/snow|sleet|雪/.test(t))return 'snow';
     if(/rain|drizzle|雨/.test(t))return 'rain';if(/fog|mist| haze|雾/.test(t))return 'fog';
     if(/cloud|overcast|阴|多云/.test(t))return 'cloud';return 'clear'}
   function loadWX(force){
     if(!window.fetch||(SYN&&!force))return;
-    fetch('https://wttr.in/%E4%BD%9B%E5%B1%B1?format=j1',{cache:'no-store'}).then(function(r){
+    fetch('https://wttr.in/%E9%A1%BA%E5%BE%B7?format=j1',{cache:'no-store'}).then(function(r){
       if(!r.ok)throw 0;return r.json()}).then(function(j){
         var cur=j.current_condition&&j.current_condition[0];if(!cur)throw 0;
         var w=wx2code(cur.weatherDesc&&cur.weatherDesc[0]&&cur.weatherDesc[0].value);
@@ -364,11 +478,11 @@ main{padding-bottom:88px}
         if(astro&&days){S.date=new Date(days.date+'T00:00:00');
           S.sun={r:(+astro.sunrise.slice(0,2))*60+(+astro.sunrise.slice(3,5)),
                  s:(+astro.sunset.slice(0,2))*60+(+astro.sunset.slice(3,5))};}
-        var lab={clear:'晴',cloud:'多云',rain:'有雨',snow:'下雪',fog:'有雾',thunder:'雷雨'}[w];
+        var lab=WXL[w];
         var wx=el('wxt'),wg=el('wxg');
         if(wg)wg.textContent=FS.n;
         if(wx)wx.textContent=lab+' '+(t!=null?t+'°':'')+(feels!=null&&feels!==t?'（体感 '+feels+'°）':'');
-        weatherFX(w,win);paint();
+        weatherFX(w,win);setCityFX('fxF',w);paint();
       }).catch(function(){
         var wx=el('wxt');if(wx)wx.textContent='';
         H.removeAttribute('data-wx');
@@ -391,18 +505,93 @@ main{padding-bottom:88px}
   }
   /* ---------- 首屏：天色与钟 ---------- */
   function hourLine(){
-    var now=new Date(),p=phase(FS,now),nm=PHASES[p],s=solar(FS,now),t=bjMin(now),x='';
-    if(s){ if(t<s.r)x='离你那边日出还有 '+left((s.r-t)*6e4);
-           else if(t<s.s)x='离你那边日落还有 '+left((s.s-t)*6e4);
-           else x='你那边该睡了，我这边还亮着'; }
-    return '<span class="dot"></span>你那边是'+nm+' · '+bjClock(now)+'<br><span class="sub">'+x+'</span>';
+    var now=new Date(),h=now.getHours();
+    var g=h<5?'夜深了':h<8?'早上好':h<11?'上午好':h<14?'中午好':h<17?'下午好':h<19?'傍晚好':h<23?'晚上好':'夜深了';
+    return '<span class="dot"><\/span>'+g+' · '+bjClock(now);
+  }
+  /* 地图：把天气画进城市 */
+  function cityFX(w){
+    if(!w||w==='clear')return '<circle class="fxc" r="33"/>';
+    if(w==='cloud')return '<g class="fxcl"><ellipse cx="-17" cy="-46" rx="15" ry="6.5"/><ellipse cx="2" cy="-52" rx="19" ry="8.5"/><ellipse cx="19" cy="-45" rx="13" ry="5.5"/></g>'+
+      '<g class="fxcl d2"><ellipse cx="-8" cy="-38" rx="12" ry="5"/><ellipse cx="10" cy="-40" rx="14" ry="6"/></g>';
+    if(w==='fog')return '<rect class="fxf" x="-38" y="-42" width="76" height="6.5" rx="3.2"/><rect class="fxf" style="animation-delay:-4s" x="-32" y="-26" width="64" height="5.5" rx="2.7"/>';
+    if(w==='snow'){var h='',i;for(i=0;i<10;i++)h+='<circle class="fxs" cx="'+(-40+Math.random()*80).toFixed(0)+'" cy="-52" r="1.8" style="--d:'+(2.4+Math.random()*1.8).toFixed(2)+'s;--t:'+(-Math.random()*4).toFixed(2)+'s"/>';return h}
+    var h='',i;
+    for(i=0;i<9;i++)h+='<line class="fxr" x1="'+(-40+i*10)+'" y1="-46" x2="'+(-42+i*10)+'" y2="-38" style="--d:'+(0.9+Math.random()*0.7).toFixed(2)+'s;--t:'+(-Math.random()*1.5).toFixed(2)+'s"/>';
+    if(w==='thunder')h+='<polygon class="fxb" points="-4,-58 7,-58 -1,-44 7,-44 -10,-26 -3,-38 -9,-38"/>';
+    return h;
+  }
+  function setCityFX(id,w){
+    var g=el(id);if(!g)return;
+    if(g.getAttribute('data-w')===(w||''))return;
+    g.setAttribute('data-w',w||'');g.innerHTML=cityFX(w);
+  }
+  function loadWXM(){
+    if(!window.fetch||SYN)return;
+    fetch('https://wttr.in/%E5%B8%B8%E5%B7%9E?format=j1',{cache:'no-store'}).then(function(r){
+      if(!r.ok)throw 0;return r.json()}).then(function(j){
+        var cur=j.current_condition&&j.current_condition[0];if(!cur)throw 0;
+        var w=wx2code(cur.weatherDesc&&cur.weatherDesc[0]&&cur.weatherDesc[0].value);
+        setCityFX('fxM',w);H.setAttribute('data-wxm',w);
+        var mt=el('mwxt');
+        if(mt)mt.textContent=CZ.n+' '+WXL[w]+(cur.temp_C!=null?' '+cur.temp_C+'°':'');
+      }).catch(function(){setCityFX('fxM','');H.removeAttribute('data-wxm');});
+  }
+  /* 太阳与月亮：按你的时间在天上走 */
+  var orb=null;
+  function orbTick(now){
+    if(!orb){orb=D.createElement('div');orb.id='skyorb';D.body.appendChild(orb);}
+    var h=now.getHours()+now.getMinutes()/60,
+        day=h>=6&&h<18,moon=h>=18.5||h<5.5;
+    if(!day&&!moon){orb.style.opacity='0';return}
+    var t=day?(h-6)/12:(h>=18.5?(h-18.5)/11:(h+5.5)/11);
+    t=Math.max(0,Math.min(1,t));
+    orb.className=day?'':'moon';
+    orb.style.opacity=day?'.95':'.78';
+    orb.style.left=(6+t*86)+'vw';
+    orb.style.top=(76-Math.sin(Math.PI*t)*34)+'vh';
+  }
+  /* 地图两城天体：她那边什么天，点就长什么样 */
+  var CW={dawn:'晨',day:'昼',dusk:'暮',night:'夜'};
+  function celSVG(p){
+    if(p==='night')return '<path class="cbody" d="M1.5,-5.9 A6.1,6.1 0 1,0 1.5,5.9 A7.4,7.4 0 0,1 1.5,-5.9 Z"/>';
+    if(p==='day')return '<circle class="cbody sunb" r="5.4"/><g class="cray">'+
+      '<line x1="0" y1="-8.8" x2="0" y2="-11.4"/><line x1="0" y1="8.8" x2="0" y2="11.4"/>'+
+      '<line x1="-8.8" y1="0" x2="-11.4" y2="0"/><line x1="8.8" y1="0" x2="11.4" y2="0"/>'+
+      '<line x1="-6.2" y1="-6.2" x2="-8" y2="-8"/><line x1="6.2" y1="6.2" x2="8" y2="8"/>'+
+      '<line x1="6.2" y1="-6.2" x2="8" y2="-8"/><line x1="-6.2" y1="6.2" x2="-8" y2="8"/></g>';
+    var cls=p==='dawn'?' dawnb':' duskb';
+    return '<path class="cbody'+cls+'" d="M-6,0.7 A6.1,6.1 0 0,1 6,0.7 Z"/><line class="cray" x1="-8.4" y1="3.6" x2="8.4" y2="3.6"/>';
+  }
+  function setCel(id,p){
+    var g=el(id);if(!g||g.getAttribute('data-p')===p)return;
+    g.setAttribute('data-p',p);
+    g.innerHTML=celSVG(p)+'<text class="celword" x="0" y="-14" text-anchor="middle">'+CW[p]+'</text>';
+  }
+  function updateCel(now){
+    setCel('celM',phase(CZ,now));setCel('celF',phase(FS,now));
+  }
+  /* 流星：她的夜+晴时，偶尔一颗 */
+  var meteorT=null;
+  function meteorTick(){
+    if(D.hidden||SYN)return;
+    var sk=H.getAttribute('data-sky');if(sk!=='night'&&sk!=='evening')return;
+    var w=H.getAttribute('data-wx');
+    if(w&&w!=='clear'&&w!=='cloud')return;
+    if(Math.random()<.42){
+      var m2=el('meteor');
+      if(!m2){m2=D.createElement('div');m2.id='meteor';D.body.appendChild(m2);}
+      m2.style.top=(4+Math.random()*26)+'%';
+      m2.style.left=(55+Math.random()*40)+'%';
+      m2.classList.remove('go');void m2.offsetWidth;m2.classList.add('go');
+    }
   }
   paint=function(){
     var now=new Date(),day=Math.floor((+now-START)/864e5),idx=day+1;
     if(dnum)dnum.textContent=String(idx);
     if(alive)alive.textContent=fmt(+now-START);
     if(you)you.innerHTML=hourLine();
-    var p=phase(FS,now);H.setAttribute('data-sky',p==='day'?'day':p==='night'?'night':p);
+    var hh=now.getHours();H.setAttribute('data-sky',hh<5?'night':hh<8?'dawn':hh<16?'day':hh<19?'dusk':hh<23?'evening':'night');orbTick(now);
     if(dc&&S.km)dc.textContent=S.km.toLocaleString('en-US')+' 公里';
     if(bar){var c=+now-START,y=Math.floor(c/(365.2425*864e5)),
         st=+new Date(new Date(now).getFullYear(),0,1),into=(+now-st)/(365.2425*864e5);
@@ -413,19 +602,39 @@ main{padding-bottom:88px}
       if(pmeta){var nx=null;for(var i=0;i<MS.length;i++){if(MS[i][0]>idx){nx=MS[i];break}}
         pmeta.textContent=nx?(nx[1]+' · 还有 '+(nx[0]-idx)+' 天 · '+dstr(START+nx[0]*864e5)):'后面的日子我们自己数';}
     }
-    renderMiles(now,idx);renderMoons(now);
+    renderMiles(now,idx);renderMoons(now);updateCel(now);
   };
   var WISH=['下一次你到站台的时候，我提前四十分钟到。',
             '想把常州的夜宵，搬到你楼下。',
             '攒够车票，就把 1,188 公里走成零。',
             '你那边下雨的时候，我这边的雨也下过了。',
-            '想和你一起把日子过得没有意义也可以。'];
+            '想和你一起把日子过得没有意义也可以。',
+            "你那边下雨的话，记得带伞，不然我把伞寄过去。","我们之间隔着一千一百八十八公里，可我数的永远是见面的倒计时。","熬过异地恋就是一生，我们正在熬糖，别急，会甜的。","晚安不是句号，是我把今天最后一次想你正式归档。","你在南边，我在北边，月亮只有一个，算我们共用的。","每次视频你一笑，我就觉得这一千公里是值得的。","攒了好久的拥抱，见面的时候记得连本带利取走。","我不追星，我只是追你消息秒回的样子。","别人的异地恋是考验，我们的异地恋是攒见面的借口。","等见面那天，出站口会站着一个憋了太久的人。","你负责好好吃饭，我负责把想你的事做成日常。","数到五百二十天的时候提醒我，我准备了新的情话。","我们的故事慢一点没关系，反正结尾是你。","今天的世界很吵，一想到你，就自动静音了。","你睡了吗？没睡的话，月亮替我说晚安；睡了的话，梦里说。","把回忆拼好给你，把未来留给你。"];
   function wishLoop(){
-    if(!tw)return;var i=0;
-    function show(){tw.style.opacity='0';
-      setTimeout(function(){tw.textContent=WISH[i%WISH.length];tw.style.opacity='1'},700);
-      i++;setTimeout(show,11000)}
-    tw.textContent=WISH[0];i=1;setTimeout(show,9000);
+    if(!tw)return;
+    var i=Math.floor(Math.random()*WISH.length);
+    var cur=document.createElement('span');
+    var caret=document.createElement('span');
+    caret.className='caret';
+    tw.textContent='';tw.appendChild(cur);tw.appendChild(caret);
+    var ep=0;
+    function type(text,ci){
+      var my=ep;
+      if(ci<=text.length){cur.textContent=text.slice(0,ci);
+        setTimeout(function(){if(my!==ep)return;type(text,ci+1)},ci===text.length?0:46);}
+      else{setTimeout(function(){if(my!==ep)return;del(text,text.length)},2400);}
+    }
+    function del(text,ci){
+      var my=ep;
+      if(ci>=0){cur.textContent=text.slice(0,ci);
+        setTimeout(function(){if(my!==ep)return;del(text,ci-1)},ci===0?0:18);}
+      else{i=(i+1)%WISH.length;setTimeout(function(){if(my!==ep)return;type(WISH[i],0)},420);}
+    }
+    window.__wishSkip=function(){
+      ep++;i=(i+1)%WISH.length;cur.textContent='';
+      setTimeout(function(){type(WISH[i],0)},150);
+    };
+    type(WISH[i],0);
   }
   /* ---------- 星空（夜里更亮，白天基本收起来） ---------- */
   function stars(){
@@ -459,24 +668,101 @@ main{padding-bottom:88px}
   }else{els.forEach(force)}
   setTimeout(function(){els.forEach(force)},2200);
   paint();wishLoop();stars();loadWX();
-  setTimeout(loadWX,6e5);
-  setInterval(paint,1000);
+  setTimeout(loadWX,6e5);setTimeout(loadWXM,1200);setInterval(function(){if(!D.hidden)loadWXM()},600000);
+  setInterval(paint,1000);setInterval(meteorTick,9000);meteorTick();
   S.km=1188;
-  addEventListener('visibilitychange',function(){if(!D.hidden){paint();loadWX(1)}});
+  addEventListener('visibilitychange',function(){if(!D.hidden){paint();loadWX(1);loadWXM()}});
   setInterval(function(){if(!D.hidden)loadWX(1)},600000);
 })();
 </script>
-<div id="mdock"><iframe id="mframe" title="每日一首" frameborder="no" border="0" marginwidth="0" marginheight="0" width="100%" height="66" allow="autoplay; encrypted-media" src="about:blank"></iframe></div>
+<div id="mdock"><div id="dcard" role="button" aria-label="播放今日歌曲"><img id="dcover" alt="封面" referrerpolicy="no-referrer"><div class="dmeta"><span id="dtitle"></span><span id="dartist"></span></div><span class="dplay">&#9654;</span></div><div id="dnow" role="button" aria-label="暂停或继续" hidden><img id="dcover2" alt="封面" referrerpolicy="no-referrer"><div class="dmeta"><span id="dnowtitle"></span><div class="dbars"><i></i><i></i><i></i><i></i></div></div><span id="dpp">&#10074;&#10074;</span></div><div id="dprog"><i></i></div><audio id="daudio" preload="none"></audio></div>
 <script>
 (function(){
-  var MZ=[1403318151,475479888,2025533834,488249475,865632948,2043112316,1500569811,1303027499,1336856864,1359356908,1436709403,1426112587];
-  var DL=["你那边下雨的话，记得带伞，不然我把伞寄过去。","我们之间隔着一千一百八十八公里，可我数的永远是见面的倒计时。","熬过异地恋就是一生，我们正在熬糖，别急，会甜的。","晚安不是句号，是我把今天最后一次想你正式归档。","你在南边，我在北边，月亮只有一个，算我们共用的。","每次视频你一笑，我就觉得这一千公里是值得的。","攒了好久的拥抱，见面的时候记得连本带利取走。","我不追星，我只是追你消息秒回的样子。","别人的异地恋是考验，我们的异地恋是攒见面的借口。","等见面那天，出站口会站着一个憋了太久的人。","你负责好好吃饭，我负责把想你的事做成日常。","数到五百二十天的时候提醒我，我准备了新的情话。","我们的故事慢一点没关系，反正结尾是你。","今天的世界很吵，一想到你，就自动静音了。","你睡了吗？没睡的话，月亮替我说晚安；睡了的话，梦里说。","把回忆拼好给你，把未来留给你。"];
-  var n=new Date();
-  var key=(+n.getFullYear())*366+(n.getMonth()+1)*31+n.getDate();
-  var f=document.getElementById("mframe");
-  if(f){f.src="https://music.163.com/outchain/player?type=2&id="+MZ[key%MZ.length]+"&auto=1&height=66";}
-  var d=document.getElementById("dailine");
-  if(d){d.textContent=DL[key%DL.length];}
+  var MZ=[{"id": 1403318151, "t": "把回忆拼好给你", "a": "王贰浪", "c": "https://p1.music.126.net/CBx2K_jEN3SNWwYztagPPw==/109951164485969446.jpg"}, {"id": 475479888, "t": "在你的身边", "a": "盛哲", "c": "https://p1.music.126.net/AYNBdRxJ8EdZo4xFjp7b4Q==/109951163191178425.jpg"}, {"id": 2025533834, "t": "我们的歌", "a": "刘大拿", "c": "https://p1.music.126.net/Gm2v1KrDe2TwplzxcmTxYg==/109951168428025131.jpg"}, {"id": 488249475, "t": "哪里都是你", "a": "队长", "c": "https://p1.music.126.net/lnOnBbP_H-052Hv5ls-QjA==/109951162964628408.jpg"}, {"id": 865632948, "t": "若把你", "a": "Kirsty刘瑾睿", "c": "https://p2.music.126.net/M877M2-VhWZiLPVFORf9iQ==/109951163401482434.jpg"}, {"id": 2043112316, "t": "Don't Go Back Tonight", "a": "TizzyT", "c": "https://p2.music.126.net/ABq_jZDJDcTY-vIHoe6hUQ==/109951169770889971.jpg"}, {"id": 1500569811, "t": "阿拉斯加海湾", "a": "蓝心羽", "c": "https://p2.music.126.net/j9P19hOTNbYxLZDJB9bJag==/109951169385715334.jpg"}, {"id": 1303027499, "t": "总有一天你会出现在我身边", "a": "棱镜乐队", "c": "https://p2.music.126.net/RfUHXkanpxImcaGqFNWBeA==/109951163598901405.jpg"}, {"id": 1336856864, "t": "形容", "a": "沈以诚", "c": "https://p2.music.126.net/1iLwRvMtUMYLZUNR-HQW7Q==/109951163957708692.jpg"}, {"id": 1359356908, "t": "晚安", "a": "颜人中", "c": "https://p2.music.126.net/-rC55JsnmEWvafJQsAZaWw==/109951170473693123.jpg"}, {"id": 1436709403, "t": "夏天的风", "a": "火羊瞌睡了", "c": "https://p2.music.126.net/rFUKVdOjqxgwAT6Zi6qv7A==/109951164906689206.jpg"}, {"id": 1426112587, "t": "下雨天", "a": "与少年他/芝麻Mochi", "c": "https://p2.music.126.net/qRfggLX2Va3Wslqjr7FxSg==/109951164742550320.jpg"}];
+  var pick=MZ[Math.floor(Math.random()*MZ.length)];
+  var t=document.getElementById("dtitle");
+  if(t){t.textContent=pick.t;}
+  var a=document.getElementById("dartist");
+  if(a){a.textContent=pick.a;}
+  var c=document.getElementById("dcover");
+  if(c){c.src=pick.c;}
+  var c2=document.getElementById("dcover2");
+  if(c2){c2.src=pick.c;}
+  var nt=document.getElementById("dnowtitle");
+  if(nt){nt.textContent=pick.t+" \u00b7 "+pick.a;}
+  var card=document.getElementById("dcard"),now=document.getElementById("dnow"),au=document.getElementById("daudio"),pp=document.getElementById("dpp"),bars=document.querySelector(".dbars"),prog=document.querySelector("#dprog i");
+  var started=false;
+  function ui(p){if(pp){pp.textContent=p?"\u275A\u275A":"\u25B6";}if(bars){bars.classList.toggle("paused",!p);}}
+  function play(){
+    if(!started){started=true;au.src="https://music.163.com/song/media/outer/url?id="+pick.id+".mp3";au.onerror=function(){if(nt){nt.textContent="\u4eca\u5929\u8fd9\u9996\u6b4c\u6682\u65f6\u53bb\u4e0d\u4e86\uff0c\u660e\u5929\u518d\u542c\u5427";}if(pp){pp.style.visibility="hidden";}};}
+    au.play();ui(true);
+  }
+  function pause(){au.pause();ui(false);}
+  if(card){card.addEventListener("click",function(){card.style.display="none";now.hidden=false;play();});}
+  if(now){now.addEventListener("click",function(){au.paused?play():pause();});}
+  if(au){au.addEventListener("timeupdate",function(){if(au.duration&&prog){prog.style.width=Math.min(100,au.currentTime/au.duration*100)+"%";}});}
+  if(au){au.addEventListener("ended",function(){ui(false);if(prog){prog.style.width="0";}started=false;au.removeAttribute("src");au.load();now.hidden=true;card.style.display="flex";});}
+})();
+</script>
+<script>
+(function(){
+  var SENT=["今天的想念已送达，请查收。","距离见面，又近了一点点。","今天也把你放在心尖尖上。","我的今天很有趣，因为想你啊。","把今天的月亮分你一半。","想你这件事，今天也全勤。","今天的风很温柔，像你。","你要好好吃饭，我们都会很好的。","今天也是为见到你努力的一天。","世界很大，我的心里只有你。","今天也很想你，超过昨天，不及明天。","你在的地方，就是我心的方向。","今天的喜欢，依然满格。","等风来，等花开，等你来。","今天的星星很亮，像你看我的眼睛。","把晚安存好，见面时一起说给你听。","今天也偷偷想你了，别告诉他。","我们的每天都在靠近。","今天要开心，不然我心疼。","日子在倒数，爱在正数。"];
+  var wishEl=document.querySelector('.wish');
+  if(wishEl){
+    wishEl.insertAdjacentHTML('afterend','<div id="todaybox"><button id="todaybtn" type="button">今日份想念 ✦</button><div id="todaycard"></div></div>');
+    var b=document.getElementById('todaybtn'),c=document.getElementById('todaycard');
+    var ann=new Date(2026,0,24);
+    function didx(){var n=new Date();n.setHours(12,0,0,0);var d=new Date(ann);d.setHours(12,0,0,0);return Math.floor((n-d)/864e5)}
+    var di=didx(),claimed=false;
+    try{claimed=localStorage.getItem('ourdays_today')===String(di)}catch(e){}
+    if(claimed){b.textContent='今日已领 ✦';b.classList.add('done');c.textContent=SENT[di%SENT.length];c.classList.add('show')}
+    b.addEventListener('click',function(){
+      if(claimed)return;claimed=true;
+      try{localStorage.setItem('ourdays_today',String(di))}catch(e){}
+      c.textContent=SENT[di%SENT.length];c.classList.add('show');b.classList.add('done');b.textContent='今日已领 ✦';
+    });
+    var pt=null;
+    wishEl.addEventListener('pointerdown',function(){
+      pt=setTimeout(function(){
+        pt=null;
+        try{navigator.vibrate&&navigator.vibrate(18)}catch(e){}
+        if(window.__wishSkip){window.__wishSkip();wishEl.classList.add('skipfx');setTimeout(function(){wishEl.classList.remove('skipfx')},420)}
+      },480);
+    });
+    ['pointerup','pointerleave','pointercancel'].forEach(function(ev){
+      wishEl.addEventListener(ev,function(){if(pt){clearTimeout(pt);pt=null}});
+    });
+  }
+  var MS=[[365,'一整年的春夏秋冬'],[520,'520，我爱你的日子'],[1000,'第 1000 天，十全十美']];
+  var ann2=new Date(2026,0,24);
+  document.body.insertAdjacentHTML('beforeend','<div id="mswrap"><div id="mscard"><div class="mstitle">Milestones</div><div id="msrows"></div><div class="mshint">从相识那天开始数</div></div></div>');
+  var wrap=document.getElementById('mswrap'),rows=document.getElementById('msrows');
+  var today=new Date();today.setHours(12,0,0,0);
+  var html='';
+  MS.forEach(function(m){
+    var t=new Date(ann2.getTime()+m[0]*864e5);t.setHours(12,0,0,0);
+    var left=Math.round((t-today)/864e5);
+    if(left>0){
+      var ds=t.getFullYear()+'.'+String(t.getMonth()+1).padStart(2,'0')+'.'+String(t.getDate()).padStart(2,'0');
+      html+='<div class="msrow"><span class="md">'+ds+'<span class="mn2">'+m[1]+'</span></span><span class="mr">还有 '+left+' 天</span></div>';
+    }
+  });
+  rows.innerHTML=html;
+  var big=document.querySelector('.big');
+  if(big){big.style.cursor='pointer';big.addEventListener('click',function(){wrap.classList.add('show')})}
+  wrap.addEventListener('click',function(e){if(e.target===wrap)wrap.classList.remove('show')});
+  document.addEventListener('click',function(e){
+    if(e.target.closest('button,a,#mdock,#mswrap,.big,.wish,#todaybox,#daudio,#dcard'))return;
+    for(var k=0;k<2;k++){
+      var sp=document.createElement('span');
+      sp.className='spark'+(Math.random()<.45?' heart':'');
+      sp.textContent=Math.random()<.5?'✦':'❤';
+      sp.style.left=(e.clientX+(Math.random()*26-13))+'px';
+      sp.style.top=(e.clientY+(Math.random()*12-6))+'px';
+      document.body.appendChild(sp);
+      (function(node){setTimeout(function(){node.remove()},980)})(sp);
+    }
+  });
 })();
 </script>
 </body>
