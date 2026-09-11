@@ -489,29 +489,53 @@ html[data-wxm] .wxc2{opacity:1}
     if(/thunder|雷/.test(t))return 'thunder';if(/snow|sleet|雪/.test(t))return 'snow';
     if(/rain|drizzle|雨/.test(t))return 'rain';if(/fog|mist| haze|雾/.test(t))return 'fog';
     if(/cloud|overcast|阴|多云/.test(t))return 'cloud';return 'clear'}
+  function omURL(o){
+    return 'https://api.open-meteo.com/v1/forecast?latitude='+o.lat+'&longitude='+o.lon+
+      '&current=weather_code,temperature_2m,apparent_temperature,wind_speed_10m'+
+      '&minutely_15=precipitation&past_minutely_15=10&forecast_minutely_15=2&timezone=Asia%2FShanghai'}
+  function omWx(c){c=+c;
+    if(c===0)return 'clear';if(c<=3)return 'cloud';if(c===45||c===48)return 'fog';
+    if((c>=51&&c<=67)||(c>=80&&c<=82))return 'rain';
+    if((c>=71&&c<=77)||c===85||c===86)return 'snow';if(c>=95)return 'thunder';return 'clear'}
+  function omRain(m){if(!m||!m.precipitation)return false;
+    var a=m.precipitation,i=Math.max(0,a.length-10);
+    for(;i<a.length;i++)if(+a[i]>0.05)return true;return false}
+  function omFetch(o){var c=new AbortController();
+    setTimeout(function(){try{c.abort()}catch(e){}},9000);
+    return fetch(omURL(o),{cache:'no-store',signal:c.signal})
+      .then(function(r){if(!r.ok)throw 0;return r.json()})}
+  function wtFetch(city){var c=new AbortController();
+    setTimeout(function(){try{c.abort()}catch(e){}},9000);
+    return fetch('https://wttr.in/'+encodeURIComponent(city)+'?format=j1',{cache:'no-store',signal:c.signal})
+      .then(function(r){if(!r.ok)throw 0;return r.json()})
+      .then(function(j){var cu=j.current_condition&&j.current_condition[0];if(!cu)throw 0;
+        return {w:wx2code(cu.weatherDesc&&cu.weatherDesc[0]&&cu.weatherDesc[0].value),
+                t:cu.temp_C,f:cu.FeelsLikeC}})
+      .catch(function(){return null})}
+
   function loadWX(force){
     if(!window.fetch||(SYN&&!force))return;
-    fetch('https://wttr.in/%E9%A1%BA%E5%BE%B7?format=j1',{cache:'no-store'}).then(function(r){
-      if(!r.ok)throw 0;return r.json()}).then(function(j){
-        var cur=j.current_condition&&j.current_condition[0];if(!cur)throw 0;
-        var w=wx2code(cur.weatherDesc&&cur.weatherDesc[0]&&cur.weatherDesc[0].value);
-        var t=cur.temp_C,feels=cur.FeelsLikeC,win=(cur.windspeedKmph||0)*1000/3600;
-        H.setAttribute('data-wx',w);
-        var days=j.weather&&j.weather[0],astro=days&&days.astronomy&&days.astronomy[0];
-        if(astro&&days){S.date=new Date(days.date+'T00:00:00');
-          S.sun={r:(+astro.sunrise.slice(0,2))*60+(+astro.sunrise.slice(3,5)),
-                 s:(+astro.sunset.slice(0,2))*60+(+astro.sunset.slice(3,5))};}
-        var lab=WXL[w];
-        var wx=el('wxt'),wg=el('wxg');
-        if(wg)wg.textContent=FS.n;
-        if(wx)wx.textContent=lab+' '+(t!=null?t+'°':'')+(feels!=null&&feels!==t?'（体感 '+feels+'°）':'');
-        weatherFX(w,win);setCityFX('fxF',w);paint();
-      }).catch(function(){
-        var wx=el('wxt');if(wx)wx.textContent='';
-        H.removeAttribute('data-wx');
-        var y=el('you');if(y&&y.getAttribute('data-idle')) y.innerHTML=hourLine();
-      });
+    Promise.all([omFetch(FS).catch(function(){return null}),wtFetch('顺德')]).then(function(rs){
+      var o1=rs[0],w1=rs[1],wx=null,t=null,f=null,win=null;
+      if(o1&&o1.current){var cu=o1.current;wx=omWx(cu.weather_code);
+        t=cu.temperature_2m;f=cu.apparent_temperature;win=(+cu.wind_speed_10m||0)/3.6;
+        if((wx==='clear'||wx==='cloud')&&omRain(o1.minutely_15))wx='rain';}
+      if(w1){if(w1.w==='rain'||w1.w==='snow'||w1.w==='thunder')wx=w1.w;
+        if(t==null)t=w1.t;if(f==null)f=w1.f;}
+      if(wx==null)throw 0;
+      H.setAttribute('data-wx',wx);
+      var lab=WXL[wx],wxel=el('wxt'),wg=el('wxg');
+      if(wg)wg.textContent=FS.n;
+      if(wxel)wxel.textContent=lab+' '+(t!=null?Math.round(+t)+'°':'')+
+        (f!=null&&t!=null&&Math.round(+f)!==Math.round(+t)?'（体感 '+Math.round(+f)+'°）':'');
+      weatherFX(wx,win);setCityFX('fxF',wx);paint();
+    }).catch(function(){
+      var wxel=el('wxt');if(wxel)wxel.textContent='';
+      H.removeAttribute('data-wx');
+      var y=el('you');if(y&&y.getAttribute('data-idle')) y.innerHTML=hourLine();
+    });
   }
+
   function weatherFX(w,win){
     var rain=el('rain'),flash=el('flash');
     if(!rain)return;rain.innerHTML='';
@@ -551,16 +575,18 @@ html[data-wxm] .wxc2{opacity:1}
   }
   function loadWXM(){
     if(!window.fetch||SYN)return;
-    fetch('https://wttr.in/%E5%B8%B8%E5%B7%9E?format=j1',{cache:'no-store'}).then(function(r){
-      if(!r.ok)throw 0;return r.json()}).then(function(j){
-        var cur=j.current_condition&&j.current_condition[0];if(!cur)throw 0;
-        var w=wx2code(cur.weatherDesc&&cur.weatherDesc[0]&&cur.weatherDesc[0].value);
-        setCityFX('fxM',w);H.setAttribute('data-wxm',w);
-        var mt=el('mwxt');
-        if(mt)mt.textContent=CZ.n+' '+WXL[w]+(cur.temp_C!=null?' '+cur.temp_C+'°':'');
-      }).catch(function(){setCityFX('fxM','');H.removeAttribute('data-wxm');});
+    Promise.all([omFetch(CZ).catch(function(){return null}),wtFetch('常州')]).then(function(rs){
+      var o1=rs[0],w1=rs[1],wx=null,t=null;
+      if(o1&&o1.current){wx=omWx(o1.current.weather_code);t=o1.current.temperature_2m;
+        if((wx==='clear'||wx==='cloud')&&omRain(o1.minutely_15))wx='rain';}
+      if(w1){if(w1.w==='rain'||w1.w==='snow'||w1.w==='thunder')wx=w1.w;if(t==null)t=w1.t;}
+      if(wx==null)throw 0;
+      setCityFX('fxM',wx);H.setAttribute('data-wxm',wx);
+      var mt=el('mwxt');if(mt)mt.textContent=CZ.n+' '+WXL[wx]+(t!=null?' '+Math.round(+t)+'°':'');
+    }).catch(function(){setCityFX('fxM','');H.removeAttribute('data-wxm');});
   }
-  /* 太阳与月亮：按你的时间在天上走 */
+
+/* 太阳与月亮：按你的时间在天上走 */
   var orb=null;
   function orbTick(now,forced){
     if(!orb){orb=D.createElement('div');orb.id='skyorb';D.body.appendChild(orb);}
