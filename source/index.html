@@ -173,8 +173,18 @@ html[data-wx="cloud"],html[data-wx="rain"],html[data-wx="snow"],html[data-wx="fo
   #cast,#rain{display:none}
 }
 html.no-motion #cast,html.no-motion #rain,html.no-motion #flash{display:none}
+main{padding-bottom:88px}
+#mdock{position:fixed;left:50%;transform:translateX(-50%);bottom:10px;width:min(88vw,420px);z-index:80;border-radius:34px;overflow:hidden;background:rgba(120,124,150,.14);box-shadow:0 8px 28px rgba(0,0,0,.38);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+#mdock iframe{display:block;width:100%;height:66px;border:0}
 </style>
 <script>document.documentElement.className+=' js';</script>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#07080c">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="我们的日子">
 </head>
 <body>
 <div id="sky" aria-hidden="true"></div>
@@ -254,6 +264,7 @@ html.no-motion #cast,html.no-motion #rain,html.no-motion #flash{display:none}
   <hr class="rule">
 
   <section class="wish rise"><span id="tw"></span><span class="c" aria-hidden="true"></span></section>
+  <section class="wish rise"><span id="dailine"></span></section>
 
   <footer class="foot rise">这个站只做一件事：记录我们的点点滴滴<span class="sig">PP &amp;&amp; YY</span></footer>
 </main>
@@ -453,6 +464,19 @@ html.no-motion #cast,html.no-motion #rain,html.no-motion #flash{display:none}
   S.km=1188;
   addEventListener('visibilitychange',function(){if(!D.hidden){paint();loadWX(1)}});
   setInterval(function(){if(!D.hidden)loadWX(1)},600000);
+})();
+</script>
+<div id="mdock"><iframe id="mframe" title="每日一首" frameborder="no" border="0" marginwidth="0" marginheight="0" width="100%" height="66" allow="autoplay; encrypted-media" src="about:blank"></iframe></div>
+<script>
+(function(){
+  var MZ=[1403318151,475479888,2025533834,488249475,865632948,2043112316,1500569811,1303027499,1336856864,1359356908,1436709403,1426112587];
+  var DL=["你那边下雨的话，记得带伞，不然我把伞寄过去。","我们之间隔着一千一百八十八公里，可我数的永远是见面的倒计时。","熬过异地恋就是一生，我们正在熬糖，别急，会甜的。","晚安不是句号，是我把今天最后一次想你正式归档。","你在南边，我在北边，月亮只有一个，算我们共用的。","每次视频你一笑，我就觉得这一千公里是值得的。","攒了好久的拥抱，见面的时候记得连本带利取走。","我不追星，我只是追你消息秒回的样子。","别人的异地恋是考验，我们的异地恋是攒见面的借口。","等见面那天，出站口会站着一个憋了太久的人。","你负责好好吃饭，我负责把想你的事做成日常。","数到五百二十天的时候提醒我，我准备了新的情话。","我们的故事慢一点没关系，反正结尾是你。","今天的世界很吵，一想到你，就自动静音了。","你睡了吗？没睡的话，月亮替我说晚安；睡了的话，梦里说。","把回忆拼好给你，把未来留给你。"];
+  var n=new Date();
+  var key=(+n.getFullYear())*366+(n.getMonth()+1)*31+n.getDate();
+  var f=document.getElementById("mframe");
+  if(f){f.src="https://music.163.com/outchain/player?type=2&id="+MZ[key%MZ.length]+"&auto=1&height=66";}
+  var d=document.getElementById("dailine");
+  if(d){d.textContent=DL[key%DL.length];}
 })();
 </script>
 </body>
