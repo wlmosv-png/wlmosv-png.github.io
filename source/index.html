@@ -572,10 +572,11 @@ html[data-wxm] .wxc2{opacity:1}
   function doy(d){return Math.floor((Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())-Date.UTC(d.getFullYear(),0,1))/864e5)+1}
   function solar(o,date){
     var n=doy(date),g=(357.528+0.9856003*n)*RAD,
-        L=(280.460+0.9856474*n+1.915*RAD*Math.sin(g)+0.020*RAD*Math.sin(2*g)),
+        Ld=(280.460+0.9856474*n+1.915*Math.sin(g)+0.020*Math.sin(2*g)),
+        L=Ld*RAD,
         e=23.439*RAD-0.0000004*RAD*n,
         RA=Math.atan2(Math.cos(e)*Math.sin(L),Math.cos(L)),
-        deg=(L-RA)/RAD, eq=4*(((deg+540)%360)-180),
+        deg=Ld-RA/RAD, eq=4*(((deg%360)+540)%360-180),
         dec=Math.asin(Math.sin(e)*Math.sin(L)),
         cH=(Math.sin(-0.833*RAD)-Math.sin(o.lat*RAD)*Math.sin(dec))/(Math.cos(o.lat*RAD)*Math.cos(dec));
     if(cH>1||cH<-1)return null;
