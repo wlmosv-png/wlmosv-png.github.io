@@ -239,11 +239,13 @@ main{padding-bottom:88px}
 #missbtn:active,#flybtn:active{transform:scale(.92);color:var(--rose2);border-color:var(--rose2)}
 #missrow .cnt,#flybox .cnt{font-family:var(--serif);font-size:11px;color:var(--ink3);letter-spacing:.06em;white-space:nowrap}
 #flybox{position:relative;z-index:3}
-.plane{filter:drop-shadow(0 1px 2px rgba(217,85,95,.45))}
-.flytrail{fill:none;stroke:var(--rose2);stroke-width:1.4;stroke-linecap:round;opacity:.5;pointer-events:none}
+.plane{filter:drop-shadow(0 1px 2px rgba(217,85,95,.45));transition:opacity .35s ease}
+.flytrail{fill:none;stroke:var(--rose2);stroke-width:1.4;stroke-linecap:round;opacity:.5;pointer-events:none;transition:opacity 1.4s ease}
 .ring{fill:none;stroke:var(--rose2);stroke-width:1;pointer-events:none}
 .arrive{font-size:26px;fill:var(--rose2);transform-origin:center;transform-box:fill-box;animation:arrive .95s ease-out forwards;pointer-events:none}
 @keyframes arrive{0%{opacity:0;transform:scale(.3)}35%{opacity:1;transform:scale(1.3)}100%{opacity:0;transform:scale(.85) translateY(-10px)}}
+.ring2{fill:none;stroke:var(--rose2);stroke-width:1.2;transform-origin:center;transform-box:fill-box;animation:ringout .9s ease-out forwards;pointer-events:none}
+@keyframes ringout{0%{opacity:.8;transform:scale(.25)}100%{opacity:0;transform:scale(1)}}
 #mswrap{position:fixed;inset:0;z-index:80;background:rgba(4,5,9,.72);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 #mswrap.show{opacity:1;pointer-events:auto}
 #mscard{width:min(86vw,360px);background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:26px 24px;transform:translateY(14px) scale(.97);transition:transform .3s}
@@ -860,51 +862,69 @@ html[data-wxm] .wxc2{opacity:1}
       var arc=document.getElementById('arc'),svg=document.getElementById('msvg');
       if(arc&&svg){
         var NS='http://www.w3.org/2000/svg';
-        var olds=svg.querySelectorAll('.plane,.flytrail,.ring,.arrive');
-        for(var oi=0;oi<olds.length;oi++)olds[oi].remove();
-        var L=arc.getTotalLength();
-        var trail=document.createElementNS(NS,'path');
-        trail.setAttribute('d',arc.getAttribute('d'));trail.setAttribute('class','flytrail');
-        trail.setAttribute('stroke-dasharray',L);trail.setAttribute('stroke-dashoffset',L);
-        svg.appendChild(trail);
-        var el=document.createElementNS(NS,'path');
-        el.setAttribute('d','M11 0 L0 -7 L3.4 0 L0 7 Z');
-        el.setAttribute('fill','var(--rose2)');
-        el.setAttribute('stroke','rgba(255,255,255,.85)');
-        el.setAttribute('stroke-width','.8');
-        el.setAttribute('class','plane');
-        svg.appendChild(el);
-        var p0=arc.getPointAtLength(L);
-        var ring=document.createElementNS(NS,'circle');
-        ring.setAttribute('cx',p0.x);ring.setAttribute('cy',p0.y);
-        ring.setAttribute('r','2');ring.setAttribute('class','ring');
-        svg.appendChild(ring);
-        var t0=Date.now(),D=2600;
-        var guard=setTimeout(function(){el.remove();trail.remove();ring.remove()},D+600);
-        (function step(){
-          var k=Math.min(1,(Date.now()-t0)/D),ek=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
-          var at=(1-ek)*L;
-          var pt=arc.getPointAtLength(at);
-          var ak=Math.max(0.001,Math.min(0.999,ek+0.004));
-          var p2=arc.getPointAtLength((1-ak)*L);
-          var ang=Math.atan2(p2.y-pt.y,p2.x-pt.x)*180/Math.PI;
-          el.setAttribute('transform','translate('+pt.x.toFixed(1)+','+pt.y.toFixed(1)+') rotate('+ang.toFixed(1)+')');
-          trail.setAttribute('stroke-dashoffset',at.toFixed(1));
-          if(k<0.25){ring.setAttribute('r',(2+k*30).toFixed(1));ring.setAttribute('opacity',(0.7-k*2.8).toFixed(2))}
-          if(k<1)setTimeout(step,16);
-          else{
-            clearTimeout(guard);
-            el.remove();trail.remove();ring.remove();
-            var pe=arc.getPointAtLength(0);
-            var hx=document.createElementNS(NS,'text');
-            hx.setAttribute('x',pe.x);hx.setAttribute('y',pe.y);
-            hx.setAttribute('text-anchor','middle');hx.setAttribute('class','arrive');
-            hx.textContent='❤';
-            svg.appendChild(hx);
-            setTimeout(function(){hx.remove()},1000);
-            try{navigator.vibrate&&navigator.vibrate(12)}catch(e){}
-          }
-        })(t0);
+        if(svg.querySelectorAll('.plane').length<2){
+          var L=arc.getTotalLength();
+          var trail=document.createElementNS(NS,'path');
+          trail.setAttribute('d',arc.getAttribute('d'));trail.setAttribute('class','flytrail');
+          trail.setAttribute('stroke-dasharray',L);trail.setAttribute('stroke-dashoffset',-L);
+          svg.appendChild(trail);
+          var el=document.createElementNS(NS,'path');
+          el.setAttribute('d','M11 0 L0 -7 L3.4 0 L0 7 Z');
+          el.setAttribute('fill','var(--rose2)');
+          el.setAttribute('stroke','rgba(255,255,255,.85)');
+          el.setAttribute('stroke-width','.8');
+          el.setAttribute('class','plane');
+          svg.appendChild(el);
+          var p0=arc.getPointAtLength(L);
+          var ring=document.createElementNS(NS,'circle');
+          ring.setAttribute('cx',p0.x);ring.setAttribute('cy',p0.y);
+          ring.setAttribute('r','2');ring.setAttribute('class','ring');
+          svg.appendChild(ring);
+          var t0=Date.now(),D=4400,done=false;
+          var guard=setTimeout(function(){if(el.parentNode)el.remove();if(trail.parentNode)trail.remove();if(ring.parentNode)ring.remove()},D+2200);
+          (function step(){
+            if(done)return;
+            var k=Math.min(1,(Date.now()-t0)/D);
+            var e=k*k*(3-2*k);
+            var at=(1-e)*L;
+            var pt=arc.getPointAtLength(at);
+            var q=arc.getPointAtLength(Math.max(0.5,at-2));
+            var ang=Math.atan2(q.y-pt.y,q.x-pt.x)*180/Math.PI;
+            var sway=Math.sin(k*Math.PI*3)*8*Math.sin(k*Math.PI);
+            var rr=ang*Math.PI/180;
+            var x=pt.x-Math.sin(rr)*sway,y=pt.y+Math.cos(rr)*sway;
+            el.setAttribute('transform','translate('+x.toFixed(1)+','+y.toFixed(1)+') rotate('+(ang+sway*2).toFixed(1)+')');
+            trail.setAttribute('stroke-dashoffset',(-at).toFixed(1));
+            if(k<0.25){ring.setAttribute('r',(2+k*40).toFixed(1));ring.setAttribute('opacity',(0.7-k*2.8).toFixed(2))}
+            else if(ring.parentNode)ring.remove();
+            if(k<1)setTimeout(step,16);
+            else{
+              done=true;clearTimeout(guard);
+              el.style.opacity='0';trail.style.opacity='0';
+              setTimeout(function(){if(el.parentNode)el.remove();if(trail.parentNode)trail.remove()},1700);
+              var pe=arc.getPointAtLength(0);
+              for(var i=0;i<3;i++){
+                (function(i){
+                  var hx=document.createElementNS(NS,'text');
+                  hx.setAttribute('x',(pe.x+(i-1)*9).toFixed(1));
+                  hx.setAttribute('y',(pe.y-(i===1?10:2)).toFixed(1));
+                  hx.setAttribute('text-anchor','middle');hx.setAttribute('class','arrive');
+                  hx.style.animationDelay=(i*160)+'ms';
+                  hx.style.fontSize=(i===1?'30px':'22px');
+                  hx.textContent='❤';
+                  svg.appendChild(hx);
+                  setTimeout(function(){hx.remove()},1300+i*160);
+                })(i);
+              }
+              var rg=document.createElementNS(NS,'circle');
+              rg.setAttribute('cx',pe.x);rg.setAttribute('cy',pe.y);
+              rg.setAttribute('r','6');rg.setAttribute('class','ring2');
+              svg.appendChild(rg);
+              setTimeout(function(){if(rg.parentNode)rg.remove()},950);
+              try{navigator.vibrate&&navigator.vibrate([12,60,18])}catch(e){}
+            }
+          })();
+        }
       }
       ptot++;try{localStorage.setItem('ourdays_plane',String(ptot))}catch(e){}
       if(fs)fs.textContent='已收 '+ptot+' 架';
