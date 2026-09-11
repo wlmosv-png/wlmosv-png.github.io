@@ -509,9 +509,12 @@ html[data-wxm] .wxc2{opacity:1}
     return fetch('https://wttr.in/'+encodeURIComponent(city)+'?format=j1',{cache:'no-store',signal:c.signal})
       .then(function(r){if(!r.ok)throw 0;return r.json()})
       .then(function(j){var cu=j.current_condition&&j.current_condition[0];if(!cu)throw 0;
-        return {w:wx2code(cu.weatherDesc&&cu.weatherDesc[0]&&cu.weatherDesc[0].value),
-                t:cu.temp_C,f:cu.FeelsLikeC}})
+        var d=cu.weatherDesc&&cu.weatherDesc[0]&&cu.weatherDesc[0].value;
+        return {w:wx2code(d),d:d,p:+(cu.precipMM||0),t:cu.temp_C,f:cu.FeelsLikeC}})
       .catch(function(){return null})}
+  function strongP(x){var d=(x.d||'').toLowerCase();
+    return (x.w==='rain'||x.w==='snow'||x.w==='thunder')&&
+      (x.p>0||!/patchy|nearby|possible|vicinity|in the area|around the region/.test(d))}
 
   function loadWX(force){
     if(!window.fetch||(SYN&&!force))return;
@@ -520,7 +523,7 @@ html[data-wxm] .wxc2{opacity:1}
       if(o1&&o1.current){var cu=o1.current;wx=omWx(cu.weather_code);
         t=cu.temperature_2m;f=cu.apparent_temperature;win=(+cu.wind_speed_10m||0)/3.6;
         if((wx==='clear'||wx==='cloud')&&omRain(o1.minutely_15))wx='rain';}
-      if(w1){if(w1.w==='rain'||w1.w==='snow'||w1.w==='thunder')wx=w1.w;
+      if(w1){if(strongP(w1))wx=w1.w;
         if(t==null)t=w1.t;if(f==null)f=w1.f;}
       if(wx==null)throw 0;
       H.setAttribute('data-wx',wx);
@@ -579,7 +582,7 @@ html[data-wxm] .wxc2{opacity:1}
       var o1=rs[0],w1=rs[1],wx=null,t=null;
       if(o1&&o1.current){wx=omWx(o1.current.weather_code);t=o1.current.temperature_2m;
         if((wx==='clear'||wx==='cloud')&&omRain(o1.minutely_15))wx='rain';}
-      if(w1){if(w1.w==='rain'||w1.w==='snow'||w1.w==='thunder')wx=w1.w;if(t==null)t=w1.t;}
+      if(w1){if(strongP(w1))wx=w1.w;if(t==null)t=w1.t;}
       if(wx==null)throw 0;
       setCityFX('fxM',wx);H.setAttribute('data-wxm',wx);
       var mt=el('mwxt');if(mt)mt.textContent=CZ.n+' '+WXL[wx]+(t!=null?' '+Math.round(+t)+'°':'');
