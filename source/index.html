@@ -234,9 +234,10 @@ main{padding-bottom:88px}
 #todaycard{max-width:340px;margin:16px auto 0;padding:14px 18px;border:1px solid var(--line);border-radius:14px;background:var(--panel);font-family:var(--serif);font-size:14.5px;color:var(--ink2);letter-spacing:.05em;opacity:0;transform:translateY(8px);transition:opacity .45s,transform .45s;display:none}
 #todaycard.show{display:block;opacity:1;transform:translateY(0)}
 #missrow{margin:18px auto 0;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+#flybox{margin:16px auto 0;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
 #missbtn,#flybtn{background:none;border:1px solid var(--line);color:var(--ink2);font-family:var(--serif);font-size:12px;letter-spacing:.14em;padding:8px 18px;border-radius:999px;cursor:pointer;transition:color .3s,border-color .3s,transform .12s;-webkit-tap-highlight-color:transparent}
 #missbtn:active,#flybtn:active{transform:scale(.92);color:var(--rose2);border-color:var(--rose2)}
-#missrow .cnt{font-family:var(--serif);font-size:11px;color:var(--ink3);letter-spacing:.06em;white-space:nowrap}
+#missrow .cnt,#flybox .cnt{font-family:var(--serif);font-size:11px;color:var(--ink3);letter-spacing:.06em;white-space:nowrap}
 .plane{font-size:21px;fill:var(--rose2);filter:drop-shadow(0 0 3px rgba(217,85,95,.55))}
 #mswrap{position:fixed;inset:0;z-index:80;background:rgba(4,5,9,.72);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 #mswrap.show{opacity:1;pointer-events:auto}
@@ -803,7 +804,9 @@ html[data-wxm] .wxc2{opacity:1}
   var SENT=["今天的想念已送达，请查收。","距离见面，又近了一点点。","今天也把你放在心尖尖上。","我的今天很有趣，因为想你啊。","把今天的月亮分你一半。","想你这件事，今天也全勤。","今天的风很温柔，像你。","你要好好吃饭，我们都会很好的。","今天也是为见到你努力的一天。","世界很大，我的心里只有你。","今天也很想你，超过昨天，不及明天。","你在的地方，就是我心的方向。","今天的喜欢，依然满格。","等风来，等花开，等你来。","今天的星星很亮，像你看我的眼睛。","把晚安存好，见面时一起说给你听。","今天也偷偷想你了，别告诉他。","我们的每天都在靠近。","今天要开心，不然我心疼。","日子在倒数，爱在正数。","今天也想你，比昨天多一点点。","等你的消息，是我每天最开心的事。","熬过今天，离见面又近了一天。","记得喝水，记得想我，两件事都别忘。","隔着 1188 公里，和一颗想见你的心。","今天的晚霞很漂亮，想拍给你看。","你不在的日子，我把每一天都过成倒数。","你养好自己，我见你的时候才放心。","距离再远，也远不过我想你的长度。","看到好吃的，第一反应是下次带你来吃。","有人惹你生气的话，记我账上，见面还。","想念是会呼吸的痛，但我甘之如饴。","我这边天气不错，你那边呢？","晚安之前，再想一遍你。","今天也是元气满满想你的一天。","你的城市下雨了吗？记得带伞。","我把今天存进罐子里，见面那天全倒给你。","遇见你之后，连等待都变得有意义。","隔着屏幕，也想抱抱你。","想见你，想马上见你，想立刻马上见你。"];
   var wishEl=document.querySelector('.wish');
   if(wishEl){
-        wishEl.insertAdjacentHTML('afterend','<div id="todaybox"><button id="todaybtn" type="button">今日份想念 ✦</button><div id="todaycard"></div><div id="missrow"><button id="missbtn" type="button">❤ 想你</button><span class="cnt" id="misstxt">今天 0 次</span><button id="flybtn" type="button">✈ 寄想念</button><span class="cnt" id="flytxt">已寄 0 架</span></div></div>');
+        wishEl.insertAdjacentHTML('afterend','<div id="todaybox"><button id="todaybtn" type="button">今日份想念 ✦</button><div id="todaycard"></div><div id="missrow"><button id="missbtn" type="button">❤ 想你</button><span class="cnt" id="misstxt">今天 0 次</span></div></div>');
+    var mapEl=document.getElementById('map');
+    if(mapEl)mapEl.insertAdjacentHTML('afterend','<div id="flybox"><button id="flybtn" type="button">✈ 寄想念</button><span class="cnt" id="flytxt">已寄 0 架</span></div>');
     var b=document.getElementById('todaybtn'),c=document.getElementById('todaycard');
     var ann=new Date(2026,0,24);
     function didx(){var n=new Date();n.setHours(12,0,0,0);var d=new Date(ann);d.setHours(12,0,0,0);return Math.floor((n-d)/864e5)}
