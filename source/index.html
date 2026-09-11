@@ -860,6 +860,8 @@ html[data-wxm] .wxc2{opacity:1}
       var arc=document.getElementById('arc'),svg=document.getElementById('msvg');
       if(arc&&svg){
         var NS='http://www.w3.org/2000/svg';
+        var olds=svg.querySelectorAll('.plane,.flytrail,.ring,.arrive');
+        for(var oi=0;oi<olds.length;oi++)olds[oi].remove();
         var L=arc.getTotalLength();
         var trail=document.createElementNS(NS,'path');
         trail.setAttribute('d',arc.getAttribute('d'));trail.setAttribute('class','flytrail');
@@ -878,6 +880,7 @@ html[data-wxm] .wxc2{opacity:1}
         ring.setAttribute('r','2');ring.setAttribute('class','ring');
         svg.appendChild(ring);
         var t0=performance.now(),D=2600;
+        var guard=setTimeout(function(){el.remove();trail.remove();ring.remove()},D+600);
         (function step(now){
           var k=Math.min(1,(now-t0)/D),ek=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
           var at=(1-ek)*L;
@@ -890,6 +893,7 @@ html[data-wxm] .wxc2{opacity:1}
           if(k<0.25){ring.setAttribute('r',(2+k*30).toFixed(1));ring.setAttribute('opacity',(0.7-k*2.8).toFixed(2))}
           if(k<1)requestAnimationFrame(step);
           else{
+            clearTimeout(guard);
             el.remove();trail.remove();ring.remove();
             var pe=arc.getPointAtLength(0);
             var hx=document.createElementNS(NS,'text');
