@@ -361,7 +361,8 @@ html[data-theme="day"][data-sky="night"]{
   --avring:rgba(35,45,75,.30); --haze:rgba(110,130,200,.17); --skylight:rgba(140,150,210,.18);
 }
 /* 白天主题：太阳更亮，月亮改银灰剪影，流星变深色 */
-html[data-theme="day"] #skyorb{box-shadow:0 0 42px 14px rgba(233,196,106,.32)}
+html[data-theme="day"] #skyorb{box-shadow:0 0 18px 6px rgba(255,238,180,.6),0 0 42px 18px rgba(255,225,145,.25)}
+html[data-theme="day"] #skyorb:not(.moon)::before{background:radial-gradient(circle,rgba(255,246,210,.38) 0%,rgba(255,230,155,.18) 45%,rgba(255,218,125,.06) 62%,transparent 74%)}
 html[data-theme="day"] #skyorb.moon{
   background:radial-gradient(circle at 46% 42%,#b8c0d0,#8d97ab 60%,rgba(141,151,171,0) 76%);
   box-shadow:0 0 22px 7px rgba(120,132,160,.25)}
@@ -396,12 +397,17 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   background:radial-gradient(130% 46% at 50% -14%,var(--haze,transparent) 0%,transparent 62%)}
 /* 太阳/月亮：只在顶部 9-17vh 天区移动，永不进入正文 */
 #skyorb{position:fixed;z-index:0;width:34px;height:34px;border-radius:50%;pointer-events:none;left:0;top:0;
-  opacity:0;transition:opacity 1.4s linear,background 1.4s linear;
-  background:radial-gradient(circle at 42% 38%,#fbe6b0,#e9c46a 58%,rgba(233,196,106,0) 74%);
-  box-shadow:0 0 34px 9px rgba(233,196,106,.20)}
+  opacity:0;transition:opacity 1.4s linear,background 1.4s linear,box-shadow 1.4s linear;
+  background:radial-gradient(circle at 44% 40%,#fffef4 0%,#fdf0c6 30%,#f7cf70 55%,rgba(247,207,112,0) 72%);
+  box-shadow:0 0 14px 4px rgba(255,236,170,.55)}
+#skyorb:not(.moon)::before{content:'';position:absolute;inset:-110%;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,rgba(255,244,205,.30) 0%,rgba(255,228,150,.14) 46%,rgba(255,215,120,.05) 62%,transparent 74%);
+  transition:background 1.4s linear,opacity 1.4s linear}
 html[data-sky="dawn"] #skyorb,html[data-sky="dusk"] #skyorb{
-  background:radial-gradient(circle at 42% 38%,#ffd9a8,#e8906a 58%,rgba(232,144,106,0) 74%);
-  box-shadow:0 0 34px 9px rgba(232,144,106,.24)}
+  background:radial-gradient(circle at 44% 40%,#fff7ea 0%,#ffe3b2 28%,#f5a25e 55%,rgba(245,162,94,0) 72%);
+  box-shadow:0 0 16px 5px rgba(255,196,140,.5)}
+html[data-sky="dawn"] #skyorb:not(.moon)::before,html[data-sky="dusk"] #skyorb:not(.moon)::before{
+  background:radial-gradient(circle,rgba(255,200,140,.36) 0%,rgba(255,160,105,.16) 45%,rgba(255,140,90,.06) 62%,transparent 74%)}
 #skyorb.moon{background:radial-gradient(circle at 46% 42%,#f7f4ea,#d9d5c5 60%,rgba(216,212,196,0) 76%);
   box-shadow:0 0 26px 7px rgba(232,226,212,.14);
   -webkit-mask:radial-gradient(circle at 30% 30%,transparent 0 42%,#000 43%);
