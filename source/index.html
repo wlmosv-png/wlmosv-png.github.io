@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="night">
+<html lang="zh-CN">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -60,7 +60,7 @@
   --serif:"LXGW WenKai","Songti SC","Noto Serif SC",Georgia,serif;
   --sans:"LXGW WenKai","LXGW WenKai Mono",-apple-system,"PingFang SC","Noto Sans CJK SC",system-ui,sans-serif;
 }
-html[data-theme="night"]{
+html{
   --bg:#07080c; --bg2:#0c0e14; --panel:#101319; --ink:#f1eee8; --ink2:#a3a09a; --ink3:#6b6862;
   --line:rgba(255,255,255,.10); --edge:rgba(255,255,255,.24); --land:rgba(255,255,255,.075);
   --rose:#e2687360; --rose2:#e26873; --accent:#c8727c; --heart:#d9555f; --moon:#e8e2d4;
@@ -68,21 +68,10 @@ html[data-theme="night"]{
   --shadow:0 24px 60px -30px rgba(0,0,0,.7); --star:#fff; --starglow:rgba(255,255,255,.42);
   --avring:rgba(255,255,255,.52); --avring2:var(--rose); --haze:rgba(255,255,255,.05);
 }
-html[data-theme="day"]{
-  --bg:#f6f3ed; --bg2:#fffdf9; --panel:#ffffff; --ink:#181c23; --ink2:#5f6570; --ink3:#98a0aa;
-  --line:rgba(24,28,35,.10); --edge:rgba(24,28,35,.17); --land:rgba(24,28,35,.045);
-  --rose:#c0505c55; --rose2:#b8525e; --accent:#a95763; --heart:#c04a56; --moon:#3a3f49;
-  --ring1:#b8525e; --ring2:#7d6494; --glow:0 0 46px 4px rgba(184,82,94,.10);
-  --shadow:0 20px 46px -28px rgba(24,28,35,.35); --star:transparent; --starglow:transparent;
-  --avring:rgba(24,28,35,.34); --avring2:var(--accent); --haze:rgba(255,170,90,.10);
-}
-html[data-theme="day"] body{
-  background:
-    radial-gradient(36% 26% at var(--sx,50%) var(--sy,12%),var(--skylight,rgba(255,220,150,.30)) 0%,transparent 72%),
-    radial-gradient(120% 80% at 50% -10%,var(--bg2) 0%,var(--bg) 62%)}
 html{background:var(--bg)}
 body{
   margin:0;background:
+    radial-gradient(36% 26% at var(--sx,50%) var(--sy,12%),var(--skylight,rgba(233,196,106,.18)) 0%,transparent 72%),
     radial-gradient(120% 80% at 50% -10%,var(--bg2) 0%,var(--bg) 62%);
   color:var(--ink);font-family:var(--sans);font-weight:400;line-height:1.9;
   -webkit-font-smoothing:antialiased;overflow-x:hidden;transition:--bg 2.4s ease,--bg2 2.4s ease,--panel 2.4s ease,--ink 2.4s ease,--ink2 2.4s ease,--ink3 2.4s ease,--line 2.4s ease,--edge 2.4s ease,--land 2.4s ease,--rose2 2.4s ease,--accent 2.4s ease,--heart 2.4s ease,--moon 2.4s ease,--ring1 2.4s ease,--ring2 2.4s ease,--haze 2.4s ease,--starglow 2.4s ease,--star 2.4s ease,--avring 2.4s ease,--avring2 2.4s ease,--skylight 2.4s ease,background 2.4s ease,color 1.6s ease;
@@ -92,8 +81,7 @@ main{position:relative;z-index:2;max-width:660px;margin:0 auto;padding:0 22px 88
   background:radial-gradient(90% 60% at 50% 0%,transparent 20%,var(--bg) 100%)}
 #cast,#rain,#flash,#motes{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
 #motes{opacity:0;transition:opacity 2.4s linear}
-html[data-theme="day"][data-sky="dawn"] #motes,html[data-theme="day"][data-sky="day"] #motes,
-html[data-theme="day"][data-sky="dusk"] #motes{opacity:.9}
+html[data-sky="dawn"] #motes,html[data-sky="day"] #motes,html[data-sky="dusk"] #motes{opacity:.9}
 #motes i{position:absolute;width:var(--w);height:var(--w);border-radius:50%;
   background:radial-gradient(circle,rgba(255,238,190,.9),rgba(255,214,140,.25) 70%);
   box-shadow:0 0 6px 1px rgba(255,210,120,.30);
@@ -118,12 +106,6 @@ html[data-theme="day"][data-sky="dusk"] #motes{opacity:.9}
 
 .top{display:flex;align-items:center;justify-content:space-between;padding:26px 0 0}
 .brand{font-family:var(--num);font-size:11px;letter-spacing:.34em;color:var(--ink3)}
-#tbtn{display:inline-flex;align-items:center;gap:2px;background:none;border:1px solid var(--line);
-  border-radius:999px;padding:6px 10px;cursor:pointer;color:var(--ink2);transition:.4s}
-#tbtn:hover{color:var(--ink);border-color:var(--edge)}
-#tbtn .ico{width:15px;height:15px;display:none}
-html[data-theme="night"] #tbtn .sun{display:block}
-html[data-theme="day"] #tbtn .moon{display:block}
 
 .hero{padding:15vh 0 0;text-align:center}
 .eyebrow{margin:0;font-family:var(--num);font-size:10.5px;letter-spacing:.3em;color:var(--ink3);text-transform:uppercase}
@@ -218,11 +200,9 @@ html.js .rise.in,html.js .rise.now{opacity:1;transform:none}
 html.js .rise.now{transition:none}
 
 html[data-sky="night"] #cast{opacity:1}
-html[data-theme="day"] #cast{opacity:0}
-html[data-theme="day"][data-sky="evening"] #cast{opacity:.45}
-html[data-theme="day"][data-sky="night"] #cast{opacity:.75}
+html[data-sky="evening"] #cast{opacity:.55}
 html[data-sky="day"] #cast{opacity:0}
-   html[data-theme="night"][data-sky="dawn"] #cast,html[data-theme="night"][data-sky="dusk"] #cast{opacity:.3}
+html[data-sky="dawn"] #cast,html[data-sky="dusk"] #cast{opacity:.3}
 html[data-sky="day"] #sky{opacity:0}
 html[data-wx="rain"] .arc,html[data-wx="snow"] .arc{opacity:.4}
 html[data-wx="cloud"],html[data-wx="rain"],html[data-wx="snow"],html[data-wx="fog"]{--glow:0 0 44px 4px rgba(150,150,160,.10)}
@@ -246,31 +226,24 @@ main{padding-bottom:88px}
 #dcard{display:flex;align-items:center;gap:10px;padding:8px 12px;cursor:pointer;-webkit-tap-highlight-color:transparent}
 #dcover{width:50px;height:50px;border-radius:12px;object-fit:cover;background:#22263a;flex:none;box-shadow:0 2px 8px rgba(0,0,0,.35)}
 .dmeta{display:flex;flex-direction:column;min-width:0;flex:1;gap:2px}
-#dtitle{font-size:14px;font-weight:600;color:#f2eee8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#dartist{font-size:11px;color:rgba(242,238,232,.62);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.dplay{width:34px;height:34px;border-radius:50%;background:#f2eee8;color:#14161c;display:flex;align-items:center;justify-content:center;font-size:12px;flex:none;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+#dtitle{font-size:14px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#dartist{font-size:11px;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dplay{width:34px;height:34px;border-radius:50%;background:var(--ink);color:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:12px;flex:none;box-shadow:0 2px 8px rgba(0,0,0,.3)}
 #mdock iframe[hidden]{display:none}
 #mdock{overflow:hidden}
 #dnow{display:flex;align-items:center;gap:10px;padding:8px 12px;cursor:pointer}
 #dcover2{width:50px;height:50px;border-radius:12px;object-fit:cover;flex:none;box-shadow:0 2px 8px rgba(0,0,0,.35)}
-#dnowtitle{font-size:13px;font-weight:600;color:#f2eee8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#dnowtitle{font-size:13px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .dbars{display:flex;align-items:flex-end;gap:3px;height:14px;margin-top:3px}
-.dbars i{width:3px;height:6px;background:#f2eee8;border-radius:2px;animation:eq 1s ease-in-out infinite}
+.dbars i{width:3px;height:6px;background:var(--ink2);border-radius:2px;animation:eq 1s ease-in-out infinite}
 .dbars i:nth-child(2){animation-delay:.18s}.dbars i:nth-child(3){animation-delay:.36s}.dbars i:nth-child(4){animation-delay:.54s}
 .dbars.paused i{animation-play-state:paused;height:4px}
 @keyframes eq{0%,100%{height:4px}50%{height:14px}}
-#dpp{width:34px;height:34px;border-radius:50%;background:#f2eee8;color:#14161c;display:flex;align-items:center;justify-content:center;font-size:10px;flex:none;box-shadow:0 2px 8px rgba(0,0,0,.3)}
-#dprog{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(242,238,232,.12)}
-#dprog i{display:block;height:100%;width:0;background:#f2eee8;border-radius:0 2px 2px 0;transition:width .3s linear}
-/* 白天主题：dock 浅底深字，跟随主题变量 */
-html[data-theme="day"] #mdock{background:rgba(255,255,255,.66);box-shadow:0 8px 28px rgba(20,45,70,.16)}
-html[data-theme="day"] #dtitle,html[data-theme="day"] #dnowtitle{color:var(--ink)}
-html[data-theme="day"] #dartist{color:var(--ink2)}
-html[data-theme="day"] .dbars i{background:var(--ink2)}
-html[data-theme="day"] .dplay,html[data-theme="day"] #dpp{background:var(--ink);color:var(--bg2)}
-html[data-theme="day"] #dprog{background:var(--line)}
-html[data-theme="day"] #dprog i{background:var(--rose2)}
-.caret{display:inline-block;width:2px;height:1em;background:#f2eee8;margin-left:2px;vertical-align:-2px;animation:blink .9s steps(1) infinite}
+#dpp{width:34px;height:34px;border-radius:50%;background:var(--ink);color:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:10px;flex:none;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+#dprog{position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--line)}
+#dprog i{display:block;height:100%;width:0;background:var(--rose2);border-radius:0 2px 2px 0;transition:width .3s linear}
+
+.caret{display:inline-block;width:2px;height:1em;background:var(--ink);margin-left:2px;vertical-align:-2px;animation:blink .9s steps(1) infinite}
 @keyframes blink{50%{opacity:0}}
 
 /* interactive add-ons */
@@ -310,14 +283,14 @@ html[data-theme="day"] #dprog i{background:var(--rose2)}
 .wish.skipfx #tw{opacity:.35}
 
 /* sky-tinted palettes (auto, follows her sky) */
-html[data-theme="night"][data-sky="dawn"]{
+html[data-sky="dawn"]{
   --bg:#0c0d16; --bg2:#231b2e; --panel:#151728; --ink:#f3efe8; --ink2:#b2aaa0; --ink3:#79726a;
   --line:rgba(255,240,225,.11); --edge:rgba(255,240,225,.24); --land:rgba(255,240,225,.085);
   --rose:#e8926a55; --rose2:#e09a6a; --accent:#d98a5f; --heart:#d97a5f; --moon:#f0dfc0;
   --glow:0 0 54px 6px rgba(224,154,106,.15); --haze:rgba(255,150,90,.13);
   --starglow:rgba(240,226,200,.30);
 }
-html[data-theme="night"][data-sky="day"]{
+html[data-sky="day"]{
   --bg:#dfe8ef; --bg2:#f8fbfd; --panel:#ffffff; --ink:#1b2836; --ink2:#4d5c6b; --ink3:#8494a3;
   --line:rgba(27,40,54,.11); --edge:rgba(27,40,54,.20); --land:rgba(27,40,54,.055);
   --rose:#c0505c55; --rose2:#b8525e; --accent:#a95763; --heart:#c04a56; --moon:#3a3f49;
@@ -325,67 +298,19 @@ html[data-theme="night"][data-sky="day"]{
   --shadow:0 20px 46px -28px rgba(27,40,54,.35); --star:#3a3f49; --starglow:rgba(58,63,73,.14);
   --avring:rgba(27,40,54,.34); --haze:rgba(255,186,110,.18);
 }
-html[data-theme="night"][data-sky="dusk"]{
+html[data-sky="dusk"]{
   --bg:#170c15; --bg2:#3a2032; --panel:#241525; --ink:#f4eef0; --ink2:#bda9b4; --ink3:#7f6f7c;
   --line:rgba(255,235,240,.12); --edge:rgba(255,235,240,.26); --land:rgba(255,235,240,.09);
   --rose:#d4708f55; --rose2:#dd7a8e; --accent:#e08a6e; --heart:#cf5f83; --moon:#f2d7c8;
   --glow:0 0 54px 6px rgba(221,122,142,.17); --haze:rgba(255,124,108,.15);
   --starglow:rgba(250,225,215,.34);
 }
-html[data-theme="night"][data-sky="night"]{
+html[data-sky="night"]{
   --bg:#04060d; --bg2:#0b1022; --panel:#0a0f1a; --moon:#e6ebf5;
   --haze:rgba(80,110,220,.09); --starglow:rgba(205,222,255,.50);
 }
 html[data-sky] body{transition:background .9s linear,color .9s linear}
 
-/* day-sky: 白天主题跟随光照五档（晨光/正午/晚霞/灯下/月光） */
-html[data-theme="day"][data-sky="dawn"]{
-  --bg:#f6e7d2; --bg2:#fdf4e6; --panel:#fffaf2; --ink:#2b1f14; --ink2:#6a533c; --ink3:#85715a;
-  --line:rgba(80,50,18,.13); --edge:rgba(80,50,18,.20); --land:rgba(80,50,18,.06);
-  --rose:#c05f4a55; --rose2:#c05f4a; --accent:#c17b4c; --heart:#c2513e; --moon:#4d4032;
-  --ring1:#c05f4a; --ring2:#c99a68; --glow:0 0 46px 4px rgba(226,150,96,.15);
-  --shadow:0 22px 48px -26px rgba(90,55,20,.34); --star:transparent; --starglow:transparent;
-  --avring:rgba(70,45,20,.38); --haze:rgba(255,168,96,.40); --skylight:rgba(255,190,130,.34);
-}
-html[data-theme="day"][data-sky="day"]{
-  --bg:#dceaf5; --bg2:#eef6fd; --panel:#ffffff; --ink:#14222e; --ink2:#3f4e5b; --ink3:#64707c;
-  --line:rgba(15,45,70,.13); --edge:rgba(15,45,70,.22); --land:rgba(15,45,70,.06);
-  --rose:#b0505e55; --rose2:#b0505e; --accent:#4a7fa3; --heart:#bd4e5c; --moon:#35414e;
-  --ring1:#b0505e; --ring2:#4a86ab; --glow:0 0 46px 4px rgba(95,155,195,.18);
-  --shadow:0 22px 48px -26px rgba(25,50,75,.32); --star:transparent; --starglow:transparent;
-  --avring:rgba(20,45,65,.36); --avring2:#c05a66; --haze:rgba(150,198,238,.40); --skylight:rgba(255,220,150,.34);
-}
-html[data-theme="day"][data-sky="dusk"]{
-  --bg:#f4ddd6; --bg2:#fdf0ea; --panel:#fff8f3; --ink:#2b1d1b; --ink2:#6e514c; --ink3:#8a6c66;
-  --line:rgba(75,35,40,.13); --edge:rgba(75,35,40,.20); --land:rgba(75,35,40,.06);
-  --rose:#b64f6255; --rose2:#b64f62; --accent:#c46a50; --heart:#b84558; --moon:#4a352f;
-  --ring1:#b64f62; --ring2:#c98a5e; --glow:0 0 46px 4px rgba(226,125,110,.18);
-  --shadow:0 22px 48px -26px rgba(75,35,30,.34); --star:transparent; --starglow:transparent;
-  --avring:rgba(70,30,35,.38); --haze:rgba(255,125,95,.38); --skylight:rgba(255,150,110,.32);
-}
-html[data-theme="day"][data-sky="evening"]{
-  --bg:#efe8d8; --bg2:#faf5ea; --panel:#fffdf5; --ink:#1f2129; --ink2:#54575f; --ink3:#767a82;
-  --line:rgba(55,50,30,.13); --edge:rgba(55,50,30,.19); --land:rgba(55,50,30,.06);
-  --rose:#b34f5d55; --rose2:#b34f5d; --accent:#a95763; --heart:#b84a56; --moon:#8a7f68;
-  --ring1:#b34f5d; --ring2:#8b74a8; --glow:0 0 46px 4px rgba(210,160,90,.16);
-  --shadow:0 22px 48px -26px rgba(60,50,25,.30); --star:#b09255; --starglow:rgba(195,165,105,.40);
-  --avring:rgba(55,50,30,.36); --haze:rgba(255,185,95,.30); --skylight:rgba(255,200,130,.22);
-}
-html[data-theme="day"][data-sky="night"]{
-  --bg:#e2e7f1; --bg2:#f1f4fa; --panel:#f9fbfe; --ink:#1b2029; --ink2:#4d545f; --ink3:#6f7681;
-  --line:rgba(35,45,75,.13); --edge:rgba(35,45,75,.20); --land:rgba(35,45,75,.06);
-  --rose:#b34f5d55; --rose2:#b34f5d; --accent:#a95763; --heart:#b84a56; --moon:#7c86a0;
-  --ring1:#b34f5d; --ring2:#7d84a8; --glow:0 0 46px 4px rgba(120,135,190,.16);
-  --shadow:0 22px 48px -26px rgba(40,50,80,.28); --star:#7d7ba8; --starglow:rgba(130,128,190,.35);
-  --avring:rgba(35,45,75,.34); --haze:rgba(110,130,200,.22); --skylight:rgba(140,150,210,.18);
-}
-/* 白天主题：太阳更亮，月亮改银灰剪影，流星变深色 */
-html[data-theme="day"] #skyorb{box-shadow:0 0 18px 6px rgba(255,238,180,.6),0 0 42px 18px rgba(255,225,145,.25)}
-html[data-theme="day"] #skyorb:not(.moon)::before{background:radial-gradient(circle,rgba(255,246,210,.38) 0%,rgba(255,230,155,.18) 45%,rgba(255,218,125,.06) 62%,transparent 74%)}
-html[data-theme="day"] #skyorb2{
-  background:radial-gradient(circle at 46% 42%,#b8c0d0,#8d97ab 60%,rgba(141,151,171,0) 76%);
-  box-shadow:0 0 22px 7px rgba(120,132,160,.25)}
-html[data-theme="day"] #meteor{background:#5c6675;box-shadow:0 0 6px 1px rgba(110,122,140,.40)}
 
 /* map: per-city celestial marker (her sky / my sky) */
 .cel{cursor:default}
@@ -404,7 +329,7 @@ html[data-theme="day"] #meteor{background:#5c6675;box-shadow:0 0 6px 1px rgba(11
 @keyframes meteor{0%{opacity:0;transform:translate(0,0) rotate(35deg)}8%{opacity:.9}
   100%{opacity:0;transform:translate(-40vw,24vh) rotate(35deg)}}
 
-html[data-theme="night"][data-sky="evening"]{
+html[data-sky="evening"]{
   --bg:#080d1c; --bg2:#172248; --panel:#0f172e; --ink:#f2efe9; --ink2:#b0b0ab; --ink3:#74746e;
   --line:rgba(255,255,255,.12); --edge:rgba(255,255,255,.26); --land:rgba(255,255,255,.09);
   --moon:#eee6cf; --haze:rgba(96,130,225,.14); --starglow:rgba(255,240,210,.34);
@@ -479,10 +404,6 @@ html[data-wxm] .wxc2{opacity:1}
 <main>
   <header class="top">
     <span class="brand">PP&amp;&amp;YY</span>
-    <button id="tbtn" type="button" aria-label="切换白天黑夜主题">
-      <svg class="moon ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5z"/></svg>
-      <svg class="sun ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.4v2.2M12 19.4v2.2M2.4 12h2.2M19.4 12h2.2M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M18.8 5.2l-1.6 1.6M6.8 17.2l-1.6 1.6"/></svg>
-    </button>
   </header>
 
   <section class="hero">
@@ -713,7 +634,7 @@ html[data-wxm] .wxc2{opacity:1}
       }
       rain.innerHTML=h;
     if(w==='thunder'&&flash&&D.body){setInterval(function(){
-      if(D.hidden||H.getAttribute('data-theme')!=='night')return;D.body.appendChild(flash);
+      if(D.hidden||(H.getAttribute('data-sky')!=='night'&&H.getAttribute('data-sky')!=='evening'))return;D.body.appendChild(flash);
       flash.style.animation='flash 1.5s linear 1';
       setTimeout(function(){flash.style.animation=''},1700);},42000);}
   }
@@ -894,14 +815,6 @@ html[data-wxm] .wxc2{opacity:1}
     c.innerHTML=h;
   }
   tickSky=function(){};
-  /* ---------- 主题 ---------- */
-  function theme(v){
-    H.setAttribute('data-theme',v);try{localStorage.setItem('days-theme',v)}catch(e){}
-  }
-  var saved=null;try{saved=localStorage.getItem('days-theme')}catch(e){}
-  theme(saved||'night');
-  var tb=el('tbtn');
-  if(tb)tb.onclick=function(){theme(H.getAttribute('data-theme')==='night'?'day':'night')};
   /* ---------- 入场：首屏直显，其余淡入 ---------- */
   function force(e){e.style.transition='none';e.style.opacity='1';e.style.transform='none'}
   var els=[].slice.call(D.querySelectorAll('.rise'));
