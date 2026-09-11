@@ -22,7 +22,7 @@ html[data-theme="night"]{
   --rose:#e2687360; --rose2:#e26873; --accent:#c8727c; --heart:#d9555f; --moon:#e8e2d4;
   --ring1:#e26873; --ring2:#8b74a8; --glow:0 0 54px 6px rgba(226,104,115,.16);
   --shadow:0 24px 60px -30px rgba(0,0,0,.7); --star:#fff; --starglow:rgba(255,255,255,.42);
-  --avring:rgba(255,255,255,.52); --avring2:var(--rose);
+  --avring:rgba(255,255,255,.52); --avring2:var(--rose); --haze:rgba(255,255,255,.05);
 }
 html[data-theme="day"]{
   --bg:#f6f3ed; --bg2:#fffdf9; --panel:#ffffff; --ink:#181c23; --ink2:#5f6570; --ink3:#98a0aa;
@@ -30,7 +30,7 @@ html[data-theme="day"]{
   --rose:#c0505c55; --rose2:#b8525e; --accent:#a95763; --heart:#c04a56; --moon:#3a3f49;
   --ring1:#b8525e; --ring2:#7d6494; --glow:0 0 46px 4px rgba(184,82,94,.10);
   --shadow:0 20px 46px -28px rgba(24,28,35,.35); --star:#3a3f49; --starglow:rgba(58,63,73,.18);
-  --avring:rgba(24,28,35,.34); --avring2:var(--accent);
+  --avring:rgba(24,28,35,.34); --avring2:var(--accent); --haze:rgba(255,170,90,.10);
 }
 html{background:var(--bg)}
 body{
@@ -159,7 +159,8 @@ html.js .rise.now{transition:none}
 
 html[data-sky="night"] #cast{opacity:1}
 html[data-theme="day"] #cast{opacity:.2}
-html[data-sky="day"] #sky{opacity:.25}
+html[data-sky="day"] #cast{opacity:0}
+html[data-sky="day"] #sky{opacity:0}
 html[data-wx="rain"] .arc,html[data-wx="snow"] .arc{opacity:.4}
 html[data-wx="cloud"],html[data-wx="rain"],html[data-wx="snow"],html[data-wx="fog"]{--glow:0 0 44px 4px rgba(150,150,160,.10)}
 @media (max-width:520px){
@@ -226,18 +227,30 @@ main{padding-bottom:88px}
 
 /* sky-tinted palettes (auto, follows her sky) */
 html[data-theme="night"][data-sky="dawn"]{
-  --bg:#0a0f13; --bg2:#141d22; --panel:#111820; --ink:#f3efe6; --ink2:#a8a396; --ink3:#6e6c63;
-  --rose:#e8926a58; --rose2:#e8906a; --accent:#d98a5f; --moon:#f0e3c8;
-  --glow:0 0 54px 6px rgba(232,144,106,.15); --starglow:rgba(240,225,195,.32);
+  --bg:#0c0d16; --bg2:#231b2e; --panel:#151728; --ink:#f3efe8; --ink2:#b2aaa0; --ink3:#79726a;
+  --line:rgba(255,240,225,.11); --edge:rgba(255,240,225,.24); --land:rgba(255,240,225,.085);
+  --rose:#e8926a55; --rose2:#e09a6a; --accent:#d98a5f; --heart:#d97a5f; --moon:#f0dfc0;
+  --glow:0 0 54px 6px rgba(224,154,106,.15); --haze:rgba(255,150,90,.13);
+  --starglow:rgba(240,226,200,.30);
 }
 html[data-theme="night"][data-sky="day"]{
-  --bg:#0c1319; --bg2:#152028; --panel:#121a22; --ink2:#a6a8a2; --ink3:#6d7069; --moon:#e8e2d4;
-  --starglow:rgba(255,255,255,.16);
+  --bg:#dfe8ef; --bg2:#f8fbfd; --panel:#ffffff; --ink:#1b2836; --ink2:#4d5c6b; --ink3:#8494a3;
+  --line:rgba(27,40,54,.11); --edge:rgba(27,40,54,.20); --land:rgba(27,40,54,.055);
+  --rose:#c0505c55; --rose2:#b8525e; --accent:#a95763; --heart:#c04a56; --moon:#3a3f49;
+  --ring1:#b8525e; --ring2:#7d6494; --glow:0 0 46px 4px rgba(184,82,94,.10);
+  --shadow:0 20px 46px -28px rgba(27,40,54,.35); --star:#3a3f49; --starglow:rgba(58,63,73,.14);
+  --avring:rgba(27,40,54,.34); --haze:rgba(255,186,110,.18);
 }
 html[data-theme="night"][data-sky="dusk"]{
-  --bg:#0f0b14; --bg2:#1a1322; --panel:#151020; --ink:#f2eef0; --ink2:#a39ba6; --ink3:#6c6570;
-  --rose:#d4708f58; --rose2:#d4708f; --accent:#c06a92; --heart:#cf5f83; --moon:#ecd9d2;
-  --glow:0 0 54px 6px rgba(212,112,143,.16); --starglow:rgba(236,217,210,.35);
+  --bg:#170c15; --bg2:#3a2032; --panel:#241525; --ink:#f4eef0; --ink2:#bda9b4; --ink3:#7f6f7c;
+  --line:rgba(255,235,240,.12); --edge:rgba(255,235,240,.26); --land:rgba(255,235,240,.09);
+  --rose:#d4708f55; --rose2:#dd7a8e; --accent:#e08a6e; --heart:#cf5f83; --moon:#f2d7c8;
+  --glow:0 0 54px 6px rgba(221,122,142,.17); --haze:rgba(255,124,108,.15);
+  --starglow:rgba(250,225,215,.34);
+}
+html[data-theme="night"][data-sky="night"]{
+  --bg:#04060d; --bg2:#0b1022; --panel:#0a0f1a; --moon:#e6ebf5;
+  --haze:rgba(80,110,220,.09); --starglow:rgba(205,222,255,.50);
 }
 html[data-sky] body{transition:background .9s linear,color .9s linear}
 /* map: per-city celestial marker (her sky / my sky) */
@@ -258,17 +271,27 @@ html[data-sky] body{transition:background .9s linear,color .9s linear}
   100%{opacity:0;transform:translate(-40vw,24vh) rotate(35deg)}}
 
 html[data-theme="night"][data-sky="evening"]{
-  --bg:#090d14; --bg2:#101627; --panel:#0f1520; --ink:#f2efe9; --ink2:#a5a49d; --ink3:#6c6b64;
-  --moon:#ece7d9; --starglow:rgba(255,255,255,.30);
+  --bg:#080d1c; --bg2:#172248; --panel:#0f172e; --ink:#f2efe9; --ink2:#b0b0ab; --ink3:#74746e;
+  --line:rgba(255,255,255,.12); --edge:rgba(255,255,255,.26); --land:rgba(255,255,255,.09);
+  --moon:#eee6cf; --haze:rgba(96,130,225,.14); --starglow:rgba(255,240,210,.34);
 }
 html[data-sky] body{transition:background .9s linear,color .9s linear}
 /* sun / moon arc */
-#skyorb{position:fixed;z-index:0;width:46px;height:46px;border-radius:50%;pointer-events:none;left:0;top:0;
+/* 地平线光晕：随天色染色 */
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(130% 46% at 50% -14%,var(--haze,transparent) 0%,transparent 62%)}
+/* 太阳/月亮：只在顶部 9-17vh 天区移动，永不进入正文 */
+#skyorb{position:fixed;z-index:0;width:34px;height:34px;border-radius:50%;pointer-events:none;left:0;top:0;
   opacity:0;transition:opacity 1.4s linear,background 1.4s linear;
   background:radial-gradient(circle at 42% 38%,#fbe6b0,#e9c46a 58%,rgba(233,196,106,0) 74%);
-  box-shadow:0 0 46px 14px rgba(233,196,106,.20)}
-#skyorb.moon{background:radial-gradient(circle at 60% 62%,#f6f3ea,#d8d4c4 58%,rgba(216,212,196,0) 74%);
-  box-shadow:0 0 38px 10px rgba(232,226,212,.16)}
+  box-shadow:0 0 34px 9px rgba(233,196,106,.20)}
+html[data-sky="dawn"] #skyorb,html[data-sky="dusk"] #skyorb{
+  background:radial-gradient(circle at 42% 38%,#ffd9a8,#e8906a 58%,rgba(232,144,106,0) 74%);
+  box-shadow:0 0 34px 9px rgba(232,144,106,.24)}
+#skyorb.moon{background:radial-gradient(circle at 46% 42%,#f7f4ea,#d9d5c5 60%,rgba(216,212,196,0) 76%);
+  box-shadow:0 0 26px 7px rgba(232,226,212,.14);
+  -webkit-mask:radial-gradient(circle at 30% 30%,transparent 0 42%,#000 43%);
+  mask:radial-gradient(circle at 30% 30%,transparent 0 42%,#000 43%)}
 /* per-city weather fx on the map */
 .cityfx .fxr{stroke:var(--rose2);stroke-width:1.6;stroke-linecap:round;opacity:0;
   animation:fxdrop var(--d) linear var(--t) infinite}
@@ -539,17 +562,25 @@ html[data-wxm] .wxc2{opacity:1}
   }
   /* 太阳与月亮：按你的时间在天上走 */
   var orb=null;
-  function orbTick(now){
+  function orbTick(now,forced){
     if(!orb){orb=D.createElement('div');orb.id='skyorb';D.body.appendChild(orb);}
-    var h=now.getHours()+now.getMinutes()/60,
-        day=h>=6&&h<18,moon=h>=18.5||h<5.5;
-    if(!day&&!moon){orb.style.opacity='0';return}
-    var t=day?(h-6)/12:(h>=18.5?(h-18.5)/11:(h+5.5)/11);
-    t=Math.max(0,Math.min(1,t));
+    var day,moon,t;
+    if(forced==='day'){day=1;t=.5}
+    else if(forced==='dawn'){day=1;t=.14}
+    else if(forced==='dusk'){day=1;t=.86}
+    else if(forced==='evening'){moon=1;t=.34}
+    else if(forced==='night'){moon=1;t=.5}
+    else{
+      var h=now.getHours()+now.getMinutes()/60;
+      day=h>=6&&h<18;moon=h>=18.5||h<5.5;
+      if(!day&&!moon){orb.style.opacity='0';return}
+      t=day?(h-6)/12:(h>=18.5?(h-18.5)/11:(h+5.5)/11);
+      t=Math.max(0,Math.min(1,t));
+    }
     orb.className=day?'':'moon';
-    orb.style.opacity=day?'.95':'.78';
-    orb.style.left=(6+t*86)+'vw';
-    orb.style.top=(76-Math.sin(Math.PI*t)*34)+'vh';
+    orb.style.opacity=day?'.95':'.85';
+    orb.style.left=(8+t*80)+'vw';
+    orb.style.top=(17-Math.sin(Math.PI*t)*8)+'vh';
   }
   /* 地图两城天体：她那边什么天，点就长什么样 */
   var CW={dawn:'晨',day:'昼',dusk:'暮',night:'夜'};
@@ -591,7 +622,9 @@ html[data-wxm] .wxc2{opacity:1}
     if(dnum)dnum.textContent=String(idx);
     if(alive)alive.textContent=fmt(+now-START);
     if(you)you.innerHTML=hourLine();
-    var hh=now.getHours();H.setAttribute('data-sky',hh<5?'night':hh<8?'dawn':hh<16?'day':hh<19?'dusk':hh<23?'evening':'night');orbTick(now);
+    var hh=now.getHours(),fm=(location.hash||'').match(/sky=(dawn|day|dusk|evening|night)/);
+    H.setAttribute('data-sky',fm?fm[1]:(hh<5?'night':hh<8?'dawn':hh<16?'day':hh<19?'dusk':hh<23?'evening':'night'));
+    orbTick(now,fm&&fm[1]);
     if(dc&&S.km)dc.textContent=S.km.toLocaleString('en-US')+' 公里';
     if(bar){var c=+now-START,y=Math.floor(c/(365.2425*864e5)),
         st=+new Date(new Date(now).getFullYear(),0,1),into=(+now-st)/(365.2425*864e5);
