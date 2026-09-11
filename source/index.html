@@ -51,6 +51,8 @@ main{position:relative;z-index:2;max-width:660px;margin:0 auto;padding:0 22px 88
   background:linear-gradient(to bottom,transparent,var(--rose2));animation:drop var(--d) linear var(--t) infinite}
 @keyframes cast{0%{opacity:0;transform:translateY(0)}8%{opacity:var(--o)}55%{opacity:var(--o)}100%{opacity:0;transform:translate(var(--x),46vh)}}
 @keyframes drop{0%{opacity:0;transform:translateY(0)}6%{opacity:.5}100%{opacity:0;transform:translate(-4vw,112vh)}}
+#rain i.sf{border-radius:50%;background:rgba(255,255,255,.95);box-shadow:0 0 4px 1px rgba(255,255,255,.35);animation:fall var(--d) linear var(--t) infinite}
+@keyframes fall{0%{opacity:0;transform:translate(0,0)}10%{opacity:.95}45%{transform:translate(calc(var(--x)*.35),50vh)}80%{opacity:.8}100%{opacity:0;transform:translate(var(--x),116vh)}}
 @keyframes br{0%,100%{opacity:.62}50%{opacity:1}}
 @keyframes flash{0%,100%{opacity:0}3%{opacity:.6}6%{opacity:.08}9%{opacity:.34}14%{opacity:0}}
 @keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
@@ -526,6 +528,7 @@ html[data-wxm] .wxc2{opacity:1}
       if(w1){if(strongP(w1))wx=w1.w;
         if(t==null)t=w1.t;if(f==null)f=w1.f;}
       if(wx==null)throw 0;
+      var ov=(location.search.match(/[?&]wx=([a-z]+)/)||[])[1];if(ov)wx=ov;
       H.setAttribute('data-wx',wx);
       var lab=WXL[wx],wxel=el('wxt'),wg=el('wxg');
       if(wg)wg.textContent=FS.n;
@@ -543,11 +546,12 @@ html[data-wxm] .wxc2{opacity:1}
     var rain=el('rain'),flash=el('flash');
     if(!rain)return;rain.innerHTML='';
     if(SYN||w!=='rain'&&w!=='snow'&&w!=='thunder')return;
-    var n=w==='snow'?34:Math.min(130,44+(win||14)*1.6),h='';
-    for(var i=0;i<n;i++){h+='<i style="--t:'+(-Math.random()*7).toFixed(2)+'s;--d:'+(0.7+Math.random()*1.1).toFixed(2)+
-      's;left:'+Math.round(Math.random()*104-2)+'%;--x:'+(w==='snow'?Math.random()*8-4:-3).toFixed(1)+'vw;'+
-      'height:'+(w==='snow'?2:8+Math.random()*10)+'px;border-radius:'+(w==='snow'?'50%':'1px')+'"></i>'}
-    rain.innerHTML=h;
+    var n=w==='snow'?54:Math.min(130,44+(win||14)*1.6),h='',sz;
+    for(var i=0;i<n;i++){
+        if(w==='snow'){sz=(2.2+Math.random()*2.4).toFixed(1);h+='<i class="sf" style="--t:'+(-Math.random()*7).toFixed(2)+'s;--d:'+(4.5+Math.random()*4).toFixed(2)+'s;left:'+Math.round(Math.random()*104-2)+'%;--x:'+(Math.random()*8-4).toFixed(1)+'vw;width:'+sz+'px;height:'+sz+'px"></i>';}
+        else{h+='<i style="--t:'+(-Math.random()*7).toFixed(2)+'s;--d:'+(0.7+Math.random()*1.1).toFixed(2)+'s;left:'+Math.round(Math.random()*104-2)+'%;--x:-3.0vw;height:'+(8+Math.random()*10)+'px;border-radius:1px"></i>';}
+      }
+      rain.innerHTML=h;
     if(w==='thunder'&&flash&&D.body){setInterval(function(){
       if(D.hidden||H.getAttribute('data-theme')!=='night')return;D.body.appendChild(flash);
       flash.style.animation='flash 1.5s linear 1';
@@ -584,6 +588,7 @@ html[data-wxm] .wxc2{opacity:1}
         if((wx==='clear'||wx==='cloud')&&omRain(o1.minutely_15))wx='rain';}
       if(w1){if(strongP(w1))wx=w1.w;if(t==null)t=w1.t;}
       if(wx==null)throw 0;
+      var ov=(location.search.match(/[?&]wxm=([a-z]+)/)||[])[1];if(ov)wx=ov;
       setCityFX('fxM',wx);H.setAttribute('data-wxm',wx);
       var mt=el('mwxt');if(mt)mt.textContent=CZ.n+' '+WXL[wx]+(t!=null?' '+Math.round(+t)+'°':'');
     }).catch(function(){setCityFX('fxM','');H.removeAttribute('data-wxm');});
