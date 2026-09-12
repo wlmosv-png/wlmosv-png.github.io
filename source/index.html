@@ -634,19 +634,57 @@ html[data-wxm] .wxc2{opacity:1}
   }
 
   function weatherFX(w,win){
-    var rain=el('rain'),flash=el('flash');
-    if(!rain)return;rain.innerHTML='';
+    var box=el('rain'),flash=el('flash');
+    if(!box)return;
+    if(box._t){clearInterval(box._t);box._t=null}
+    if(box._fx){try{box._fx()}catch(e){};box._fx=null}
+    box.innerHTML='';
     if(SYN||w!=='rain'&&w!=='snow'&&w!=='thunder')return;
-    var n=w==='snow'?54:Math.min(185,58+(win||14)*2.2),h='',sz;
+    if(w==='snow'){var h='',sz;
+      for(var i=0;i<54;i++){sz=(2.2+Math.random()*2.4).toFixed(1);
+        h+='<i class="sf" style="--t:'+(-Math.random()*7).toFixed(2)+'s;--d:'+(4.5+Math.random()*4).toFixed(2)+'s;left:'+Math.round(Math.random()*104-2)+'%;--x:'+(Math.random()*8-4).toFixed(1)+'vw;width:'+sz+'px;height:'+sz+'px"></i>';}
+      box.innerHTML=h;return;}
+    /* 电影雨：Canvas 直线下落，近粗远细 + 速度拖影 */
+    var c=document.createElement('canvas');
+    c.style.cssText='position:absolute;inset:0;width:100%;height:100%;display:block';
+    box.appendChild(c);
+    var ctx=c.getContext('2d');
+    function rs(){c.width=c.clientWidth||innerWidth;c.height=c.clientHeight||innerHeight}
+    rs();
+    var n=Math.min(220,Math.round(72+(win||14)*4)),drops=[];
     for(var i=0;i<n;i++){
-        if(w==='snow'){sz=(2.2+Math.random()*2.4).toFixed(1);h+='<i class="sf" style="--t:'+(-Math.random()*7).toFixed(2)+'s;--d:'+(4.5+Math.random()*4).toFixed(2)+'s;left:'+Math.round(Math.random()*104-2)+'%;--x:'+(Math.random()*8-4).toFixed(1)+'vw;width:'+sz+'px;height:'+sz+'px"></i>';}
-        else{
-          var tier=Math.random(),cls=tier<.5?'':tier<.82?'mid':tier<.96?'near':'gem';
-          var op=cls==='gem'?.92:cls==='near'?.8:cls==='mid'?.64:.48;
-          h+='<i class="'+cls+'" style="--a:'+(-12-Math.random()*10).toFixed(1)+'deg;--o:'+op+';--t:'+(-Math.random()*8).toFixed(2)+'s;--d:'+(0.62+Math.random()*0.9).toFixed(2)+'s;left:'+Math.round(Math.random()*106-4)+'%;--x:'+(Math.random()*6-3).toFixed(1)+'vw"></i>';}
+      var z=Math.random(),sp=980+z*z*1500,ln=9+z*z*46;
+      drops.push({x:Math.random()*c.width,y:-Math.random()*c.height,z:z,len:ln,sp:sp,w:.7+z*1.7,a:.16+z*.5});
+    }
+    var alive=true,last=0;
+    function resize(){rs()}
+    addEventListener('resize',resize);
+    function tick(t){
+      if(!alive)return;
+      var dt=Math.min(.05,(t-last)/1000||.016);last=t;
+      ctx.clearRect(0,0,c.width,c.height);
+      for(var i=0;i<drops.length;i++){
+        var d=drops[i];d.y+=d.sp*dt;
+        if(d.y-d.len>c.height){d.y=-d.len-Math.random()*260;d.x=Math.random()*c.width}
+        var g=ctx.createLinearGradient(0,d.y,0,d.y+d.len);
+        g.addColorStop(0,'rgba(196,214,255,'+d.a+')');
+        g.addColorStop(.3,'rgba(212,228,255,'+(d.a*.6).toFixed(3)+')');
+        g.addColorStop(1,'rgba(212,228,255,0)');
+        ctx.strokeStyle=g;ctx.lineWidth=d.w;ctx.lineCap='round';
+        ctx.beginPath();ctx.moveTo(d.x,d.y);ctx.lineTo(d.x,d.y+d.len);ctx.stroke();
+        if(d.z>.55){
+          var g2=ctx.createLinearGradient(0,d.y+d.len*.35,0,d.y+d.len*1.7);
+          g2.addColorStop(0,'rgba(190,208,255,'+(d.a*.2).toFixed(3)+')');
+          g2.addColorStop(1,'rgba(190,208,255,0)');
+          ctx.strokeStyle=g2;ctx.lineWidth=d.w*.7;
+          ctx.beginPath();ctx.moveTo(d.x,d.y+d.len*.4);ctx.lineTo(d.x,d.y+d.len*1.75);ctx.stroke();
+        }
       }
-      rain.innerHTML=h;
-    if(w==='thunder'&&flash&&D.body){setInterval(function(){
+      requestAnimationFrame(tick);
+    }
+    box._fx=function(){alive=false;removeEventListener('resize',resize);ctx.clearRect(0,0,c.width,c.height);c.width=0;c.height=0};
+    requestAnimationFrame(tick);
+    if(w==='thunder'&&flash&&D.body){box._t=setInterval(function(){
       if(D.hidden||(H.getAttribute('data-sky')!=='night'&&H.getAttribute('data-sky')!=='evening'))return;D.body.appendChild(flash);
       flash.style.animation='flash 1.5s linear 1';
       setTimeout(function(){flash.style.animation=''},1700);},42000);}
