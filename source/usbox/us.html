@@ -229,6 +229,7 @@ body{
 }
 #composer .send:active{transform:scale(.86)}
 #pending{font-size:12px;color:var(--pp);text-align:center;padding:6px 0}
+#sizeTip{display:none;align-items:center;justify-content:center;gap:4px;margin:8px 16px 0;padding:8px 10px;border-radius:12px;font-size:12px;color:#fff;background:linear-gradient(135deg,rgba(255,92,156,.85),rgba(168,85,247,.85));box-shadow:var(--shadow);line-height:1.4}
 #photoPrev{display:none;margin:10px 0 4px;border-radius:16px;overflow:hidden;max-width:200px;position:relative;box-shadow:var(--shadow)}
 #photoPrev.show{display:block}
 #photoPrev img{width:100%;display:block}
@@ -322,6 +323,7 @@ body{
   <div id="list"></div>
   <div id="empty"><div class="big">🫧</div><div class="t">这里还空着<br>写下第一句悄悄话吧<br><i>whisper something sweet</i></div></div>
   <div id="pending"></div>
+  <div id="sizeTip"></div>
   <div id="photoPrev"><img id="photoPrevImg"><span class="x" id="photoPrevX">✕</span></div>
 </div>
 
@@ -373,7 +375,7 @@ var lock = $('lock'), lockLogo = $('lockLogo'), lockHint = $('lockHint'), pwdBox
     app = $('app'), list = $('list'), empty = $('empty'), pending = $('pending'),
     composer = $('composer'), input = $('input'), btnSend = $('btnSend'), btnPhoto = $('btnPhoto'),
     file = $('file'), photoPrev = $('photoPrev'), photoPrevImg = $('photoPrevImg'), photoPrevX = $('photoPrevX'),
-    hello = $('hello');
+    hello = $('hello'), sizeTip = $('sizeTip');
 
 var EMOS = [['\u2764\ufe0f','heart'],['\u263a\ufe0f','smile'],['\ud83d\ude02','laugh'],['\ud83d\ude2d','cry']];
 
@@ -430,6 +432,7 @@ function compressPhoto(file, cb){
       var cv = document.createElement('canvas');
       cv.width = w; cv.height = h;
       var ctx = cv.getContext('2d');
+      ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, w, h);  // 透明 PNG 转 JPEG 先垫白底，防变黑
       ctx.drawImage(img, 0, 0, w, h);
       cb(cv.toDataURL('image/jpeg', 0.72));
     };
@@ -514,6 +517,16 @@ async function saveData(){
   var blob = await UsCrypto.encryptObject(state.pwd, { msgs: state.msgs });
   await store.save(blob);
   state.blob = blob;
+  updateSizeTip();
+}
+function updateSizeTip(){
+  var bytes = state.blob ? JSON.stringify(state.blob).length : 0;
+  var warn = bytes > 4000000;
+  sizeTip.style.display = warn ? 'flex' : 'none';
+  if (warn){
+    var mb = (bytes / 1048576).toFixed(1);
+    sizeTip.innerHTML = (bytes > 8000000 ? '⚠️ 空间快满了（' : '📦 空间已用 ') + mb + ' MB' + (bytes > 8000000 ? '），照片太多传不动了，删一些吧' : '，照片多了会卡，建议清理一下');
+  }
 }
 async function loadData(){
   var blob = await store.load();
@@ -522,6 +535,7 @@ async function loadData(){
     var obj = await UsCrypto.decryptObject(state.pwd, blob);
     state.msgs = (obj && obj.msgs) || [];
     state.blob = blob;
+    updateSizeTip();
     return true;
   } catch(e) { return false; }
 }
