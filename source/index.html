@@ -93,10 +93,20 @@ html[data-sky="dawn"] #motes,html[data-sky="day"] #motes,html[data-sky="dusk"] #
 #cast i{position:absolute;top:-3px;border-radius:50%;background:var(--star);opacity:0;
   animation:cast var(--d) linear var(--t) infinite}
 #cast.stars i{box-shadow:0 0 5px 1px var(--starglow)}
-#rain i{position:absolute;top:-14%;width:1px;height:15px;border-radius:1px;opacity:0;
-  background:linear-gradient(to bottom,transparent,var(--rose2));animation:drop var(--d) linear var(--t) infinite}
+#rain i{position:absolute;top:-18%;width:1px;height:13px;border-radius:3px;opacity:0;
+  background:linear-gradient(to bottom,transparent,rgba(196,216,255,.5) 58%,var(--rose2));
+  filter:blur(.28px);will-change:transform,opacity;
+  animation:drop var(--d) linear var(--t) infinite}
+#rain i.mid{filter:blur(.4px);width:1.5px;height:19px;
+  background:linear-gradient(to bottom,transparent,rgba(212,229,255,.6) 52%,var(--rose2))}
+#rain i.near{filter:blur(.5px);width:2px;height:27px;
+  background:linear-gradient(to bottom,transparent,rgba(224,239,255,.78) 46%,var(--rose2))}
+#rain i.gem{filter:blur(.6px);width:2.6px;height:35px;
+  background:linear-gradient(to bottom,transparent,rgba(235,245,255,.9) 40%,var(--rose2));
+  box-shadow:0 0 6px 1px rgba(210,225,255,.28)}
 @keyframes cast{0%{opacity:0;transform:translateY(0)}8%{opacity:var(--o)}55%{opacity:var(--o)}100%{opacity:0;transform:translate(var(--x),46vh)}}
-@keyframes drop{0%{opacity:0;transform:translateY(0)}6%{opacity:.5}100%{opacity:0;transform:translate(-4vw,112vh)}}
+@keyframes drop{0%{opacity:0;transform:translate(var(--x),0) rotate(var(--a))}
+  8%{opacity:var(--o)}100%{opacity:0;transform:translate(calc(var(--x) - 7vw),113vh) rotate(var(--a))}}
 #rain i.sf{border-radius:50%;background:rgba(255,255,255,.95);box-shadow:0 0 4px 1px rgba(255,255,255,.35);animation:fall var(--d) linear var(--t) infinite}
 @keyframes fall{0%{opacity:0;transform:translate(0,0)}10%{opacity:.95}45%{transform:translate(calc(var(--x)*.35),50vh)}80%{opacity:.8}100%{opacity:0;transform:translate(var(--x),116vh)}}
 @keyframes br{0%,100%{opacity:.62}50%{opacity:1}}
@@ -627,10 +637,13 @@ html[data-wxm] .wxc2{opacity:1}
     var rain=el('rain'),flash=el('flash');
     if(!rain)return;rain.innerHTML='';
     if(SYN||w!=='rain'&&w!=='snow'&&w!=='thunder')return;
-    var n=w==='snow'?54:Math.min(130,44+(win||14)*1.6),h='',sz;
+    var n=w==='snow'?54:Math.min(185,58+(win||14)*2.2),h='',sz;
     for(var i=0;i<n;i++){
         if(w==='snow'){sz=(2.2+Math.random()*2.4).toFixed(1);h+='<i class="sf" style="--t:'+(-Math.random()*7).toFixed(2)+'s;--d:'+(4.5+Math.random()*4).toFixed(2)+'s;left:'+Math.round(Math.random()*104-2)+'%;--x:'+(Math.random()*8-4).toFixed(1)+'vw;width:'+sz+'px;height:'+sz+'px"></i>';}
-        else{h+='<i style="--t:'+(-Math.random()*7).toFixed(2)+'s;--d:'+(0.7+Math.random()*1.1).toFixed(2)+'s;left:'+Math.round(Math.random()*104-2)+'%;--x:-3.0vw;height:'+(8+Math.random()*10)+'px;border-radius:1px"></i>';}
+        else{
+          var tier=Math.random(),cls=tier<.5?'':tier<.82?'mid':tier<.96?'near':'gem';
+          var op=cls==='gem'?.92:cls==='near'?.8:cls==='mid'?.64:.48;
+          h+='<i class="'+cls+'" style="--a:'+(-12-Math.random()*10).toFixed(1)+'deg;--o:'+op+';--t:'+(-Math.random()*8).toFixed(2)+'s;--d:'+(0.62+Math.random()*0.9).toFixed(2)+'s;left:'+Math.round(Math.random()*106-4)+'%;--x:'+(Math.random()*6-3).toFixed(1)+'vw"></i>';}
       }
       rain.innerHTML=h;
     if(w==='thunder'&&flash&&D.body){setInterval(function(){
