@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>只属于我们</title>
+<style>
+:root{
+  --bg:#04060d; --bg2:#0a0e1c; --panel:rgba(255,255,255,.05);
+  --line:rgba(255,255,255,.12); --ink:#f2eee8; --ink2:#b9b2a8; --ink3:#8a8378;
+  --rose:#e8709a; --rose2:#f4a7c3; --gold:#ecc46a;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  background:radial-gradient(120% 80% at 50% 0%,#0d1226 0%,#04060d 60%);
+  color:var(--ink);font-family:-apple-system,"PingFang SC","HarmonyOS Sans SC","Noto Sans CJK SC",sans-serif;
+  min-height:100vh;overflow-x:hidden;
+}
+/* ===== 未解锁遮罩 ===== */
+#lock{
+  position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:radial-gradient(120% 80% at 50% 0%,#0d1226 0%,#04060d 60%);
+  transition:opacity .45s ease;cursor:pointer;
+}
+#lock.hidden{opacity:0;pointer-events:none}
+#lockHint{font-size:13px;color:var(--ink3);letter-spacing:2px;margin-top:14px}
+#lockLogo{
+  width:88px;height:88px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(circle at 50% 35%,#1a2138,#0a0e1c 70%);
+  border:1px solid var(--line);font-size:40px;color:var(--rose2);
+  box-shadow:0 0 44px rgba(232,112,154,.18);user-select:none;touch-action:none;-webkit-touch-callout:none;
+}
+#lockLogo.pressed{transform:scale(.96);box-shadow:0 0 20px rgba(232,112,154,.4)}
+#pwdBox{
+  display:none;margin-top:26px;text-align:center;animation:rise .3s ease;
+}
+#pwdBox.show{display:block}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+#pwdBox input{
+  width:220px;padding:12px 16px;border-radius:12px;border:1px solid var(--line);
+  background:rgba(255,255,255,.06);color:var(--ink);font-size:16px;text-align:center;outline:none;
+  letter-spacing:1px;
+}
+#pwdBox input:focus{border-color:var(--rose2)}
+#pwdBtns{display:flex;gap:10px;justify-content:center;margin-top:14px}
+.btn{
+  padding:9px 20px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.07);
+  color:var(--ink);font-size:14px;cursor:pointer;transition:all .2s;
+}
+.btn:active{transform:scale(.96)}
+.btn.primary{background:linear-gradient(135deg,#e8709a,#c4577e);border:none;color:#fff;font-weight:600}
+#pwdErr{font-size:12px;color:#ff8f8f;margin-top:10px;min-height:16px;display:none}
+/* ===== 主界面 ===== */
+#app{display:none;max-width:560px;margin:0 auto;padding:0 16px 120px}
+#app.show{display:block}
+#topbar{
+  position:sticky;top:0;z-index:20;padding:14px 4px 12px;display:flex;align-items:center;justify-content:space-between;
+  background:linear-gradient(180deg,#04060d 60%,rgba(4,6,13,0));
+}
+#topbar h1{font-size:19px;font-weight:700;letter-spacing:1px}
+#topbar h1 small{display:block;font-size:11px;font-weight:400;color:var(--ink3);letter-spacing:3px;margin-top:2px}
+#whoBox{display:flex;gap:6px;align-items:center;font-size:13px;color:var(--ink2)}
+#whoBox .who{
+  padding:5px 12px;border-radius:999px;border:1px solid var(--line);cursor:pointer;color:var(--ink3);transition:all .2s;user-select:none;
+}
+#whoBox .who.on{background:var(--rose);border-color:var(--rose);color:#fff;font-weight:600}
+/* 消息列表 */
+#list{display:flex;flex-direction:column;gap:14px;margin-top:8px}
+.msg{
+  max-width:86%;padding:12px 14px;border-radius:16px;background:var(--panel);border:1px solid var(--line);
+  animation:rise .3s ease;
+}
+.msg.me{align-self:flex-end;background:linear-gradient(135deg,rgba(232,112,154,.16),rgba(196,87,126,.10));border-color:rgba(232,112,154,.35)}
+.msg.you{align-self:flex-start}
+.msg .meta{font-size:11px;color:var(--ink3);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.msg .meta b{color:var(--rose2);font-weight:600}
+.msg.you .meta b{color:var(--gold)}
+.msg .txt{font-size:15px;line-height:1.65;word-break:break-word;white-space:pre-wrap}
+.msg img{
+  max-width:100%;border-radius:12px;display:block;margin-top:4px;border:1px solid var(--line);
+}
+.msg .imgTag{font-size:11px;color:var(--ink3);margin-top:6px}
+/* 表情反应 */
+.rx{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.rx .rxb{
+  display:flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;
+  border:1px solid var(--line);background:rgba(255,255,255,.05);font-size:13px;color:var(--ink2);
+  cursor:pointer;transition:all .2s;user-select:none;
+}
+.rx .rxb:active{transform:scale(.92)}
+.rx .rxb.hot{background:rgba(232,112,154,.22);border-color:var(--rose2);color:var(--ink)}
+.rx .rxb b{font-size:12px;min-width:10px}
+/* 输入区 */
+#composer{
+  position:fixed;left:0;right:0;bottom:0;z-index:30;max-width:560px;margin:0 auto;
+  padding:10px 14px calc(12px + env(safe-area-inset-bottom));
+  background:linear-gradient(0deg,#04060d 75%,rgba(4,6,13,0));
+  display:flex;gap:8px;align-items:flex-end;
+}
+#composer textarea{
+  flex:1;resize:none;max-height:96px;padding:11px 14px;border-radius:14px;border:1px solid var(--line);
+  background:rgba(255,255,255,.07);color:var(--ink);font-size:15px;line-height:1.4;outline:none;font-family:inherit;
+}
+#composer textarea:focus{border-color:var(--rose2)}
+#composer .icon{
+  flex:none;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);
+  background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;
+  font-size:19px;cursor:pointer;transition:all .2s;color:var(--ink2);
+}
+#composer .icon:active{transform:scale(.9)}
+#composer .send{
+  flex:none;width:44px;height:44px;border-radius:50%;border:none;font-size:18px;cursor:pointer;
+  background:linear-gradient(135deg,#e8709a,#c4577e);color:#fff;display:flex;align-items:center;justify-content:center;
+  transition:all .2s;
+}
+#composer .send:active{transform:scale(.9)}
+#sendTip{font-size:12px;color:var(--ink3);text-align:center;padding:8px 0 4px;display:none}
+#pending{font-size:12px;color:var(--rose2);text-align:center;padding:6px 0}
+#photoPrev{
+  display:none;margin:8px 0;border-radius:12px;overflow:hidden;border:1px solid var(--line);max-width:180px;position:relative;
+}
+#photoPrev.show{display:block}
+#photoPrev img{width:100%;display:block}
+#photoPrev .x{
+  position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.6);
+  color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;
+}
+/* 空状态 */
+#empty{display:none;text-align:center;padding:60px 0;color:var(--ink3)}
+#empty.show{display:block}
+#empty .big{font-size:44px;margin-bottom:14px}
+</style>
+</head>
+<body>
+<!-- 锁屏层：长按 logo 3 秒弹出 -->
+<div id="lock">
+  <div id="lockLogo">🔒</div>
+  <div id="lockHint">长按打开 · 只属于我们</div>
+  <div id="pwdBox">
+    <input id="pwd" type="password" placeholder="输入密码" autocomplete="off">
+    <div id="pwdBtns">
+      <button class="btn" id="pwdCancel">取消</button>
+      <button class="btn primary" id="pwdOk">解锁</button>
+    </div>
+    <div id="pwdErr">密码不对，再想想</div>
+  </div>
+</div>
+
+<!-- 主界面 -->
+<div id="app">
+  <div id="topbar">
+    <h1>只属于我们<small>THE PLACE FOR US</small></h1>
+    <div id="whoBox">
+      <span class="who" data-who="me">我</span>
+      <span class="who" data-who="you">你</span>
+    </div>
+  </div>
+  <div id="list"></div>
+  <div id="empty"><div class="big">🫧</div>这里还空着<br>写下第一句话吧</div>
+  <div id="pending"></div>
+  <div id="photoPrev"><img id="photoPrevImg"><span class="x" id="photoPrevX">✕</span></div>
+</div>
+
+<!-- 输入区 -->
+<div id="composer" style="display:none">
+  <button class="icon" id="btnPhoto" title="传照片">📷</button>
+  <textarea id="input" rows="1" placeholder="说点什么…"></textarea>
+  <button class="send" id="btnSend">➤</button>
+</div>
+<input type="file" id="file" accept="image/*" style="display:none">
+<div id="sendTip">长按 logo 3 秒回到这里</div>
+
+<script src="us_crypto.js"></script>
+<script>
+(function(){
+'use strict';
+// ========== 存储适配器（先 localStorage，后续换 Firebase 云同步） ==========
+var LS_KEY = 'usbox.v1';       // 加密数据
+var LS_WHO = 'usbox.who';      // 身份 me/you
+var LS_PW  = 'usbox.pwkeep';   // 是否记住密码
+
+var store = {
+  load: function(){ try { var s = localStorage.getItem(LS_KEY); return s ? JSON.parse(s) : null; } catch(e){ return null; } },
+  save: function(blob){ localStorage.setItem(LS_KEY, JSON.stringify(blob)); },
+};
+
+var state = { blob: null, msgs: [], who: localStorage.getItem(LS_WHO) || 'me', pwd: null };
+
+// ========== DOM ==========
+var $ = function(id){ return document.getElementById(id); };
+var lock = $('lock'), lockLogo = $('lockLogo'), lockHint = $('lockHint'), pwdBox = $('pwdBox'),
+    pwd = $('pwd'), pwdOk = $('pwdOk'), pwdCancel = $('pwdCancel'), pwdErr = $('pwdErr'),
+    app = $('app'), list = $('list'), empty = $('empty'), pending = $('pending'),
+    composer = $('composer'), input = $('input'), btnSend = $('btnSend'), btnPhoto = $('btnPhoto'),
+    file = $('file'), photoPrev = $('photoPrev'), photoPrevImg = $('photoPrevImg'), photoPrevX = $('photoPrevX'),
+    sendTip = $('sendTip');
+
+var EMOS = [['\u2764\ufe0f','heart'],['\u263a\ufe0f','smile'],['\ud83d\ude02','laugh'],['\ud83d\ude2d','cry']];
+var RX_KEY = { heart:'\u2764\ufe0f', smile:'\u263a\ufe0f', laugh:'\ud83d\ude02', cry:'\ud83d\ude2d' };
+
+// ========== 照片压缩 ==========
+function compressPhoto(file, cb){
+  var reader = new FileReader();
+  reader.onload = function(e){
+    var img = new Image();
+    img.onload = function(){
+      var MAX = 900, w = img.width, h = img.height;
+      if (w > MAX || h > MAX) {
+        var r = Math.min(MAX / w, MAX / h);
+        w = Math.round(w * r); h = Math.round(h * r);
+      }
+      var cv = document.createElement('canvas');
+      cv.width = w; cv.height = h;
+      var ctx = cv.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      cb(cv.toDataURL('image/jpeg', 0.72));
+    };
+    img.onerror = function(){ cb(null); };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// ========== 渲染 ==========
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function fmtTime(ts){
+  var d = new Date(ts), now = new Date();
+  var hh = function(n){ return (n<10?'0':'')+n; };
+  var today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  if (ts >= today) return '今天 '+hh(d.getHours())+':'+hh(d.getMinutes());
+  if (ts >= today - 864e5) return '昨天 '+hh(d.getHours())+':'+hh(d.getMinutes());
+  return (d.getMonth()+1)+'/'+d.getDate()+' '+hh(d.getHours())+':'+hh(d.getMinutes());
+}
+function render(){
+  list.innerHTML = '';
+  if (!state.msgs.length) { empty.className = 'show'; return; }
+  empty.className = '';
+  state.msgs.slice().reverse().forEach(function(m){
+    var el = document.createElement('div');
+    el.className = 'msg ' + (m.who === state.who ? 'me' : 'you');
+    var html = '<div class="meta"><b>' + (m.who === 'me' ? '我' : '你') + '</b>' + fmtTime(m.ts) + '</div>';
+    if (m.type === 'photo') {
+      html += '<img src="' + m.photo + '" alt="照片" loading="lazy">';
+    }
+    if (m.text) html += '<div class="txt">' + esc(m.text) + '</div>';
+    html += '<div class="rx">';
+    EMOS.forEach(function(e){
+      var n = (m.rx && m.rx[e[1]]) || 0;
+      html += '<span class="rxb' + (n?' hot':'') + '" data-id="' + m.id + '" data-emo="' + e[1] + '">' + e[0] + (n?'<b>'+n+'</b>':'') + '</span>';
+    });
+    html += '</div>';
+    el.innerHTML = html;
+    list.appendChild(el);
+  });
+  var c = list.querySelectorAll('.msg').length;
+  if (c) pending.textContent = '';
+}
+// ========== 加密读写 ==========
+async function saveData(){
+  var blob = await UsCrypto.encryptObject(state.pwd, { msgs: state.msgs });
+  store.save(blob);
+  state.blob = blob;
+}
+async function loadData(){
+  var blob = store.load();
+  if (!blob) return null;
+  try {
+    var obj = await UsCrypto.decryptObject(state.pwd, blob);
+    state.msgs = (obj && obj.msgs) || [];
+    state.blob = blob;
+    return true;
+  } catch(e) { return false; }
+}
+
+// ========== 解锁流程 ==========
+var pressT = null, pressTimer = null, pwdMode = false, pressXY = null;
+lockLogo.addEventListener('pointerdown', function(e){
+  e.preventDefault();
+  pressXY = { x: e.clientX, y: e.clientY };
+  lockLogo.classList.add('pressed');
+  pressT = Date.now();
+  pressTimer = setTimeout(function(){ openPwdBox(); }, 900);
+});
+window.addEventListener('pointermove', function(e){
+  if (!pressXY) return;
+  var dx = e.clientX - pressXY.x, dy = e.clientY - pressXY.y;
+  if (dx * dx + dy * dy > 100) pressEnd();
+});
+window.addEventListener('pointerup', pressEnd);
+window.addEventListener('pointercancel', pressEnd);
+function pressEnd(){
+  pressXY = null;
+  lockLogo.classList.remove('pressed');
+  if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
+}
+
+function openPwdBox(){
+  pressEnd();
+  pwdMode = true;
+  lockHint.textContent = '输入密码进入';
+  pwdBox.className = 'show';
+  pwdErr.style.display = 'none';
+  pwd.value = '';
+  setTimeout(function(){ pwd.focus(); }, 100);
+}
+async function unlock(){
+  var v = pwd.value.trim();
+  if (!v) return;
+  state.pwd = v;
+  var ok = await loadData();
+  if (ok === false) {
+    pwdErr.style.display = 'block';
+    state.pwd = null;
+    return;
+  }
+  if (ok === null) {
+    // 首次使用：建立空数据
+    state.msgs = [];
+    await saveData();
+  }
+  enter();
+}
+function enter(){
+  pwdMode = false;
+  lock.className = 'hidden';
+  app.className = 'show';
+  composer.style.display = 'flex';
+  sendTip.style.display = 'none';
+  document.body.style.overflow = 'auto';
+  setWho(state.who);
+  render();
+  input.focus();
+}
+
+pwdOk.addEventListener('click', unlock);
+pwdCancel.addEventListener('click', function(){
+  pwdMode = false; pwdBox.className = ''; pwd.value = '';
+  lockHint.textContent = '长按打开 · 只属于我们';
+  pwdErr.style.display = 'none';
+});
+pwd.addEventListener('keydown', function(e){ if (e.key === 'Enter') unlock(); });
+
+// ========== 身份切换 ==========
+function setWho(w){
+  state.who = w;
+  localStorage.setItem(LS_WHO, w);
+  document.querySelectorAll('.who').forEach(function(el){
+    el.className = 'who' + (el.getAttribute('data-who') === w ? ' on' : '');
+  });
+  render();
+}
+document.querySelector('#whoBox').addEventListener('click', function(e){
+  var w = e.target.getAttribute && e.target.getAttribute('data-who');
+  if (w) setWho(w);
+});
+
+// ========== 发送 ==========
+function sendMsg(type, text, photo){
+  var m = { id: Date.now(), ts: Date.now(), who: state.who, type: type, rx: {} };
+  if (text) m.text = text;
+  if (photo) m.photo = photo;
+  state.msgs.push(m);
+  saveData().then(function(){
+    render();
+    pending.textContent = '';
+  });
+  pending.textContent = type === 'photo' ? '照片加密上传中…' : '加密保存中…';
+}
+function doSend(){
+  var v = input.value.trim();
+  if (v) {
+    sendMsg('text', v);
+    input.value = '';
+    input.style.height = 'auto';
+  }
+  if (pendingPhoto) {
+    sendMsg('photo', '', pendingPhoto);
+    pendingPhoto = null;
+    photoPrev.className = '';
+    photoPrevImg.src = '';
+  }
+  input.focus();
+}
+btnSend.addEventListener('click', doSend);
+input.addEventListener('keydown', function(e){
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); doSend(); }
+});
+input.addEventListener('input', function(){
+  this.style.height = 'auto';
+  this.style.height = Math.min(this.scrollHeight, 96) + 'px';
+});
+
+// ========== 照片 ==========
+var pendingPhoto = null;
+btnPhoto.addEventListener('click', function(){ file.click(); });
+file.addEventListener('change', function(){
+  var f = file.files[0];
+  if (!f) return;
+  compressPhoto(f, function(data){
+    file.value = '';
+    if (!data) { pending.textContent = '照片处理失败'; return; }
+    pendingPhoto = data;
+    photoPrevImg.src = data;
+    photoPrev.className = 'show';
+    pending.textContent = '';
+  });
+});
+photoPrevX.addEventListener('click', function(){
+  pendingPhoto = null;
+  photoPrev.className = '';
+  photoPrevImg.src = '';
+});
+
+// ========== 表情反应 ==========
+list.addEventListener('click', function(e){
+  var b = e.target.closest('.rxb');
+  if (!b) return;
+  var id = parseInt(b.getAttribute('data-id'), 10);
+  var emo = b.getAttribute('data-emo');
+  var m = state.msgs.find(function(x){ return x.id === id; });
+  if (!m) return;
+  if (!m.rx) m.rx = {};
+  m.rx[emo] = (m.rx[emo] || 0) + 1;
+  saveData().then(render);
+});
+
+// ========== 键盘弹起布局 ==========
+input.addEventListener('focus', function(){ setTimeout(function(){ render(); }, 300); });
+render();
+})();
+</script>
+</body>
+</html>

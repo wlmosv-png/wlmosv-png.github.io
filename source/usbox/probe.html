@@ -1,0 +1,12 @@
+<!DOCTYPE html><html><body>
+<div id="r1">pending</div>
+<script>
+(async function(){
+  var out = [];
+  try { localStorage.setItem('t','1'); out.push('localStorage:OK'); } catch(e){ out.push('localStorage:FAIL '+e.name); }
+  try { var k = await crypto.subtle.importKey('raw', new TextEncoder().encode('x'), 'PBKDF2', false, ['deriveKey']); out.push('crypto.subtle:OK'); } catch(e){ out.push('crypto.subtle:FAIL '+e.name); }
+  try { var k2 = await crypto.subtle.deriveKey({name:'PBKDF2', salt:new Uint8Array(8), iterations:100, hash:'SHA-256'}, k, {name:'AES-GCM',length:256}, false, ['encrypt']); out.push('deriveKey:OK'); } catch(e){ out.push('deriveKey:FAIL '+e.name); }
+  document.getElementById('r1').textContent = out.join(' | ');
+})();
+</script>
+</body></html>
