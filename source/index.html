@@ -1034,11 +1034,16 @@ html[data-wxm] .wxc2{opacity:1}
 </script>
 
 <script id="usbox-secret-gate">
-/* 隐藏入口：长按顶部 PP&&YY 品牌 1.5 秒进入留言板（只有知道的人才找得到） */
+/* 隐藏入口：长按顶部 PP&&YY 品牌（整行顶栏均可）1.2 秒进入留言板 */
 (function(){
+  var topEl = document.querySelector('.top');
   var brand = document.querySelector('.brand');
-  if (!brand) return;
-  var HOLD = 1500, MOVE = 14, t = null, x0 = 0, y0 = 0;
+  if (!topEl) return;
+  /* 禁掉长按文本选择/系统菜单，否则手机上长按会被系统吞掉 */
+  var st = document.createElement('style');
+  st.textContent = '.brand{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:none;transition:transform .12s}';
+  document.head.appendChild(st);
+  var HOLD = 1200, MOVE = 24, t = null, fired = false, x0 = 0, y0 = 0;
   var tip = null;
   function showTip(){
     if (tip) return;
@@ -1047,33 +1052,37 @@ html[data-wxm] .wxc2{opacity:1}
     tip.style.cssText = 'position:fixed;left:50%;top:16%;transform:translateX(-50%);'+
       'background:rgba(30,20,40,.92);color:#ffd7e8;font-size:13px;letter-spacing:2px;'+
       'padding:9px 20px;border-radius:999px;z-index:9999;pointer-events:none;'+
-      'box-shadow:0 6px 20px rgba(0,0,0,.35);transition:opacity .4s';
+      'box-shadow:0 6px 20px rgba(0,0,0,.35)';
     document.body.appendChild(tip);
   }
-  function hideTip(){
-    if (tip){ tip.style.opacity='0'; setTimeout(function(){ if(tip) tip.remove(); tip=null; }, 450); }
+  function clear(){
+    if (t) { clearTimeout(t); t = null; }
+    fired = false;
+    if (brand) brand.style.transform = '';
+    if (tip) { tip.style.opacity = '0'; setTimeout(function(){ if(tip) tip.remove(); tip = null; }, 400); }
   }
-  brand.addEventListener('pointerdown', function(e){
-    if (e.button !== undefined && e.button !== 0 && e.pointerType === 'mouse') return;
+  function down(e){
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    try { e.preventDefault(); } catch(_){}
     x0 = e.clientX; y0 = e.clientY;
+    if (brand) brand.style.transform = 'scale(1.18)';
     t = setTimeout(function(){
-      t = null; showTip();
-      try { navigator.vibrate && navigator.vibrate(60); } catch(_){}
-      setTimeout(function(){ location.href = '/usbox/us.html?v=2'; }, 500);
+      t = null; fired = true;
+      try { navigator.vibrate && navigator.vibrate([40,30,60]); } catch(_){}
+      showTip();
+      setTimeout(function(){ location.href = '/usbox/us.html?v=3'; }, 450);
     }, HOLD);
-  });
-  function cancel(e){
-    if (!t) return;
-    if (e && (e.type === 'pointermove') &&
-        Math.abs(e.clientX - x0) + Math.abs(e.clientY - y0) > MOVE) {
-      clearTimeout(t); t = null; return;
-    }
-    if (e && (e.type === 'pointerup' || e.type === 'pointercancel' || e.type === 'pointerleave')) {
-      clearTimeout(t); t = null; hideTip();
-    }
   }
-  ['pointermove','pointerup','pointercancel','pointerleave'].forEach(function(ev){
-    brand.addEventListener(ev, cancel);
+  function move(e){
+    if (!t || fired) return;
+    if (Math.abs(e.clientX - x0) + Math.abs(e.clientY - y0) > MOVE) clear();
+  }
+  function up(e){ if (!fired) clear(); }
+  ['pointerdown','pointermove','pointerup','pointercancel','pointerleave'].forEach(function(ev){
+    topEl.addEventListener(ev, ev === 'pointerdown' ? down : ev === 'pointermove' ? move : up, {passive:false});
+  });
+  document.addEventListener('contextmenu', function(e){
+    if (e.target && e.target.closest && e.target.closest('.top')) e.preventDefault();
   });
 })();
 </script>
