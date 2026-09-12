@@ -280,11 +280,11 @@ function render(){
 // ========== 加密读写 ==========
 async function saveData(){
   var blob = await UsCrypto.encryptObject(state.pwd, { msgs: state.msgs });
-  store.save(blob);
+  await store.save(blob);
   state.blob = blob;
 }
 async function loadData(){
-  var blob = store.load();
+  var blob = await store.load();
   if (!blob) return null;
   try {
     var obj = await UsCrypto.decryptObject(state.pwd, blob);
