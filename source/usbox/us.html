@@ -25,6 +25,8 @@ body{
 }
 #lock.hidden{opacity:0;pointer-events:none}
 #lockHint{font-size:13px;color:var(--ink3);letter-spacing:2px;margin-top:14px}
+#cloudLink{font-size:12px;color:var(--ink3);margin-top:10px;padding:6px 14px;border:1px solid var(--line);border-radius:14px;cursor:pointer;opacity:.7}
+#cloudLink:hover{opacity:1}
 #lockLogo{
   width:88px;height:88px;border-radius:50%;display:flex;align-items:center;justify-content:center;
   background:radial-gradient(circle at 50% 35%,#1a2138,#0a0e1c 70%);
@@ -137,6 +139,7 @@ body{
 <div id="lock">
   <div id="lockLogo">🔒</div>
   <div id="lockHint">长按打开 · 只属于我们</div>
+  <div id="cloudLink">⚙ 连接云端</div>
   <div id="pwdBox">
     <input id="pwd" type="password" placeholder="输入密码" autocomplete="off">
     <div id="pwdBtns">
@@ -172,6 +175,7 @@ body{
 <div id="sendTip">长按 logo 3 秒回到这里</div>
 
 <script src="us_crypto.js"></script>
+<script src="us_cloud.js"></script>
 <script>
 (function(){
 'use strict';
@@ -180,9 +184,26 @@ var LS_KEY = 'usbox.v1';       // 加密数据
 var LS_WHO = 'usbox.who';      // 身份 me/you
 var LS_PW  = 'usbox.pwkeep';   // 是否记住密码
 
+var CLOUD = true;   // 云端同步开关
 var store = {
-  load: function(){ try { var s = localStorage.getItem(LS_KEY); return s ? JSON.parse(s) : null; } catch(e){ return null; } },
-  save: function(blob){ localStorage.setItem(LS_KEY, JSON.stringify(blob)); },
+  // 读：云端优先，失败回退本地缓存（离线可用）
+  load: function(){
+    var local = null;
+    try { var s = localStorage.getItem(LS_KEY); local = s ? JSON.parse(s) : null; } catch(e){ local = null; }
+    if (!CLOUD || !UsCloud.hasToken()) return local;
+    return UsCloud.load().then(function(cloud){
+      if (cloud) { localStorage.setItem(LS_KEY, JSON.stringify(cloud)); return cloud; }
+      return local;
+    }).catch(function(){ return local; });   // 网络失败：用本地
+  },
+  // 写：先落本地（秒回），再异步推云端（先拉 sha 再 PUT，乐观锁防覆盖）
+  save: function(blob){
+    localStorage.setItem(LS_KEY, JSON.stringify(blob));
+    if (!CLOUD || !UsCloud.hasToken()) return Promise.resolve();
+    return UsCloud.getFile().then(function(f){
+      return UsCloud.save(blob, f.sha);
+    }).catch(function(){ /* 云端失败，本地已存，下次刷新再试 */ });
+  },
 };
 
 var state = { blob: null, msgs: [], who: localStorage.getItem(LS_WHO) || 'me', pwd: null };
@@ -338,6 +359,22 @@ pwdCancel.addEventListener('click', function(){
   pwdMode = false; pwdBox.className = ''; pwd.value = '';
   lockHint.textContent = '长按打开 · 只属于我们';
   pwdErr.style.display = 'none';
+});
+
+// ========== 云端连接配置 ==========
+var cloudLink = document.getElementById('cloudLink');
+cloudLink.addEventListener('click', function(){
+  if (UsCloud.hasToken()) {
+    if (!confirm('已连接云端。\n要更换访问令牌吗？')) return;
+  }
+  var t = prompt('粘贴你的 GitHub 访问令牌（两人用同一个）。\n未配置时只能在本机查看。', UsCloud.token() || '');
+  if (t === null) return;
+  if (UsCloud.saveToken(t)) {
+    lockHint.textContent = '✓ 云端已连接，长按进入';
+    setTimeout(function(){ lockHint.textContent = '长按打开 · 只属于我们'; }, 1800);
+  } else {
+    alert('令牌已清除（仅本机）。');
+  }
 });
 pwd.addEventListener('keydown', function(e){ if (e.key === 'Enter') unlock(); });
 
