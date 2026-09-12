@@ -1034,43 +1034,74 @@ html[data-wxm] .wxc2{opacity:1}
 </script>
 
 <script id="usbox-secret-gate">
-/* 隐藏入口：长按顶部 PP&&YY 品牌（整行顶栏均可）1.2 秒进入留言板 */
+/* 隐藏入口：长按 PP&&YY（整行顶栏）1.1s，底部进度条涨满即进留言板 */
 (function(){
   var topEl = document.querySelector('.top');
   var brand = document.querySelector('.brand');
   if (!topEl) return;
-  /* 禁掉长按文本选择/系统菜单，否则手机上长按会被系统吞掉 */
+  /* 禁长按选字/菜单 + 样式注入 */
   var st = document.createElement('style');
-  st.textContent = '.brand{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:none;transition:transform .12s}';
+  st.textContent =
+    '.brand{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;'+
+    'touch-action:none;transition:color .15s,text-shadow .15s}'+
+    '#gatePro{position:absolute;left:0;bottom:-3px;height:3px;border-radius:3px;width:0;'+
+    'background:linear-gradient(90deg,#ff8fb8,#ff4f94);box-shadow:0 0 10px rgba(255,79,148,.8);'+
+    'opacity:0;pointer-events:none}'+
+    '#gatePro.on{opacity:1}'+
+    '#gatePro.done{opacity:0;transition:opacity .3s}';
   document.head.appendChild(st);
-  var HOLD = 1200, MOVE = 24, t = null, fired = false, x0 = 0, y0 = 0;
+  var HOLD = 1100, MOVE = 26, t = null, fired = false, x0 = 0, y0 = 0;
+  var pro = document.createElement('div');
+  pro.id = 'gatePro';
+  topEl.style.position = 'relative';
+  topEl.appendChild(pro);
   var tip = null;
   function showTip(){
     if (tip) return;
     tip = document.createElement('span');
     tip.textContent = '🔓 秘密基地';
-    tip.style.cssText = 'position:fixed;left:50%;top:16%;transform:translateX(-50%);'+
-      'background:rgba(30,20,40,.92);color:#ffd7e8;font-size:13px;letter-spacing:2px;'+
+    tip.style.cssText = 'position:fixed;left:50%;top:15%;transform:translateX(-50%) scale(.9);opacity:0;'+
+      'background:rgba(40,22,38,.86);color:#ffd7e8;font-size:13px;letter-spacing:2px;'+
       'padding:9px 20px;border-radius:999px;z-index:9999;pointer-events:none;'+
-      'box-shadow:0 6px 20px rgba(0,0,0,.35)';
+      'box-shadow:0 8px 26px rgba(0,0,0,.3);backdrop-filter:blur(8px);transition:all .22s';
     document.body.appendChild(tip);
+    requestAnimationFrame(function(){
+      tip.style.transform = 'translateX(-50%) scale(1)';
+      tip.style.opacity = '1';
+    });
   }
   function clear(){
     if (t) { clearTimeout(t); t = null; }
-    fired = false;
-    if (brand) brand.style.transform = '';
-    if (tip) { tip.style.opacity = '0'; setTimeout(function(){ if(tip) tip.remove(); tip = null; }, 400); }
+    if (fired) return;
+    pro.style.transition = 'width .18s ease, opacity .25s';
+    pro.style.width = '0';
+    setTimeout(function(){ if (!fired) pro.classList.remove('on'); }, 200);
+    if (brand) { brand.style.color = ''; brand.style.textShadow = ''; }
+    if (tip) { tip.style.opacity = '0'; setTimeout(function(){ if(tip) tip.remove(); tip = null; }, 300); }
   }
   function down(e){
     if (e.pointerType === 'mouse' && e.button !== 0) return;
     try { e.preventDefault(); } catch(_){}
     x0 = e.clientX; y0 = e.clientY;
-    if (brand) brand.style.transform = 'scale(1.18)';
+    fired = false;
+    /* 进度条从 0 线性涨满 */
+    pro.classList.add('on');
+    pro.classList.remove('done');
+    pro.style.transition = 'none';
+    pro.style.width = '0';
+    void pro.offsetWidth;
+    pro.style.transition = 'width ' + HOLD + 'ms linear';
+    pro.style.width = '100%';
+    if (brand) { brand.style.color = '#ff4f94'; brand.style.textShadow = '0 0 14px rgba(255,79,148,.55)'; }
+    /* 300ms 时轻震提示正在蓄力 */
+    setTimeout(function(){ if (t) { try { navigator.vibrate && navigator.vibrate(14); } catch(_){} } }, 300);
     t = setTimeout(function(){
       t = null; fired = true;
-      try { navigator.vibrate && navigator.vibrate([40,30,60]); } catch(_){}
+      pro.classList.add('done');
+      pro.style.transition = 'none';
+      try { navigator.vibrate && navigator.vibrate([30,40,70]); } catch(_){}
       showTip();
-      setTimeout(function(){ location.href = '/usbox/us.html?v=3'; }, 450);
+      setTimeout(function(){ location.href = '/usbox/us.html?v=4'; }, 260);
     }, HOLD);
   }
   function move(e){
