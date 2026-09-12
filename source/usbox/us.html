@@ -3,164 +3,232 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>只属于我们</title>
+<title>只属于我们 · 记录墙</title>
 <style>
+/* ===== 奶油粉彩手账风 · 与主页星空完全区分 ===== */
 :root{
-  --bg:#04060d; --bg2:#0a0e1c; --panel:rgba(255,255,255,.05);
-  --line:rgba(255,255,255,.12); --ink:#f2eee8; --ink2:#b9b2a8; --ink3:#8a8378;
-  --rose:#e8709a; --rose2:#f4a7c3; --gold:#ecc46a;
+  --cream:#fff7f0; --cream2:#ffeef2;
+  --paper:#fffdf9; --paper2:#fff4f0;
+  --ink:#6b4f5e; --ink2:#a08894; --ink3:#c9aeb8;
+  --pp:#ff7ba9; --pp2:#ffa6c4;          /* PP 粉色 */
+  --yy:#b8a0e8; --yy2:#d8c9f5;          /* YY 淡紫 */
+  --gold:#f6c453;
+  --line:rgba(180,140,160,.18);
+  --shadow:0 6px 20px rgba(190,120,150,.16);
+  --shadow2:0 3px 10px rgba(190,120,150,.12);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
 body{
-  background:radial-gradient(120% 80% at 50% 0%,#0d1226 0%,#04060d 60%);
-  color:var(--ink);font-family:-apple-system,"PingFang SC","HarmonyOS Sans SC","Noto Sans CJK SC",sans-serif;
+  background:
+    radial-gradient(rgba(255,170,200,.16) 1.2px, transparent 1.2px) 0 0 / 22px 22px,
+    linear-gradient(160deg,#fff5ee 0%,#ffe9f2 55%,#fdeef7 100%);
+  color:var(--ink);
+  font-family:"Yuanti SC","PingFang SC","HarmonyOS Sans SC","Noto Sans CJK SC",sans-serif;
   min-height:100vh;overflow-x:hidden;
 }
-/* ===== 未解锁遮罩 ===== */
+
+/* ===== 锁屏（女孩子喜欢的：蜜桃渐变 + 小爱心飘落） ===== */
 #lock{
   position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  background:radial-gradient(120% 80% at 50% 0%,#0d1226 0%,#04060d 60%);
-  transition:opacity .45s ease;cursor:pointer;
+  background:linear-gradient(165deg,#ffe9f2 0%,#ffd9e6 45%,#f6d8f2 100%);
+  transition:opacity .45s ease;cursor:pointer;overflow:hidden;
 }
 #lock.hidden{opacity:0;pointer-events:none}
-#lockHint{font-size:13px;color:var(--ink3);letter-spacing:2px;margin-top:14px}
-#cloudLink{font-size:12px;color:var(--ink3);margin-top:10px;padding:6px 14px;border:1px solid var(--line);border-radius:14px;cursor:pointer;opacity:.7}
-#cloudLink:hover{opacity:1}
-#lockLogo{
-  width:88px;height:88px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  background:radial-gradient(circle at 50% 35%,#1a2138,#0a0e1c 70%);
-  border:1px solid var(--line);font-size:40px;color:var(--rose2);
-  box-shadow:0 0 44px rgba(232,112,154,.18);user-select:none;touch-action:none;-webkit-touch-callout:none;
+#hearts{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+#hearts i{
+  position:absolute;bottom:-40px;font-style:normal;animation:floatUp linear infinite;opacity:.5;
 }
-#lockLogo.pressed{transform:scale(.96);box-shadow:0 0 20px rgba(232,112,154,.4)}
+@keyframes floatUp{
+  0%{transform:translateY(0) rotate(0deg);opacity:0}
+  12%{opacity:.6}
+  100%{transform:translateY(-110vh) rotate(360deg);opacity:0}
+}
+#lockLogo{
+  width:104px;height:104px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#ff9dbb,#ff6f9c);
+  font-size:46px;color:#fff;cursor:pointer;user-select:none;touch-action:none;-webkit-touch-callout:none;
+  box-shadow:0 10px 34px rgba(255,110,160,.45), inset 0 -6px 14px rgba(190,60,110,.28);
+  transition:transform .18s ease, box-shadow .18s ease;position:relative;
+  animation:breathe 2.6s ease-in-out infinite;
+}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.045)}}
+#lockLogo:active{transform:scale(.94)}
+#lockLogo .ring{position:absolute;inset:-12px;border:2px dashed rgba(255,255,255,.7);border-radius:50%;animation:spin 14s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#lockTitle{margin-top:26px;font-size:22px;font-weight:700;color:#b8537d;letter-spacing:3px}
+#lockSub{margin-top:8px;font-size:13px;color:#d895b0;letter-spacing:2px}
+#lockHint{font-size:13px;color:#d895b0;margin-top:18px;letter-spacing:2px}
+#cloudLink{
+  position:absolute;top:calc(env(safe-area-inset-top) + 14px);right:16px;z-index:2;
+  font-size:12px;color:#d895b0;padding:6px 14px;border:1px solid rgba(216,149,176,.5);
+  border-radius:14px;cursor:pointer;background:rgba(255,255,255,.55);opacity:.9;
+}
 #pwdBox{
-  display:none;margin-top:26px;text-align:center;animation:rise .3s ease;
+  display:none;margin-top:20px;text-align:center;animation:rise .3s ease;width:min(300px,86vw);
 }
 #pwdBox.show{display:block}
 @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 #pwdBox input{
-  width:220px;padding:12px 16px;border-radius:12px;border:1px solid var(--line);
-  background:rgba(255,255,255,.06);color:var(--ink);font-size:16px;text-align:center;outline:none;
-  letter-spacing:1px;
+  width:100%;padding:13px 18px;border-radius:999px;border:2px solid rgba(255,140,180,.5);
+  background:rgba(255,255,255,.85);color:#b8537d;font-size:16px;text-align:center;outline:none;
+  letter-spacing:2px;box-shadow:var(--shadow2);
 }
-#pwdBox input:focus{border-color:var(--rose2)}
-#pwdBtns{display:flex;gap:10px;justify-content:center;margin-top:14px}
+#pwdBox input:focus{border-color:#ff7ba9}
+#pwdBox input::placeholder{color:#e5b9cb;letter-spacing:1px}
+#pwdBtns{display:flex;gap:12px;justify-content:center;margin-top:16px}
 .btn{
-  padding:9px 20px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.07);
-  color:var(--ink);font-size:14px;cursor:pointer;transition:all .2s;
+  padding:11px 26px;border-radius:999px;border:none;font-size:14px;cursor:pointer;letter-spacing:2px;
+  background:rgba(255,255,255,.8);color:#c98aa6;transition:all .2s;box-shadow:var(--shadow2);
 }
-.btn:active{transform:scale(.96)}
-.btn.primary{background:linear-gradient(135deg,#e8709a,#c4577e);border:none;color:#fff;font-weight:600}
-#pwdErr{font-size:12px;color:#ff8f8f;margin-top:10px;min-height:16px;display:none}
-/* ===== 主界面 ===== */
-#app{display:none;max-width:560px;margin:0 auto;padding:0 16px 120px}
+.btn:active{transform:scale(.95)}
+.btn.primary{background:linear-gradient(135deg,#ff9dbb,#ff6f9c);color:#fff;font-weight:600;box-shadow:0 6px 18px rgba(255,110,160,.4)}
+#pwdErr{font-size:12px;color:#e05d7f;margin-top:12px;min-height:16px;display:none}
+
+/* ===== 主界面：记录墙 ===== */
+#app{display:none;max-width:600px;margin:0 auto;padding:0 14px 130px}
 #app.show{display:block}
 #topbar{
-  position:sticky;top:0;z-index:20;padding:14px 4px 12px;display:flex;align-items:center;justify-content:space-between;
-  background:linear-gradient(180deg,#04060d 60%,rgba(4,6,13,0));
+  position:sticky;top:0;z-index:20;padding:16px 6px 12px;
+  background:linear-gradient(180deg,rgba(255,246,240,.97) 70%,rgba(255,246,240,0));
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
 }
-#topbar h1{font-size:19px;font-weight:700;letter-spacing:1px}
-#topbar h1 small{display:block;font-size:11px;font-weight:400;color:var(--ink3);letter-spacing:3px;margin-top:2px}
-#whoBox{display:flex;gap:6px;align-items:center;font-size:13px;color:var(--ink2)}
+#brand{display:flex;align-items:center;gap:8px}
+#brand .mark{
+  width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#ff9dbb,#ff6f9c);color:#fff;font-size:17px;
+  box-shadow:0 4px 12px rgba(255,110,160,.35);
+}
+#brand h1{font-size:17px;font-weight:700;color:#b8537d;letter-spacing:1px;line-height:1.25}
+#brand h1 small{display:block;font-size:10px;font-weight:400;color:var(--ink3);letter-spacing:3px;margin-top:1px}
+#whoBox{display:flex;gap:8px;background:rgba(255,255,255,.8);padding:4px;border-radius:999px;box-shadow:var(--shadow2)}
 #whoBox .who{
-  padding:5px 12px;border-radius:999px;border:1px solid var(--line);cursor:pointer;color:var(--ink3);transition:all .2s;user-select:none;
+  padding:7px 16px;border-radius:999px;cursor:pointer;color:var(--ink2);font-size:14px;font-weight:600;
+  transition:all .2s;user-select:none;
 }
-#whoBox .who.on{background:var(--rose);border-color:var(--rose);color:#fff;font-weight:600}
-/* 消息列表 */
-#list{display:flex;flex-direction:column;gap:14px;margin-top:8px}
+#whoBox .who.on{color:#fff;font-weight:700}
+#whoBox .who.on[data-who="me"]{background:linear-gradient(135deg,#ff9dbb,#ff6f9c);box-shadow:0 3px 10px rgba(255,110,160,.4)}
+#whoBox .who.on[data-who="you"]{background:linear-gradient(135deg,#c3aef0,#9f83e0);box-shadow:0 3px 10px rgba(160,130,220,.4)}
+
+/* 日期分隔 */
+.daytag{
+  display:flex;align-items:center;gap:10px;margin:22px 0 6px;font-size:12px;color:var(--ink3);letter-spacing:1px;
+}
+.daytag::before,.daytag::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--line));}
+.daytag::after{background:linear-gradient(90deg,var(--line),transparent)}
+.daytag b{color:var(--ink2);font-weight:600}
+
+/* 便利贴消息 */
+#list{display:flex;flex-direction:column;gap:14px;margin-top:4px}
 .msg{
-  max-width:86%;padding:12px 14px;border-radius:16px;background:var(--panel);border:1px solid var(--line);
-  animation:rise .3s ease;
+  position:relative;max-width:88%;padding:13px 15px;border-radius:18px;
+  box-shadow:var(--shadow2);
 }
-.msg.me{align-self:flex-end;background:linear-gradient(135deg,rgba(232,112,154,.16),rgba(196,87,126,.10));border-color:rgba(232,112,154,.35)}
-.msg.you{align-self:flex-start}
-.msg .meta{font-size:11px;color:var(--ink3);margin-bottom:6px;display:flex;align-items:center;gap:8px}
-.msg .meta b{color:var(--rose2);font-weight:600}
-.msg.you .meta b{color:var(--gold)}
-.msg .txt{font-size:15px;line-height:1.65;word-break:break-word;white-space:pre-wrap}
-.msg img{
-  max-width:100%;border-radius:12px;display:block;margin-top:4px;border:1px solid var(--line);
+.msg.me{align-self:flex-end;background:linear-gradient(150deg,#fff0f6,#ffe3ee);border:1px solid rgba(255,150,190,.4)}
+.msg.you{align-self:flex-start;background:linear-gradient(150deg,#f3eeff,#eae1ff);border:1px solid rgba(180,150,230,.35)}
+.msg::before{  /* 小贴纸角 */
+  content:"";position:absolute;top:-7px;width:26px;height:12px;border-radius:4px;opacity:.85;
 }
-.msg .imgTag{font-size:11px;color:var(--ink3);margin-top:6px}
+.msg.me::before{right:14px;background:linear-gradient(135deg,#ffc4da,#ff9dbb);transform:rotate(4deg)}
+.msg.you::before{left:14px;background:linear-gradient(135deg,#d9ccf7,#c3aef0);transform:rotate(-4deg)}
+.msg .meta{font-size:11px;color:var(--ink3);margin-bottom:7px;display:flex;align-items:center;gap:7px}
+.msg .meta .dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+.msg.me .meta .dot{background:var(--pp)}
+.msg.you .meta .dot{background:var(--yy)}
+.msg .meta b{font-weight:700;letter-spacing:1px}
+.msg.me .meta b{color:var(--pp)}
+.msg.you .meta b{color:var(--yy)}
+.msg .txt{font-size:15px;line-height:1.7;word-break:break-word;white-space:pre-wrap;color:var(--ink)}
+.msg img{max-width:100%;border-radius:12px;display:block;margin-top:4px;box-shadow:var(--shadow)}
+.msg .imgTag{font-size:11px;color:var(--ink3);margin-top:7px;letter-spacing:1px}
+
 /* 表情反应 */
-.rx{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.rx{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap}
 .rx .rxb{
-  display:flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;
-  border:1px solid var(--line);background:rgba(255,255,255,.05);font-size:13px;color:var(--ink2);
-  cursor:pointer;transition:all .2s;user-select:none;
+  display:flex;align-items:center;gap:4px;padding:4px 11px;border-radius:999px;
+  border:1px solid var(--line);background:rgba(255,255,255,.75);font-size:14px;color:var(--ink2);
+  cursor:pointer;transition:all .18s;user-select:none;box-shadow:var(--shadow2);
 }
-.rx .rxb:active{transform:scale(.92)}
-.rx .rxb.hot{background:rgba(232,112,154,.22);border-color:var(--rose2);color:var(--ink)}
-.rx .rxb b{font-size:12px;min-width:10px}
+.rx .rxb:active{transform:scale(.9)}
+.rx .rxb.hot{background:#fff;border-color:var(--pp);color:var(--ink);box-shadow:0 3px 10px rgba(255,110,160,.3)}
+.rx .rxb b{font-size:12px;min-width:10px;color:var(--pp);font-weight:700}
+
 /* 输入区 */
 #composer{
-  position:fixed;left:0;right:0;bottom:0;z-index:30;max-width:560px;margin:0 auto;
+  position:fixed;left:0;right:0;bottom:0;z-index:30;max-width:600px;margin:0 auto;
   padding:10px 14px calc(12px + env(safe-area-inset-bottom));
-  background:linear-gradient(0deg,#04060d 75%,rgba(4,6,13,0));
+  background:linear-gradient(0deg,rgba(255,247,240,.98) 72%,rgba(255,247,240,0));
   display:flex;gap:8px;align-items:flex-end;
 }
 #composer textarea{
-  flex:1;resize:none;max-height:96px;padding:11px 14px;border-radius:14px;border:1px solid var(--line);
-  background:rgba(255,255,255,.07);color:var(--ink);font-size:15px;line-height:1.4;outline:none;font-family:inherit;
+  flex:1;resize:none;max-height:96px;padding:12px 16px;border-radius:999px;border:2px solid rgba(255,150,190,.45);
+  background:rgba(255,255,255,.9);color:var(--ink);font-size:15px;line-height:1.4;outline:none;font-family:inherit;
+  box-shadow:var(--shadow2);
 }
-#composer textarea:focus{border-color:var(--rose2)}
+#composer textarea:focus{border-color:var(--pp)}
 #composer .icon{
-  flex:none;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);
-  background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;
-  font-size:19px;cursor:pointer;transition:all .2s;color:var(--ink2);
+  flex:none;width:44px;height:44px;border-radius:50%;border:none;
+  background:linear-gradient(135deg,#ffe3ee,#ffc4da);display:flex;align-items:center;justify-content:center;
+  font-size:19px;cursor:pointer;transition:all .2s;color:#b8537d;box-shadow:var(--shadow2);
 }
 #composer .icon:active{transform:scale(.9)}
 #composer .send{
-  flex:none;width:44px;height:44px;border-radius:50%;border:none;font-size:18px;cursor:pointer;
-  background:linear-gradient(135deg,#e8709a,#c4577e);color:#fff;display:flex;align-items:center;justify-content:center;
-  transition:all .2s;
+  flex:none;width:44px;height:44px;border-radius:50%;border:none;font-size:17px;cursor:pointer;
+  background:linear-gradient(135deg,#ff9dbb,#ff6f9c);color:#fff;display:flex;align-items:center;justify-content:center;
+  transition:all .2s;box-shadow:0 4px 14px rgba(255,110,160,.4);
 }
 #composer .send:active{transform:scale(.9)}
 #sendTip{font-size:12px;color:var(--ink3);text-align:center;padding:8px 0 4px;display:none}
-#pending{font-size:12px;color:var(--rose2);text-align:center;padding:6px 0}
+#pending{font-size:12px;color:var(--pp);text-align:center;padding:6px 0}
 #photoPrev{
-  display:none;margin:8px 0;border-radius:12px;overflow:hidden;border:1px solid var(--line);max-width:180px;position:relative;
+  display:none;margin:8px 0;border-radius:14px;overflow:hidden;max-width:190px;position:relative;
+  box-shadow:var(--shadow);
 }
 #photoPrev.show{display:block}
 #photoPrev img{width:100%;display:block}
 #photoPrev .x{
-  position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.6);
+  position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;background:rgba(180,60,100,.7);
   color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;
 }
-/* 空状态 */
-#empty{display:none;text-align:center;padding:60px 0;color:var(--ink3)}
+#empty{display:none;text-align:center;padding:70px 0;color:var(--ink3)}
 #empty.show{display:block}
-#empty .big{font-size:44px;margin-bottom:14px}
+#empty .big{font-size:46px;margin-bottom:16px;animation:breathe 3s ease-in-out infinite}
+#empty .t{font-size:15px;color:var(--ink2);letter-spacing:1px}
 </style>
 </head>
 <body>
-<!-- 锁屏层：长按 logo 3 秒弹出 -->
+<!-- 锁屏：点击心形直接弹密码框（不再长按） -->
 <div id="lock">
-  <div id="lockLogo">🔒</div>
-  <div id="lockHint">长按打开 · 只属于我们</div>
+  <div id="hearts"></div>
   <div id="cloudLink">⚙ 连接云端</div>
+  <div id="lockLogo"><span class="ring"></span>💗</div>
+  <div id="lockTitle">只属于我们</div>
+  <div id="lockSub">OUR LITTLE SECRET WALL</div>
+  <div id="lockHint">点一下心形，进来吧</div>
   <div id="pwdBox">
-    <input id="pwd" type="password" placeholder="输入密码" autocomplete="off">
+    <input id="pwd" type="password" placeholder="输入我们的密码" autocomplete="off">
     <div id="pwdBtns">
       <button class="btn" id="pwdCancel">取消</button>
-      <button class="btn primary" id="pwdOk">解锁</button>
+      <button class="btn primary" id="pwdOk">解锁 💕</button>
     </div>
-    <div id="pwdErr">密码不对，再想想</div>
+    <div id="pwdErr">密码不对哦，再想想 💭</div>
   </div>
 </div>
 
-<!-- 主界面 -->
+<!-- 主界面：记录墙 -->
 <div id="app">
   <div id="topbar">
-    <h1>只属于我们<small>THE PLACE FOR US</small></h1>
+    <div id="brand">
+      <span class="mark">💌</span>
+      <h1>只属于我们<small>THE PLACE FOR US</small></h1>
+    </div>
     <div id="whoBox">
-      <span class="who" data-who="me">我</span>
-      <span class="who" data-who="you">你</span>
+      <span class="who" data-who="me">PP</span>
+      <span class="who" data-who="you">YY</span>
     </div>
   </div>
   <div id="list"></div>
-  <div id="empty"><div class="big">🫧</div>这里还空着<br>写下第一句话吧</div>
+  <div id="empty"><div class="big">🫧</div><div class="t">这里还空着<br>写下第一句悄悄话吧</div></div>
   <div id="pending"></div>
   <div id="photoPrev"><img id="photoPrevImg"><span class="x" id="photoPrevX">✕</span></div>
 </div>
@@ -168,25 +236,21 @@ body{
 <!-- 输入区 -->
 <div id="composer" style="display:none">
   <button class="icon" id="btnPhoto" title="传照片">📷</button>
-  <textarea id="input" rows="1" placeholder="说点什么…"></textarea>
+  <textarea id="input" rows="1" placeholder="写点悄悄话…"></textarea>
   <button class="send" id="btnSend">➤</button>
 </div>
 <input type="file" id="file" accept="image/*" style="display:none">
-<div id="sendTip">长按 logo 3 秒回到这里</div>
+<div id="sendTip">点右上角 ⚙ 连接云端</div>
 
 <script src="us_crypto.js"></script>
 <script src="us_cloud.js"></script>
 <script>
 (function(){
 'use strict';
-// ========== 存储适配器（先 localStorage，后续换 Firebase 云同步） ==========
-var LS_KEY = 'usbox.v1';       // 加密数据
-var LS_WHO = 'usbox.who';      // 身份 me/you
-var LS_PW  = 'usbox.pwkeep';   // 是否记住密码
-
-var CLOUD = true;   // 云端同步开关
+var LS_KEY = 'usbox.v1';
+var LS_WHO = 'usbox.who';
+var CLOUD = true;
 var store = {
-  // 读：云端优先，失败回退本地缓存（离线可用）
   load: function(){
     var local = null;
     try { var s = localStorage.getItem(LS_KEY); local = s ? JSON.parse(s) : null; } catch(e){ local = null; }
@@ -194,33 +258,44 @@ var store = {
     return UsCloud.load().then(function(cloud){
       if (cloud) { localStorage.setItem(LS_KEY, JSON.stringify(cloud)); return cloud; }
       return local;
-    }).catch(function(){ return local; });   // 网络失败：用本地
+    }).catch(function(){ return local; });
   },
-  // 写：先落本地（秒回），再异步推云端（先拉 sha 再 PUT，乐观锁防覆盖）
   save: function(blob){
     localStorage.setItem(LS_KEY, JSON.stringify(blob));
     if (!CLOUD || !UsCloud.hasToken()) return Promise.resolve();
     return UsCloud.getFile().then(function(f){
       return UsCloud.save(blob, f.sha);
-    }).catch(function(){ /* 云端失败，本地已存，下次刷新再试 */ });
+    }).catch(function(){});
   },
 };
 
 var state = { blob: null, msgs: [], who: localStorage.getItem(LS_WHO) || 'me', pwd: null };
+var NAMES = { me: 'PP', you: 'YY' };
 
-// ========== DOM ==========
 var $ = function(id){ return document.getElementById(id); };
 var lock = $('lock'), lockLogo = $('lockLogo'), lockHint = $('lockHint'), pwdBox = $('pwdBox'),
     pwd = $('pwd'), pwdOk = $('pwdOk'), pwdCancel = $('pwdCancel'), pwdErr = $('pwdErr'),
     app = $('app'), list = $('list'), empty = $('empty'), pending = $('pending'),
     composer = $('composer'), input = $('input'), btnSend = $('btnSend'), btnPhoto = $('btnPhoto'),
-    file = $('file'), photoPrev = $('photoPrev'), photoPrevImg = $('photoPrevImg'), photoPrevX = $('photoPrevX'),
-    sendTip = $('sendTip');
+    file = $('file'), photoPrev = $('photoPrev'), photoPrevImg = $('photoPrevImg'), photoPrevX = $('photoPrevX');
 
 var EMOS = [['\u2764\ufe0f','heart'],['\u263a\ufe0f','smile'],['\ud83d\ude02','laugh'],['\ud83d\ude2d','cry']];
-var RX_KEY = { heart:'\u2764\ufe0f', smile:'\u263a\ufe0f', laugh:'\ud83d\ude02', cry:'\ud83d\ude2d' };
 
-// ========== 照片压缩 ==========
+/* ===== 漂浮小爱心 ===== */
+(function(){
+  var box = $('hearts'), marks = ['💗','💕','💖','🌸','✨','💞','🌷','🩷'];
+  for (var i = 0; i < 12; i++){
+    var el = document.createElement('i');
+    el.textContent = marks[i % marks.length];
+    el.style.left = (4 + Math.random() * 92) + '%';
+    el.style.fontSize = (12 + Math.random() * 16) + 'px';
+    el.style.animationDuration = (7 + Math.random() * 8) + 's';
+    el.style.animationDelay = (-Math.random() * 12) + 's';
+    box.appendChild(el);
+  }
+})();
+
+/* ===== 照片压缩 ===== */
 function compressPhoto(file, cb){
   var reader = new FileReader();
   reader.onload = function(e){
@@ -243,26 +318,41 @@ function compressPhoto(file, cb){
   reader.readAsDataURL(file);
 }
 
-// ========== 渲染 ==========
+/* ===== 渲染（记录墙 + 日期分隔） ===== */
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function fmtTime(ts){
+function pad(n){ return (n<10?'0':'')+n; }
+function dayKey(ts){ var d = new Date(ts); return d.getFullYear()+'/'+d.getMonth()+'/'+d.getDate(); }
+function dayLabel(ts){
   var d = new Date(ts), now = new Date();
-  var hh = function(n){ return (n<10?'0':'')+n; };
-  var today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-  if (ts >= today) return '今天 '+hh(d.getHours())+':'+hh(d.getMinutes());
-  if (ts >= today - 864e5) return '昨天 '+hh(d.getHours())+':'+hh(d.getMinutes());
-  return (d.getMonth()+1)+'/'+d.getDate()+' '+hh(d.getHours())+':'+hh(d.getMinutes());
+  var tk = dayKey(ts), nk = dayKey(now.getTime()), yk = dayKey(now.getTime() - 864e5);
+  if (tk === nk) return '今天';
+  if (tk === yk) return '昨天';
+  return (d.getMonth()+1)+'月'+d.getDate()+'日';
+}
+function fmtTime(ts){
+  var d = new Date(ts);
+  return pad(d.getHours())+':'+pad(d.getMinutes());
 }
 function render(){
   list.innerHTML = '';
   if (!state.msgs.length) { empty.className = 'show'; return; }
   empty.className = '';
+  var last = null;
   state.msgs.slice().reverse().forEach(function(m){
+    var k = dayKey(m.ts);
+    if (k !== last) {
+      last = k;
+      var dt = document.createElement('div');
+      dt.className = 'daytag';
+      dt.innerHTML = '<b>'+dayLabel(m.ts)+'</b>';
+      list.appendChild(dt);
+    }
     var el = document.createElement('div');
     el.className = 'msg ' + (m.who === state.who ? 'me' : 'you');
-    var html = '<div class="meta"><b>' + (m.who === 'me' ? '我' : '你') + '</b>' + fmtTime(m.ts) + '</div>';
+    var html = '<div class="meta"><span class="dot"></span><b>' + NAMES[m.who] + '</b>' + fmtTime(m.ts) + '</div>';
     if (m.type === 'photo') {
       html += '<img src="' + m.photo + '" alt="照片" loading="lazy">';
+      html += '<div class="imgTag">📸 一张照片</div>';
     }
     if (m.text) html += '<div class="txt">' + esc(m.text) + '</div>';
     html += '<div class="rx">';
@@ -274,10 +364,9 @@ function render(){
     el.innerHTML = html;
     list.appendChild(el);
   });
-  var c = list.querySelectorAll('.msg').length;
-  if (c) pending.textContent = '';
 }
-// ========== 加密读写 ==========
+
+/* ===== 加密读写 ===== */
 async function saveData(){
   var blob = await UsCrypto.encryptObject(state.pwd, { msgs: state.msgs });
   await store.save(blob);
@@ -294,36 +383,14 @@ async function loadData(){
   } catch(e) { return false; }
 }
 
-// ========== 解锁流程 ==========
-var pressT = null, pressTimer = null, pwdMode = false, pressXY = null;
-lockLogo.addEventListener('pointerdown', function(e){
-  e.preventDefault();
-  pressXY = { x: e.clientX, y: e.clientY };
-  lockLogo.classList.add('pressed');
-  pressT = Date.now();
-  pressTimer = setTimeout(function(){ openPwdBox(); }, 900);
-});
-window.addEventListener('pointermove', function(e){
-  if (!pressXY) return;
-  var dx = e.clientX - pressXY.x, dy = e.clientY - pressXY.y;
-  if (dx * dx + dy * dy > 100) pressEnd();
-});
-window.addEventListener('pointerup', pressEnd);
-window.addEventListener('pointercancel', pressEnd);
-function pressEnd(){
-  pressXY = null;
-  lockLogo.classList.remove('pressed');
-  if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
-}
-
+/* ===== 解锁：点击心形弹密码框（取消长按） ===== */
+lockLogo.addEventListener('click', openPwdBox);
 function openPwdBox(){
-  pressEnd();
-  pwdMode = true;
-  lockHint.textContent = '输入密码进入';
   pwdBox.className = 'show';
+  lockHint.style.display = 'none';
   pwdErr.style.display = 'none';
   pwd.value = '';
-  setTimeout(function(){ pwd.focus(); }, 100);
+  setTimeout(function(){ pwd.focus(); }, 120);
 }
 async function unlock(){
   var v = pwd.value.trim();
@@ -336,49 +403,43 @@ async function unlock(){
     return;
   }
   if (ok === null) {
-    // 首次使用：建立空数据
     state.msgs = [];
     await saveData();
   }
   enter();
 }
 function enter(){
-  pwdMode = false;
   lock.className = 'hidden';
   app.className = 'show';
   composer.style.display = 'flex';
-  sendTip.style.display = 'none';
   document.body.style.overflow = 'auto';
   setWho(state.who);
   render();
-  input.focus();
+  setTimeout(function(){ input.focus(); }, 200);
 }
-
 pwdOk.addEventListener('click', unlock);
 pwdCancel.addEventListener('click', function(){
-  pwdMode = false; pwdBox.className = ''; pwd.value = '';
-  lockHint.textContent = '长按打开 · 只属于我们';
+  pwdBox.className = ''; pwd.value = '';
+  lockHint.style.display = '';
   pwdErr.style.display = 'none';
 });
+pwd.addEventListener('keydown', function(e){ if (e.key === 'Enter') unlock(); });
 
-// ========== 云端连接配置 ==========
-var cloudLink = document.getElementById('cloudLink');
-cloudLink.addEventListener('click', function(){
+/* ===== 云端连接配置 ===== */
+document.getElementById('cloudLink').addEventListener('click', function(){
   if (UsCloud.hasToken()) {
     if (!confirm('已连接云端。\n要更换访问令牌吗？')) return;
   }
   var t = prompt('粘贴你的 GitHub 访问令牌（两人用同一个）。\n未配置时只能在本机查看。', UsCloud.token() || '');
   if (t === null) return;
   if (UsCloud.saveToken(t)) {
-    lockHint.textContent = '✓ 云端已连接，长按进入';
-    setTimeout(function(){ lockHint.textContent = '长按打开 · 只属于我们'; }, 1800);
+    alert('✓ 云端已连接');
   } else {
     alert('令牌已清除（仅本机）。');
   }
 });
-pwd.addEventListener('keydown', function(e){ if (e.key === 'Enter') unlock(); });
 
-// ========== 身份切换 ==========
+/* ===== 身份切换（PP / YY） ===== */
 function setWho(w){
   state.who = w;
   localStorage.setItem(LS_WHO, w);
@@ -392,7 +453,7 @@ document.querySelector('#whoBox').addEventListener('click', function(e){
   if (w) setWho(w);
 });
 
-// ========== 发送 ==========
+/* ===== 发送 ===== */
 function sendMsg(type, text, photo){
   var m = { id: Date.now(), ts: Date.now(), who: state.who, type: type, rx: {} };
   if (text) m.text = text;
@@ -428,7 +489,7 @@ input.addEventListener('input', function(){
   this.style.height = Math.min(this.scrollHeight, 96) + 'px';
 });
 
-// ========== 照片 ==========
+/* ===== 照片 ===== */
 var pendingPhoto = null;
 btnPhoto.addEventListener('click', function(){ file.click(); });
 file.addEventListener('change', function(){
@@ -449,7 +510,7 @@ photoPrevX.addEventListener('click', function(){
   photoPrevImg.src = '';
 });
 
-// ========== 表情反应 ==========
+/* ===== 表情反应 ===== */
 list.addEventListener('click', function(e){
   var b = e.target.closest('.rxb');
   if (!b) return;
@@ -462,7 +523,7 @@ list.addEventListener('click', function(e){
   saveData().then(render);
 });
 
-// ========== 键盘弹起布局 ==========
+/* ===== 键盘弹起布局 ===== */
 input.addEventListener('focus', function(){ setTimeout(function(){ render(); }, 300); });
 render();
 })();
