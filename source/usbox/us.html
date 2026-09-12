@@ -152,39 +152,44 @@ body{
   background:rgba(255,255,255,.62);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
   border:1px solid rgba(255,255,255,.85);box-shadow:var(--shadow2);
 }
-/* ===== 消息气泡：玻璃卡 + 头像徽章 ===== */
-#list{display:flex;flex-direction:column;gap:16px;margin-top:4px}
-.msg{display:flex;gap:9px;align-items:flex-end;animation:popIn .38s cubic-bezier(.2,.9,.3,1.15) both}
+/* ===== 信笺墙：纸条卡片 ===== */
+#list{display:flex;flex-direction:column;gap:18px;margin-top:4px}
+.msg{
+  position:relative;padding:16px 16px 12px;border-radius:20px;
+  background:var(--panel);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border:1px solid var(--line);box-shadow:var(--shadow);
+  animation:popIn .38s cubic-bezier(.2,.9,.3,1.15) backwards;
+}
 @keyframes popIn{from{opacity:0;transform:translateY(16px) scale(.96)}to{opacity:1;transform:none}}
-.msg.me{flex-direction:row-reverse}
-.ava{
-  flex:none;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  font-size:14px;font-weight:800;color:#fff;letter-spacing:0;position:relative;
-  box-shadow:0 4px 12px rgba(160,100,150,.3);
+.msg.tilt-l{rotate:-1.2deg}
+.msg.tilt-r{rotate:1.1deg}
+.msg.me{border-left:4px solid var(--pp)}
+.msg.you{border-left:4px solid var(--yy)}
+.msg::before{
+  content:"";position:absolute;top:-7px;left:22px;width:56px;height:14px;border-radius:4px;
+  background:linear-gradient(120deg,rgba(255,255,255,.55),rgba(255,255,255,.15));
+  box-shadow:0 2px 6px rgba(0,0,0,.08);transform:rotate(-3deg);
+  border:1px solid rgba(255,255,255,.35);
 }
-.msg.me .ava{background:linear-gradient(140deg,#ff9dbe,#ff4f94)}
-.msg.you .ava{background:linear-gradient(140deg,#a88bf0,#7d5ce0)}
-.ava::after{content:"";position:absolute;inset:-3px;border-radius:50%;border:1.5px solid rgba(255,255,255,.85)}
-.bubble{
-  position:relative;max-width:78%;padding:12px 16px;border-radius:20px;
-  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
-  border:1px solid rgba(255,255,255,.8);
-  box-shadow:0 10px 28px rgba(180,110,170,.14), inset 0 1px 0 rgba(255,255,255,.9);
+.msg.me::before{background:linear-gradient(120deg,rgba(255,159,190,.62),rgba(255,79,148,.38))}
+.msg.you::before{background:linear-gradient(120deg,rgba(168,139,240,.62),rgba(125,92,224,.42))}
+.msg .who{
+  font-size:11.5px;color:var(--ink3);margin-bottom:8px;letter-spacing:.5px;
+  display:flex;align-items:center;gap:5px;flex-wrap:wrap;
 }
-.msg.me .bubble{
-  background:linear-gradient(150deg,rgba(255,232,242,.92),rgba(255,214,232,.88));
-  border-top-right-radius:8px;
+.msg .who b{font-weight:800;letter-spacing:1px}
+.msg.me .who b{color:var(--pp)} .msg.you .who b{color:var(--yy)}
+.msg .who i{font-style:normal;font-family:Georgia,serif;font-size:11px;letter-spacing:.5px;color:var(--ink3)}
+.msg .txt{font-size:15.5px;line-height:1.8;word-break:break-word;white-space:pre-wrap;color:var(--ink)}
+.msg img{
+  width:100%;border-radius:14px;display:block;margin-top:2px;
+  box-shadow:var(--shadow);object-fit:cover;cursor:zoom-in;
 }
-.msg.you .bubble{
-  background:linear-gradient(150deg,rgba(241,234,255,.92),rgba(228,216,252,.9));
-  border-top-left-radius:8px;
+.msg .del{
+  position:absolute;top:8px;right:10px;font-size:13px;opacity:.4;
+  padding:4px;border-radius:8px;cursor:pointer;transition:opacity .2s, transform .15s;user-select:none;
 }
-.bubble .meta{font-size:11px;color:var(--ink3);margin-bottom:6px;display:flex;align-items:center;gap:7px}
-.bubble .meta b{font-weight:800;letter-spacing:1px;font-size:11.5px}
-.msg.me .meta b{color:var(--pp)} .msg.you .meta b{color:var(--yy)}
-.bubble .txt{font-size:15px;line-height:1.75;word-break:break-word;white-space:pre-wrap;color:var(--ink)}
-.bubble img{max-width:100%;border-radius:14px;display:block;margin-top:3px;box-shadow:var(--shadow)}
-.bubble .imgTag{font-size:11px;color:var(--ink3);margin-top:7px;letter-spacing:1px}
+.msg .del:hover{opacity:.95} .msg .del:active{transform:scale(.85)}
 /* 表情反应 */
 .rx{display:flex;gap:7px;margin-top:9px;flex-wrap:wrap}
 .rx .rxb{
@@ -465,14 +470,16 @@ function render(){
       list.appendChild(dt);
     }
     var el = document.createElement('div');
-    el.className = 'msg ' + (m.who === state.who ? 'me' : 'you');
+    var tilt = (idx % 2) ? ' tilt-r' : ' tilt-l';
+    el.className = 'msg' + (m.who === state.who ? ' me' : ' you') + tilt;
     el.style.animationDelay = Math.min(idx * 45, 320) + 'ms';
-    var html = '<span class="ava"><img src="' + AV[m.who] + '" alt=""></span>';
-    html += '<div class="bubble">';
-    html += '<div class="meta"><b>' + NAMES[m.who] + '</b>' + fmtTime(m.ts) + '</div>';
+    var mine = m.who === state.who;
+    var verb;
+    if (m.type === 'photo') verb = mine ? '悄悄放下一张照片' : '偷偷发来一张照片';
+    else verb = mine ? '也悄悄留下一句' : '偷偷说了一句';
+    var html = '<div class="who"><b>' + NAMES[m.who] + '</b><i>' + fmtTime(m.ts) + '</i> · ' + verb + '</div>';
     if (m.type === 'photo') {
       html += '<img src="' + m.photo + '" alt="照片" loading="lazy">';
-      html += '<div class="imgTag">📸 一张照片</div>';
     }
     if (m.text) html += '<div class="txt">' + esc(m.text) + '</div>';
     html += '<div class="rx">';
@@ -480,7 +487,8 @@ function render(){
       var n = (m.rx && m.rx[e[1]]) || 0;
       html += '<span class="rxb' + (n?' hot':'') + '" data-id="' + m.id + '" data-emo="' + e[1] + '">' + e[0] + (n?'<b>'+n+'</b>':'') + '</span>';
     });
-    html += '</div></div>';
+    html += '</div>';
+    html += '<span class="del" data-id="' + m.id + '" title="删除">🗑</span>';
     el.innerHTML = html;
     list.appendChild(el);
     idx++;
@@ -649,8 +657,22 @@ photoPrevX.addEventListener('click', function(){
   photoPrevImg.src = '';
 });
 
+/* ===== 删除消息 ===== */
+function delMsg(id){
+  var m = state.msgs.find(function(x){ return x.id === id; });
+  if (!m) return;
+  var tip = m.type === 'photo' ? '要删掉这张照片吗？' : '要删掉这条消息吗？';
+  if (!confirm(tip)) return;
+  state.msgs = state.msgs.filter(function(x){ return x.id !== id; });
+  saveData().then(render);
+}
+
 /* ===== 表情反应 ===== */
 list.addEventListener('click', function(e){
+  var d = e.target.closest('.del');
+  if (d) { delMsg(parseInt(d.getAttribute('data-id'), 10)); return; }
+  var ph = e.target.closest('.msg img');
+  if (ph) { lightboxImg.src = ph.src; lightbox.className = 'show'; return; }
   var b = e.target.closest('.rxb');
   if (!b) return;
   var id = parseInt(b.getAttribute('data-id'), 10);
