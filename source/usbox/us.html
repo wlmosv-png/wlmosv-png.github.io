@@ -259,6 +259,8 @@ body{
 .pwStrip{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .pwStrip::-webkit-scrollbar{display:none}
 .pwStrip img{width:64px;height:64px;border-radius:14px;object-fit:cover;flex:none;cursor:pointer;border:2px solid rgba(255,255,255,.85);box-shadow:0 4px 10px rgba(160,110,170,.22);transition:transform .2s}
+.pwItem{position:relative;flex:none}
+.pwItem .del{position:absolute;top:-6px;right:-6px;width:18px;height:18px;border-radius:50%;background:rgba(200,50,90,.92);color:#fff;font-size:10px;line-height:18px;text-align:center;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.3);z-index:2;font-style:normal;user-select:none}
 .pwStrip img:active{transform:scale(.93)}
 
 /* ===== 照片放大 ===== */
@@ -506,9 +508,16 @@ function renderWall(){
   wall.className = 'show';
   strip.innerHTML = '';
   photos.slice().reverse().forEach(function(p){
+    var it = document.createElement('div');
+    it.className = 'pwItem';
     var im = document.createElement('img');
     im.src = p.photo; im.alt = '照片';
-    strip.appendChild(im);
+    var d = document.createElement('span');
+    d.className = 'del';
+    d.setAttribute('data-id', p.id);
+    d.textContent = '✕';
+    it.appendChild(im); it.appendChild(d);
+    strip.appendChild(it);
   });
 }
 
@@ -705,6 +714,8 @@ render();
 /* ===== 照片放大 ===== */
 var lightbox = $('lightbox'), lightboxImg = $('lightboxImg');
 $('pwStrip').addEventListener('click', function(e){
+  var d = e.target.closest('.del');
+  if (d) { delMsg(parseInt(d.getAttribute('data-id'), 10)); return; }
   var im = e.target.closest('img');
   if (!im) return;
   lightboxImg.src = im.src;
