@@ -103,3 +103,4 @@ theme: butterfly
 
 skip_render:
   - index.html
+  - usbox/**
