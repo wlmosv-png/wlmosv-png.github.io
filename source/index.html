@@ -104,6 +104,10 @@ html[data-sky="dawn"] #motes,html[data-sky="day"] #motes,html[data-sky="dusk"] #
 #rain i.gem{filter:blur(.6px);width:2.6px;height:35px;
   background:linear-gradient(to bottom,transparent,rgba(235,245,255,.9) 40%,var(--rose2));
   box-shadow:0 0 6px 1px rgba(210,225,255,.28)}
+html[data-sky="day"] #rain i,html[data-sky="dawn"] #rain i,html[data-sky="dusk"] #rain i{background:linear-gradient(to bottom,transparent,rgba(96,116,152,.55) 58%,rgba(168,90,104,.95))}
+html[data-sky="day"] #rain i.mid,html[data-sky="dawn"] #rain i.mid,html[data-sky="dusk"] #rain i.mid{background:linear-gradient(to bottom,transparent,rgba(104,124,160,.62) 52%,rgba(168,90,104,.95))}
+html[data-sky="day"] #rain i.near,html[data-sky="dawn"] #rain i.near,html[data-sky="dusk"] #rain i.near{background:linear-gradient(to bottom,transparent,rgba(112,132,168,.8) 46%,rgba(168,90,104,.95))}
+html[data-sky="day"] #rain i.gem,html[data-sky="dawn"] #rain i.gem,html[data-sky="dusk"] #rain i.gem{background:linear-gradient(to bottom,transparent,rgba(120,140,176,.9) 40%,rgba(168,90,104,.95));box-shadow:0 0 6px 1px rgba(110,130,166,.28)}
 @keyframes cast{0%{opacity:0;transform:translateY(0)}8%{opacity:var(--o)}55%{opacity:var(--o)}100%{opacity:0;transform:translate(var(--x),46vh)}}
 @keyframes drop{0%{opacity:0;transform:translate(var(--x),0) rotate(var(--a))}
   8%{opacity:var(--o)}100%{opacity:0;transform:translate(calc(var(--x) - 7vw),113vh) rotate(var(--a))}}
@@ -650,6 +654,7 @@ html[data-wxm] .wxc2{opacity:1}
     box.appendChild(c);
     var ctx=c.getContext('2d');
     function rs(){c.width=c.clientWidth||innerWidth;c.height=c.clientHeight||innerHeight}
+    var PAL=(function(){var sk=H.getAttribute('data-sky')||'';if(sk==='day'||sk==='dawn'||sk==='dusk')return {a:'rgba(104,124,160,',b:'rgba(112,132,168,',c:'rgba(96,112,148,'};return {a:'rgba(210,228,255,',b:'rgba(216,233,255,',c:'rgba(182,202,255,'}})();
     rs();
     var n=Math.min(220,Math.round(72+(win||14)*4)),drops=[];
     for(var i=0;i<n;i++){
@@ -674,20 +679,20 @@ html[data-wxm] .wxc2{opacity:1}
           d.sp=390+d.z*d.z*1020+Math.random()*190;
           d.w=.6+d.z*1.7;d.len=8+d.z*d.z*50+Math.random()*7;}
         /* 细核心线（头部实） */
-        ctx.strokeStyle='rgba(210,228,255,'+(d.a*.9).toFixed(3)+')';
+        ctx.strokeStyle=PAL.a+(d.a*.9).toFixed(3)+')';
         ctx.lineWidth=d.w*.45;ctx.lineCap='round';
         ctx.beginPath();ctx.moveTo(d.x,d.y);ctx.lineTo(d.x+d.w*.15,d.y-d.len*.14);ctx.stroke();
         /* 弥散光晕（亮头渐隐） */
         var g=ctx.createLinearGradient(0,d.y,0,d.y+d.len*.6);
-        g.addColorStop(0,'rgba(216,233,255,'+(d.a*.7).toFixed(3)+')');
-        g.addColorStop(1,'rgba(216,233,255,0)');
+        g.addColorStop(0,PAL.b+(d.a*.7).toFixed(3)+')');
+        g.addColorStop(1,PAL.b+'0)');
         ctx.strokeStyle=g;ctx.lineWidth=d.w;ctx.beginPath();
         ctx.moveTo(d.x,d.y);ctx.lineTo(d.x,d.y+d.len*.62);ctx.stroke();
         /* 近景随机拖尾 */
         if(d.tail){
           var g2=ctx.createLinearGradient(0,d.y+d.len*.55,0,d.y+d.len*2);
-          g2.addColorStop(0,'rgba(182,202,255,'+(d.a*.15).toFixed(3)+')');
-          g2.addColorStop(1,'rgba(182,202,255,0)');
+          g2.addColorStop(0,PAL.c+(d.a*.15).toFixed(3)+')');
+          g2.addColorStop(1,PAL.c+'0)');
           ctx.strokeStyle=g2;ctx.lineWidth=d.w*.5;
           ctx.beginPath();ctx.moveTo(d.x,d.y+d.len*.6);ctx.lineTo(d.x+d.w*.2,d.y+d.len*2);ctx.stroke();
         }
