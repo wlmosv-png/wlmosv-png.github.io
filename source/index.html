@@ -592,11 +592,12 @@ html[data-wxm] .wxc2{opacity:1}
       '&minutely_15=precipitation&past_minutely_15=10&forecast_minutely_15=2&timezone=Asia%2FShanghai'}
   function omWx(c){c=+c;
     if(c===0)return 'clear';if(c<=3)return 'cloud';if(c===45||c===48)return 'fog';
-    if((c>=51&&c<=67)||(c>=80&&c<=82))return 'rain';
-    if((c>=71&&c<=77)||c===85||c===86)return 'snow';if(c>=95)return 'thunder';return 'clear'}
+    if((c>=61&&c<=67)||(c>=80&&c<=82))return 'rain';
+    if((c>=71&&c<=77)||c===85||c===86)return 'snow';if(c>=95)return 'thunder';
+    if(c>=51&&c<=57)return 'cloud';return 'clear'}
   function omRain(m){if(!m||!m.precipitation)return false;
-    var a=m.precipitation,i=Math.max(0,a.length-10);
-    for(;i<a.length;i++)if(+a[i]>0.05)return true;return false}
+    var a=m.precipitation,i=Math.max(0,a.length-3);
+    for(;i<a.length;i++)if(+a[i]>0.1)return true;return false}
   function omFetch(o){var c=new AbortController();
     setTimeout(function(){try{c.abort()}catch(e){}},9000);
     return fetch(omURL(o),{cache:'no-store',signal:c.signal})
@@ -609,18 +610,33 @@ html[data-wxm] .wxc2{opacity:1}
         var d=cu.weatherDesc&&cu.weatherDesc[0]&&cu.weatherDesc[0].value;
         return {w:wx2code(d),d:d,p:+(cu.precipMM||0),t:cu.temp_C,f:cu.FeelsLikeC}})
       .catch(function(){return null})}
+  /* 中国天气网实况（气象站观测，非预报）：weather=天气现象文本, rain=当前小时降水mm */
+  function cnSK(id){
+    if(!window.fetch)return Promise.resolve(null);
+    return fetch('https://weather.cma.cn/api/now/'+id,{cache:'no-store'})
+      .then(function(r){if(!r.ok)throw 0;return r.json()})
+      .then(function(j){if(!j||j.code!==0||!j.data||!j.data.now)throw 0;
+        var n=j.data.now;
+        return {rain:+(n.precipitation||0),t:+(n.temperature||0),f:+(n.feelst||0),
+          win:+(n.windSpeed||0)};})
+      .catch(function(){return null})}
   function strongP(x){var d=(x.d||'').toLowerCase();
     return (x.w==='rain'||x.w==='snow'||x.w==='thunder')&&
-      (x.p>0||!/patchy|nearby|possible|vicinity|in the area|around the region/.test(d))}
+      (x.p>0.1||!/patchy|nearby|possible|vicinity|in the area|around the region/.test(d))}
 
   function loadWX(force){
     if(!window.fetch||(SYN&&!force))return;
-    Promise.all([omFetch(FS).catch(function(){return null}),wtFetch('顺德')]).then(function(rs){
-      var o1=rs[0],w1=rs[1],wx=null,t=null,f=null,win=null;
-      if(o1&&o1.current){var cu=o1.current;wx=omWx(cu.weather_code);
-        t=cu.temperature_2m;f=cu.apparent_temperature;win=(+cu.wind_speed_10m||0)/3.6;
-        if((wx==='clear'||wx==='cloud')&&omRain(o1.minutely_15))wx='rain';}
-      if(w1){if(strongP(w1))wx=w1.w;
+    Promise.all([omFetch(FS).catch(function(){return null}),wtFetch('顺德').catch(function(){return null}),
+        cnSK('59480')]).then(function(rs){
+      var o1=rs[0],w1=rs[1],cn=rs[2],wx=null,t=null,f=null,win=null;
+      if(cn){t=cn.t;f=cn.f;win=cn.win;
+        if(cn.rain>0.05)wx='rain';}
+      if(wx==null&&o1&&o1.current){var cu=o1.current;wx=omWx(cu.weather_code);
+        if((wx==='clear'||wx==='cloud')&&omRain(o1.minutely_15))wx='rain';
+        if(cn&&cn.rain<=0.05&&wx==='rain')wx='cloud';
+        if(t==null)t=cu.temperature_2m;if(f==null)f=cu.apparent_temperature;
+        if(win==null)win=(+cu.wind_speed_10m||0)/3.6;}
+      if(wx==null&&w1){if(strongP(w1))wx=w1.w;
         if(t==null)t=w1.t;if(f==null)f=w1.f;}
       if(wx==null)throw 0;
       var ov=(location.search.match(/[?&]wx=([a-z]+)/)||[])[1];if(ov)wx=ov;
@@ -731,11 +747,16 @@ html[data-wxm] .wxc2{opacity:1}
   }
   function loadWXM(){
     if(!window.fetch||SYN)return;
-    Promise.all([omFetch(CZ).catch(function(){return null}),wtFetch('常州')]).then(function(rs){
-      var o1=rs[0],w1=rs[1],wx=null,t=null;
-      if(o1&&o1.current){wx=omWx(o1.current.weather_code);t=o1.current.temperature_2m;
-        if((wx==='clear'||wx==='cloud')&&omRain(o1.minutely_15))wx='rain';}
-      if(w1){if(strongP(w1))wx=w1.w;if(t==null)t=w1.t;}
+    Promise.all([omFetch(CZ).catch(function(){return null}),wtFetch('常州').catch(function(){return null}),
+        cnSK('58343')]).then(function(rs){
+      var o1=rs[0],w1=rs[1],cn=rs[2],wx=null,t=null;
+      if(cn){t=cn.t;
+        if(cn.rain>0.05)wx='rain';}
+      if(wx==null&&o1&&o1.current){wx=omWx(o1.current.weather_code);
+        if((wx==='clear'||wx==='cloud')&&omRain(o1.minutely_15))wx='rain';
+        if(cn&&cn.rain<=0.05&&wx==='rain')wx='cloud';
+        if(t==null)t=o1.current.temperature_2m;}
+      if(wx==null&&w1){if(strongP(w1))wx=w1.w;if(t==null)t=w1.t;}
       if(wx==null)throw 0;
       var ov=(location.search.match(/[?&]wxm=([a-z]+)/)||[])[1];if(ov)wx=ov;
       setCityFX('fxM',wx);H.setAttribute('data-wxm',wx);
@@ -897,11 +918,11 @@ html[data-wxm] .wxc2{opacity:1}
   }else{els.forEach(force)}
   setTimeout(function(){els.forEach(force)},2200);
   paint();wishLoop();stars();motes();loadWX();
-  setTimeout(loadWX,6e5);setTimeout(loadWXM,1200);setInterval(function(){if(!D.hidden)loadWXM()},600000);
+  setTimeout(loadWX,3e5);setTimeout(loadWXM,1200);setInterval(function(){if(!D.hidden)loadWXM()},300000);
   setInterval(paint,1000);setInterval(meteorTick,9000);meteorTick();
   S.km=1188;
   addEventListener('visibilitychange',function(){if(!D.hidden){paint();loadWX(1);loadWXM()}});
-  setInterval(function(){if(!D.hidden)loadWX(1)},600000);
+  setInterval(function(){if(!D.hidden)loadWX(1)},300000);
 })();
 </script>
 <div id="mdock"><div id="dcard" role="button" aria-label="播放今日歌曲"><img id="dcover" alt="封面" loading="lazy" referrerpolicy="no-referrer"><div class="dmeta"><span id="dtitle"></span><span id="dartist"></span></div><span class="dplay">&#9654;</span></div><div id="dnow" role="button" aria-label="暂停或继续" hidden><img id="dcover2" alt="封面" loading="lazy" referrerpolicy="no-referrer"><div class="dmeta"><span id="dnowtitle"></span><div class="dbars"><i></i><i></i><i></i><i></i></div></div><span id="dpp">&#10074;&#10074;</span></div><div id="dprog"><i></i></div><audio id="daudio" preload="none"></audio></div>
