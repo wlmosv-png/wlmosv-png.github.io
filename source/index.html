@@ -598,6 +598,12 @@ html[data-wxm] .wxc2{opacity:1}
   function omRain(m){if(!m||!m.precipitation)return false;
     var a=m.precipitation,i=Math.max(0,a.length-3);
     for(;i<a.length;i++)if(+a[i]>0.1)return true;return false}
+  /* 是否正在下雨：只认 open-meteo 当前实况 current.precipitation>0.05 且码为雨/雷 */
+  function omNowRain(o){
+    if(!o||!o.current)return false;
+    if(+o.current.precipitation<=0.05)return false;
+    var w=omWx(o.current.weather_code);
+    return w==='rain'||w==='thunder';}
   function omFetch(o){var c=new AbortController();
     setTimeout(function(){try{c.abort()}catch(e){}},9000);
     return fetch(omURL(o),{cache:'no-store',signal:c.signal})
@@ -629,15 +635,12 @@ html[data-wxm] .wxc2{opacity:1}
     Promise.all([omFetch(FS).catch(function(){return null}),wtFetch('顺德').catch(function(){return null}),
         cnSK('59480')]).then(function(rs){
       var o1=rs[0],w1=rs[1],cn=rs[2],wx=null,t=null,f=null,win=null;
-      if(cn){t=cn.t;f=cn.f;win=cn.win;
-        if(cn.rain>0.05)wx='rain';}
-      if(wx==null&&w1){wx=w1.w;
-        if(cn&&cn.rain<=0.05&&wx==='rain')wx='cloud';}
-      if(wx==null&&o1&&o1.current){var cu=o1.current;wx=omWx(cu.weather_code);
-        if((wx==='clear'||wx==='cloud')&&omRain(o1.minutely_15))wx='rain';
-        if(cn&&cn.rain<=0.05&&wx==='rain')wx='cloud';}
-      if(t==null&&o1&&o1.current){t=o1.current.temperature_2m;f=o1.current.apparent_temperature;
-        win=(+o1.current.wind_speed_10m||0)/3.6;}
+      if(o1&&o1.current){var cu=o1.current;
+        if(omNowRain(o1))wx='rain';else wx=omWx(cu.weather_code);
+        t=cu.temperature_2m;f=cu.apparent_temperature;win=(+cu.wind_speed_10m||0)/3.6;}
+      if(wx!=null&&wx!=='rain'&&cn&&cn.rain>0.05)wx='rain';
+      if(t==null&&cn){t=cn.t;f=cn.f;win=cn.win;}
+      if(wx==null&&w1){wx=w1.w;if(wx==='rain')wx='cloud';}
       if(t==null&&w1){t=w1.t;f=w1.f;}
       if(wx==null)throw 0;
       var ov=(location.search.match(/[?&]wx=([a-z]+)/)||[])[1];if(ov)wx=ov;
@@ -751,14 +754,12 @@ html[data-wxm] .wxc2{opacity:1}
     Promise.all([omFetch(CZ).catch(function(){return null}),wtFetch('常州').catch(function(){return null}),
         cnSK('58343')]).then(function(rs){
       var o1=rs[0],w1=rs[1],cn=rs[2],wx=null,t=null;
-      if(cn){t=cn.t;
-        if(cn.rain>0.05)wx='rain';}
-      if(wx==null&&w1){wx=w1.w;
-        if(cn&&cn.rain<=0.05&&wx==='rain')wx='cloud';}
-      if(wx==null&&o1&&o1.current){wx=omWx(o1.current.weather_code);
-        if((wx==='clear'||wx==='cloud')&&omRain(o1.minutely_15))wx='rain';
-        if(cn&&cn.rain<=0.05&&wx==='rain')wx='cloud';}
-      if(t==null&&o1&&o1.current){t=o1.current.temperature_2m;}
+      if(o1&&o1.current){var cu=o1.current;
+        if(omNowRain(o1))wx='rain';else wx=omWx(cu.weather_code);
+        t=cu.temperature_2m;}
+      if(wx!=null&&wx!=='rain'&&cn&&cn.rain>0.05)wx='rain';
+      if(t==null&&cn){t=cn.t;}
+      if(wx==null&&w1){wx=w1.w;if(wx==='rain')wx='cloud';}
       if(t==null&&w1){t=w1.t;}
       if(wx==null)throw 0;
       var ov=(location.search.match(/[?&]wxm=([a-z]+)/)||[])[1];if(ov)wx=ov;
