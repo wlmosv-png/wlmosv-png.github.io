@@ -841,7 +841,7 @@ html[data-wxm] .wxc2{opacity:1}
   paint=function(){
     var now=new Date(),day=Math.floor((+now-START)/864e5),idx=day+1;
     if(dnum)dnum.textContent=String(idx);
-    if(alive)alive.textContent=fmt(+now-START);
+    if(alive)alive.textContent=idx+'天'+fmt((+now-START)%864e5);
     if(you)you.innerHTML=hourLine();
     var fm=(location.hash||'').match(/sky=(dawn|day|dusk|evening|night)/);
     H.setAttribute('data-sky',fm?fm[1]:astroSky(now));
