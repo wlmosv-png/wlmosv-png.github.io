@@ -775,8 +775,16 @@ html[data-wxm] .wxc2{opacity:1}
   function orbTick(now,forced){
     if(!orb){orb=D.createElement('div');orb.id='skyorb';D.body.appendChild(orb);}
     if(!orb2){orb2=D.createElement('div');orb2.id='skyorb2';D.body.appendChild(orb2);}
+    /* 天气遮日月：降水(雨/雪/雷)太阳全隐，阴/雾太阳变淡；月亮不受影响 */
+    function wxMask(){
+      var w=H.getAttribute('data-wx')||'';
+      if(w==='rain'||w==='snow'||w==='thunder')return 0;
+      if(w==='cloud'||w==='fog')return 0.35;
+      return 1;
+    }
     function apply(o,on,tt){
-      o.style.opacity=on?(o===orb?'.95':'.85'):'0';
+      var sun=(o===orb),mask=sun?wxMask():1;
+      o.style.opacity=on?(sun?String(.95*mask):'.85'):'0';
       if(on){o.style.left=(8+tt*80)+'vw';o.style.top=(17-Math.sin(Math.PI*tt)*8)+'vh';}
     }
     var day,moon,t,mt;
