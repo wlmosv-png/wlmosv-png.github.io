@@ -496,7 +496,7 @@ html[data-wxm] .wxc2{opacity:1}
   var D=document,H=D.documentElement,SYN=!!(navigator.connection&&navigator.connection.saveData);
   if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches){H.classList.add('no-motion');}
   var START=+new Date(2026,0,24,0,0,0);
-  var CZ={lat:31.93,lon:119.95,n:'常州'},FS={lat:22.9667,lon:113.0833,n:'顺德'};
+  var CZ={lat:31.93,lon:119.95,n:'常州'},FS={lat:22.84,lon:113.25,n:'顺德'};
   var PHASES={day:'白天',night:'夜里',dawn:'日出时分',dusk:'日落时分'};
   function pad(n){return (n<10?'0':'')+n}
   function fmt(ms){var s=Math.floor(ms/1000),d=Math.floor(s/86400);s-=d*86400;
@@ -521,23 +521,25 @@ html[data-wxm] .wxc2{opacity:1}
   }
   function bjMin(d){var u=new Date(+d+TZ*36e5);return u.getUTCHours()*60+u.getUTCMinutes()+u.getUTCSeconds()/60}
   function bjClock(d){var u=new Date(+d+TZ*36e5);return pad(u.getUTCHours())+':'+pad(u.getUTCMinutes())+':'+pad(u.getUTCSeconds())}
-  function phase(o,date){
+  /* 唯一真源：天文时段 → night/dawn/day/dusk/evening（统一口径，三处共用）
+     r=日出, s=日落（分钟）；白天在日落前30分钟结束，太阳轨迹同步 */
+  function skyPhase(o,date){
     var s=solar(o,date);if(!s)return 'day';
-    var t=bjMin(date);
-    if(t<s.r-30||t>s.s+30)return 'night';
-    if(t<s.r+30)return 'dawn';
-    if(t>s.s-30)return 'dusk';
-    return 'day';
-  }
-  /* 真实天文时段 → data-sky（含 evening 暮光段；solar 失败回退白天） */
-  function astroSky(now){
-    var s=solar(CZ,now);if(!s)return 'day';
-    var m=bjMin(now);
-    if(m<s.r-30||m>=s.s+150)return 'night';
+    var m=bjMin(date);
+    if(m<s.r-30||m>=s.s+30)return 'night';
     if(m<s.r+30)return 'dawn';
     if(m<s.s-30)return 'day';
     if(m<s.s+30)return 'dusk';
     return 'evening';
+  }
+  /* 地图城市标记只取 4 档（晨/昼/暮/夜），evening 归入 night 展示月亮 */
+  function phase(o,date){
+    var p=skyPhase(o,date);
+    return p==='evening'?'night':p;
+  }
+  /* 背景天色：直接走唯一真源 */
+  function astroSky(now){
+    return skyPhase(CZ,now);
   }
   function el(id){return D.getElementById(id)}
   var dnum=el('dnum'),alive=D.querySelector('.alive b'),you=el('you'),dc=el('dc'),
@@ -787,10 +789,10 @@ html[data-wxm] .wxc2{opacity:1}
       var m=bjMin(now),sr=solar(CZ,now);
       if(sr){
         var r=sr.r,ss=sr.s;
-        day=m>=r-30&&m<ss+30;moon=m>=ss-30||m<r+30;
-        t=day?(m-(r-30))/((ss+30)-(r-30)):0;t=Math.max(0,Math.min(1,t));
+        day=m>=r-30&&m<ss-30;moon=m>=ss+30||m<r-30;
+        t=day?(m-(r-30))/((ss-30)-(r-30)):0;t=Math.max(0,Math.min(1,t));
         var pd=1500+r-ss;
-        mt=m>=ss-30?(m-(ss-30))/pd:(m+1440-(ss-30))/pd;mt=Math.max(0,Math.min(1,mt));
+        mt=m>=ss+30?(m-(ss+30))/pd:(m+1440-(ss+30))/pd;mt=Math.max(0,Math.min(1,mt));
       }else{
         day=m>=345&&m<1095;moon=m>=1065||m<375;
         t=day?(m-345)/750:0;t=Math.max(0,Math.min(1,t));
