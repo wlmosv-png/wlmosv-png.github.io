@@ -301,6 +301,23 @@ html[data-sky="dawn"][data-wx="rain"] #rain,html[data-sky="dawn"][data-wx="heavy
 html[data-sky="dusk"][data-wx="rain"] #rain,html[data-sky="dusk"][data-wx="heavy-rain"] #rain{
   background:repeating-linear-gradient(99deg,rgba(64,86,118,.05) 0 1px,transparent 1px 8px)}
 html.no-motion #clouds,html.no-motion #fogband,html.no-motion #wxveil{display:none}
+
+/* ---- 晴天精修：天空做层次、收太阳光晕、切换时序统一 ---- */
+html[data-sky="day"]{--wx-veil-clear:linear-gradient(180deg,rgba(122,160,204,.36) 0%,rgba(158,186,218,.16) 32%,rgba(238,230,208,.10) 52%,transparent 72%)}
+html[data-sky="dawn"]{--wx-veil-clear:linear-gradient(180deg,rgba(150,166,206,.30) 0%,rgba(238,206,190,.16) 40%,transparent 72%)}
+html[data-sky="dusk"]{--wx-veil-clear:linear-gradient(180deg,rgba(150,150,200,.28) 0%,rgba(240,196,170,.18) 42%,transparent 72%)}
+html[data-sky="night"],html[data-sky="evening"]{--wx-veil-clear:linear-gradient(180deg,rgba(46,62,104,.42) 0%,rgba(40,54,92,.16) 40%,transparent 70%)}
+html[data-wx="clear"] #wxveil{background:var(--wx-veil-clear);opacity:.9}
+html[data-wx="partly"] #wxveil{background:linear-gradient(180deg,rgba(122,160,204,.30) 0%,rgba(158,186,218,.12) 34%,transparent 70%);opacity:.8}
+html[data-wx="clear"]{--haze:rgba(255,196,120,.12)}
+#skyorb:not(.moon)::before{inset:-78%}
+html[data-sky="day"] #skyorb:not(.moon)::before{opacity:.34}
+html[data-sky="day"] #skyorb:not(.moon)::after{opacity:.3}
+html[data-sky="dawn"] #skyorb:not(.moon)::before,html[data-sky="dusk"] #skyorb:not(.moon)::before{opacity:.42}
+html[data-sky="day"] #skyorb{background:radial-gradient(circle at 46% 42%,#fff8e2 0%,#ffd67a 42%,#ffc25c 60%,rgba(255,190,80,0) 78%)}
+html[data-wx="clear"] #skyorb,html[data-wx="partly"] #skyorb{width:30px;height:30px}
+#clouds,#fogband,#wxveil{transition:opacity 1.3s linear}
+#skyorb,#skyorb2{transition:opacity 1.3s linear,background 1.3s linear,box-shadow 1.3s linear}
 html[data-wx="rain"] .arc,html[data-wx="snow"] .arc{opacity:.4}
 html[data-wx="cloud"],html[data-wx="rain"],html[data-wx="snow"],html[data-wx="fog"]{--glow:0 0 44px 4px rgba(150,150,160,.10)}
 @media (max-width:520px){
