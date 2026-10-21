@@ -218,6 +218,82 @@ html[data-sky="evening"] #cast{opacity:.55}
 html[data-sky="day"] #cast{opacity:0}
 html[data-sky="dawn"] #cast,html[data-sky="dusk"] #cast{opacity:.3}
 html[data-sky="day"] #sky{opacity:0}
+/* ================= weather v2 ================= */
+/* 白天/晨昏是浅底：天气用加深去饱和；夜里/傍晚是深底：天气用提亮 */
+html[data-sky="day"],html[data-sky="dawn"],html[data-sky="dusk"]{
+  --wx-veil-cloudy:linear-gradient(180deg,rgba(70,84,104,.64),rgba(84,97,116,.28) 42%,transparent 68%);
+  --wx-veil-grey:linear-gradient(180deg,rgba(54,66,84,.90),rgba(66,78,96,.50) 44%,transparent 72%);
+  --wx-veil-wet:linear-gradient(180deg,rgba(44,60,84,.86),rgba(56,72,98,.48) 44%,transparent 72%);
+  --wx-veil-storm:linear-gradient(180deg,rgba(32,40,60,.92),rgba(44,54,76,.52) 44%,transparent 74%);
+  --wx-veil-fog:linear-gradient(180deg,rgba(160,170,186,.95),rgba(170,179,194,.62) 38%,rgba(178,186,198,.26) 60%,transparent 80%);
+  --wx-veil-haze:linear-gradient(180deg,rgba(190,168,132,.80),rgba(188,172,142,.48) 42%,transparent 74%);
+  --wx-veil-snow:linear-gradient(180deg,rgba(120,136,162,.78),rgba(134,148,172,.40) 44%,transparent 72%);
+  --wx-cf:rgba(120,134,158,.92);
+  --wx-cf2:rgba(98,114,140,.82);
+  --wx-fogc:rgba(196,205,217,.92);
+  --wx-hazec:rgba(206,188,158,.88);
+  --wx-snowrgb:206,220,242;
+  --wx-rainrgb:88,106,138;
+}
+html[data-sky="night"],html[data-sky="evening"]{
+  --wx-veil-cloudy:linear-gradient(180deg,rgba(118,132,162,.42),transparent 62%);
+  --wx-veil-grey:linear-gradient(180deg,rgba(126,140,166,.58),rgba(116,130,156,.26) 44%,transparent 68%);
+  --wx-veil-wet:linear-gradient(180deg,rgba(92,122,170,.54),rgba(96,126,174,.22) 44%,transparent 68%);
+  --wx-veil-storm:linear-gradient(180deg,rgba(104,100,152,.64),rgba(98,96,146,.30) 44%,transparent 70%);
+  --wx-veil-fog:linear-gradient(180deg,rgba(152,160,176,.52),rgba(142,150,166,.26) 42%,transparent 74%);
+  --wx-veil-haze:linear-gradient(180deg,rgba(152,138,116,.42),rgba(142,132,114,.18) 44%,transparent 72%);
+  --wx-veil-snow:linear-gradient(180deg,rgba(146,158,184,.52),rgba(134,146,172,.22) 44%,transparent 70%);
+  --wx-cf:rgba(186,200,228,.40);
+  --wx-cf2:rgba(148,162,194,.30);
+  --wx-fogc:rgba(208,216,230,.46);
+  --wx-hazec:rgba(160,146,122,.44);
+  --wx-snowrgb:238,244,255;
+  --wx-rainrgb:186,210,252;
+}
+#wxveil{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0;transition:opacity 2s linear;
+  background:linear-gradient(180deg,rgba(96,108,126,.6),transparent 64%)}
+html[data-wx="partly"] #wxveil{background:var(--wx-veil-cloudy);opacity:.5}
+html[data-wx="cloudy"] #wxveil{background:var(--wx-veil-cloudy);opacity:.88}
+html[data-wx="overcast"] #wxveil{background:var(--wx-veil-grey);opacity:1}
+html[data-wx="drizzle"] #wxveil{background:var(--wx-veil-wet);opacity:.65}
+html[data-wx="rain"] #wxveil{background:var(--wx-veil-wet);opacity:.9}
+html[data-wx="heavy-rain"] #wxveil{background:var(--wx-veil-storm);opacity:.95}
+html[data-wx="thunder"] #wxveil{background:var(--wx-veil-storm);opacity:1}
+html[data-wx="fog"] #wxveil{background:var(--wx-veil-fog);opacity:.95}
+html[data-wx="haze"] #wxveil{background:var(--wx-veil-haze);opacity:.72}
+html[data-wx="haze"] #fogband i{background:linear-gradient(90deg,transparent,var(--wx-hazec),transparent)}
+html[data-wx="snow"] #wxveil,html[data-wx="sleet"] #wxveil{background:var(--wx-veil-snow);opacity:.85}
+#clouds{position:fixed;left:0;right:0;top:0;height:54vh;z-index:0;pointer-events:none;opacity:0;transition:opacity 2s linear;overflow:hidden}
+#clouds i{position:absolute;display:block;filter:blur(9px);
+  animation:cldsway var(--d,60s) ease-in-out infinite alternate}
+#clouds i b{position:absolute;display:block;background:var(--wx-cf);border-radius:50%}
+#clouds i b:nth-child(1){width:56%;height:78%;left:0;bottom:0}
+#clouds i b:nth-child(2){width:66%;height:100%;left:19%;bottom:4%}
+#clouds i b:nth-child(3){width:48%;height:66%;left:52%;bottom:0;background:var(--wx-cf2)}
+@keyframes cldsway{from{transform:translateX(-2.6vw)}to{transform:translateX(2.6vw)}}
+#fogband{position:fixed;left:0;right:0;top:0;height:56vh;z-index:0;pointer-events:none;opacity:0;transition:opacity 2s linear;overflow:hidden}
+#fogband i{position:absolute;left:-30vw;width:160vw;height:var(--h,10vh);border-radius:50%;filter:blur(10px);
+  background:linear-gradient(90deg,transparent,var(--wx-fogc),transparent);opacity:var(--o,.7);
+  animation:fogdrift var(--d,40s) ease-in-out infinite alternate}
+@keyframes fogdrift{from{transform:translateX(-6vw)}to{transform:translateX(6vw)}}
+html[data-sky="day"] #skyorb:not(.moon)::before{opacity:.5}
+html[data-wx="partly"] #skyorb:not(.moon)::after,html[data-wx="cloudy"] #skyorb:not(.moon)::after,
+html[data-wx="overcast"] #skyorb:not(.moon)::after{content:'';position:absolute;left:-72%;top:-4%;
+  width:244%;height:76%;border-radius:50%;filter:blur(6px);opacity:.72;
+  background:radial-gradient(closest-side,var(--wx-cf) 86%,transparent 100%)}
+html[data-wx="partly"] #skyorb:not(.moon)::before,html[data-wx="cloudy"] #skyorb:not(.moon)::before{opacity:.32}
+html[data-wx="drizzle"] #skyorb:not(.moon)::before,html[data-wx="fog"] #skyorb:not(.moon)::before,html[data-wx="haze"] #skyorb:not(.moon)::before{opacity:.22}
+/* 天气压掉地平线暖光（只在本页覆盖取值，不改主题定义） */
+html[data-wx="partly"],html[data-wx="cloudy"],html[data-wx="overcast"],html[data-wx="drizzle"],
+html[data-wx="rain"],html[data-wx="heavy-rain"],html[data-wx="thunder"],html[data-wx="fog"],
+html[data-wx="haze"],html[data-wx="snow"],html[data-wx="sleet"]{--haze:rgba(140,150,166,.05)}
+html[data-cloud="2"][data-sky="night"] #cast,html[data-cloud="2"][data-sky="evening"] #cast{opacity:.4}
+html[data-cloud="3"][data-sky="night"] #cast,html[data-cloud="3"][data-sky="evening"] #cast{opacity:.08}
+#flash.on{animation:flz .72s linear}
+#flash.on.far{animation-name:flzf;animation-duration:1.15s}
+@keyframes flz{0%{opacity:0}3%{opacity:.85}8%{opacity:.06}12%{opacity:.7}20%{opacity:.02}30%{opacity:.32}100%{opacity:0}}
+@keyframes flzf{0%{opacity:0}7%{opacity:.34}15%{opacity:.04}100%{opacity:0}}
+html.no-motion #clouds,html.no-motion #fogband,html.no-motion #wxveil{display:none}
 html[data-wx="rain"] .arc,html[data-wx="snow"] .arc{opacity:.4}
 html[data-wx="cloud"],html[data-wx="rain"],html[data-wx="snow"],html[data-wx="fog"]{--glow:0 0 44px 4px rgba(150,150,160,.10)}
 @media (max-width:520px){
@@ -411,9 +487,12 @@ html[data-wxm] .wxc2{opacity:1}
 </head>
 <body>
 <div id="sky" aria-hidden="true"></div>
+<div id="wxveil" aria-hidden="true"></div>
 <div id="cast" aria-hidden="true"></div>
 <div id="motes" aria-hidden="true"></div>
 <div id="rain" aria-hidden="true"></div>
+<div id="clouds" aria-hidden="true"></div>
+<div id="fogband" aria-hidden="true"></div>
 <div id="flash" aria-hidden="true"></div>
 <main>
   <header class="top">
@@ -583,20 +662,37 @@ html[data-wxm] .wxc2{opacity:1}
     moons.innerHTML=h;
   }
   /* ---------- 天气（失败只降级，不影响天色与时钟） ---------- */
-  var WXL={clear:'晴',cloud:'多云',rain:'有雨',snow:'下雪',fog:'有雾',thunder:'雷雨'};
+  var WXL={clear:'晴',cloud:'多云',rain:'有雨',snow:'下雪',fog:'有雾',thunder:'雷雨','partly':'少云','cloudy':'多云','overcast':'阴','haze':'霾','drizzle':'毛毛雨','heavy-rain':'大雨','sleet':'雨夹雪','clear-night':'晴'};
   function wx2code(t){t=(t||'').toLowerCase();
-    if(/thunder|雷/.test(t))return 'thunder';if(/snow|sleet|雪/.test(t))return 'snow';
-    if(/rain|drizzle|雨/.test(t))return 'rain';if(/fog|mist| haze|雾/.test(t))return 'fog';
-    if(/cloud|overcast|阴|多云/.test(t))return 'cloud';return 'clear'}
+    if(/thunder|雷/.test(t))return 'thunder';
+    if(/sleet|冻雨|雨夹雪/.test(t))return 'sleet';
+    if(/heavy rain|torrential|大雨|暴雨/.test(t))return 'heavy-rain';
+    if(/snow|雪/.test(t))return 'snow';
+    if(/drizzle|毛毛雨/.test(t))return 'drizzle';
+    if(/rain|shower|阵雨|雨/.test(t))return 'rain';
+    if(/haze|smoke|霾/.test(t))return 'haze';
+    if(/fog|mist|雾/.test(t))return 'fog';
+    if(/overcast|阴/.test(t))return 'overcast';
+    if(/partly|mostly sunny|少云|晴间/.test(t))return 'partly';
+    if(/cloud|多云/.test(t))return 'cloudy';
+    return 'clear'}
   function omURL(o){
     return 'https://api.open-meteo.com/v1/forecast?latitude='+o.lat+'&longitude='+o.lon+
-      '&current=weather_code,temperature_2m,apparent_temperature,wind_speed_10m'+
+      '&current=weather_code,temperature_2m,apparent_temperature,relative_humidity_2m,cloud_cover,visibility,wind_speed_10m,wind_gusts_10m,precipitation,is_day'+
       '&minutely_15=precipitation&past_minutely_15=10&forecast_minutely_15=2&timezone=Asia%2FShanghai'}
-  function omWx(c){c=+c;
-    if(c===0)return 'clear';if(c<=3)return 'cloud';if(c===45||c===48)return 'fog';
-    if((c>=61&&c<=67)||(c>=80&&c<=82))return 'rain';
-    if((c>=71&&c<=77)||c===85||c===86)return 'snow';if(c>=95)return 'thunder';
-    if(c>=51&&c<=57)return 'cloud';return 'clear'}
+  function omWx(c){
+    c=+c;
+    if(c===0)return 'clear';
+    if(c===1)return 'partly';if(c===2)return 'cloudy';if(c===3)return 'overcast';
+    if(c===45||c===48)return 'fog';
+    if(c>=51&&c<=57)return 'drizzle';
+    if(c===65||c===82)return 'heavy-rain';
+    if((c>=61&&c<=64)||c===80||c===81)return 'rain';
+    if(c===66||c===67)return 'sleet';
+    if((c>=71&&c<=77)||c===85)return 'snow';
+    if(c===86)return 'heavy-rain';
+    if(c>=95)return 'thunder';
+    return 'cloudy'}
   function omRain(m){if(!m||!m.precipitation)return false;
     var a=m.precipitation,i=Math.max(0,a.length-3);
     for(;i<a.length;i++)if(+a[i]>0.1)return true;return false}
@@ -638,52 +734,194 @@ html[data-wxm] .wxc2{opacity:1}
         cnSK('59480')]).then(function(rs){
       var o1=rs[0],w1=rs[1],cn=rs[2],wx=null,t=null,f=null,win=null;
       if(o1&&o1.current){var cu=o1.current;
-        if(omNowRain(o1))wx='rain';else wx=omWx(cu.weather_code);
+        wx=omWx(cu.weather_code);
+        var vs0=wxNum(cu.visibility);
+        var wet0=(wx==='rain'||wx==='heavy-rain'||wx==='thunder'||wx==='drizzle'||wx==='sleet'||wx==='snow');
+        if(!wet0&&omNowRain(o1))wx='rain';
+        if(!wet0&&(wx==='clear'||wx==='partly'||wx==='cloudy')&&vs0!=null&&vs0<5200)wx='haze';
         t=cu.temperature_2m;f=cu.apparent_temperature;win=(+cu.wind_speed_10m||0)/3.6;}
       if(wx!=null&&wx!=='rain'&&cn&&cn.rain>0.05)wx='rain';
       if(t==null&&cn){t=cn.t;f=cn.f;win=cn.win;}
       if(wx==null&&w1){wx=w1.w;if(wx==='rain')wx='cloud';}
       if(t==null&&w1){t=w1.t;f=w1.f;}
       if(wx==null)throw 0;
-      var ov=(location.search.match(/[?&]wx=([a-z]+)/)||[])[1];if(ov)wx=ov;
+      var ov=(location.search.match(/[?&]wx=([a-z-]+)/)||[])[1];if(ov){wx=ov;WX.forced=ov;}else WX.forced=null;
+      var c0=(o1&&o1.current)?o1.current:null;
+      WX.ok=true;
+      WX.cloud=c0?wxNum(c0.cloud_cover):null;
+      WX.vis=c0?wxNum(c0.visibility):null;
+      WX.wind=c0?wxNum(c0.wind_speed_10m):null;
+      WX.gust=c0?wxNum(c0.wind_gusts_10m):null;
+      WX.rh=c0?wxNum(c0.relative_humidity_2m):null;
+      WX.precip=c0?wxNum(c0.precipitation):null;
+      if(WX.precip==null&&cn&&cn.rain!=null)WX.precip=cn.rain;
+      WX.isDay=(c0&&c0.is_day!=null)?+c0.is_day:null;
       H.setAttribute('data-wx',wx);
+      wxSync();
       var lab=WXL[wx],wxel=el('wxt'),wg=el('wxg');
       if(wg)wg.textContent=FS.n;
       if(wxel)wxel.textContent=lab+' '+(t!=null?Math.round(+t)+'°':'')+
         (f!=null&&t!=null&&Math.round(+f)!==Math.round(+t)?'（体感 '+Math.round(+f)+'°）':'');
       weatherFX(wx,win);setCityFX('fxF',wx);paint();
     }).catch(function(){
-      var wxel=el('wxt');if(wxel)wxel.textContent='';
+      var ovf=(location.search.match(/[?&]wx=([a-z-]+)/)||[])[1];
+      WX.ok=false;WX.cloud=null;WX.wind=null;WX.forced=ovf||null;
+      var wxel=el('wxt');
+      if(ovf){
+        H.setAttribute('data-wx',ovf);
+        if(wxel)wxel.textContent=(WXL[ovf]||ovf);
+        setCityFX('fxF',ovf);wxSync();paint();return;
+      }
+      if(wxel)wxel.textContent='';
       H.removeAttribute('data-wx');
+      wxSync();
       var y=el('you');if(y&&y.getAttribute('data-idle')) y.innerHTML=hourLine();
     });
   }
 
+    /* ================= weather v2：实况 -> 视觉配方 ================= */
+  var WX={ok:false,cloud:null,vis:null,hum:null,wind:null,gust:null,precip:null,isDay:null,forced:null};
+  function wxNum(v){return (v==null||v==='')?null:(isNaN(+v)?null:+v)}
+  function wxCloudEst(w){
+    if(w==='thunder'||w==='heavy-rain'||w==='snow'||w==='sleet')return 94;
+    if(w==='rain')return 84;if(w==='drizzle')return 72;
+    if(w==='fog')return 90;if(w==='haze')return 58;
+    if(w==='overcast')return 96;if(w==='cloudy')return 74;if(w==='partly')return 34;
+    if(w==='cloud')return 66;if(w==='clear'||w==='clear-night')return 6;
+    return null}
+  function wxRGB(name,fb){
+    try{var v=getComputedStyle(H).getPropertyValue(name);if(v)return v.trim()}catch(e){}
+    return fb}
+  function wxRecipe(){
+    var w=H.getAttribute('data-wx')||'';
+    var cl=WX.forced?wxCloudEst(WX.forced):(WX.ok?WX.cloud:null);
+    if(cl==null)cl=wxCloudEst(w);
+    if(cl==null)cl=30;
+    if((w==='rain'||w==='heavy-rain'||w==='thunder'||w==='snow'||w==='sleet')&&cl<74)cl=84;
+    if(w==='overcast'&&cl<88)cl=92;
+    if(w==='fog'&&cl<80)cl=88;
+    var r={w:w,cloud:cl,veil:0,cops:0,rain:0,snow:0,fog:0,sun:1,moon:1,flash:0,gust:1};
+    r.cops=cl<10?0:(cl<35?0.45:(cl<60?0.78:1));
+    if(w==='overcast'||w==='heavy-rain'||w==='thunder')r.veil=1;
+    else if(w==='rain')r.veil=.9;
+    else if(w==='fog')r.veil=1;
+    else if(w==='haze')r.veil=.85;
+    else if(w==='snow'||w==='sleet')r.veil=.8;
+    else if(w==='drizzle')r.veil=.62;
+    else r.veil=Math.min(.7,cl/100*.85);
+    if(w==='thunder'||w==='heavy-rain'||w==='rain'||w==='snow'||w==='sleet'){r.sun=0;r.moon=.05}
+    else if(w==='overcast'){r.sun=0;r.moon=.06}
+    else if(w==='fog'){r.sun=.16;r.moon=.25}
+    else if(w==='haze'){r.sun=.3;r.moon=.4}
+    else if(w==='drizzle'){r.sun=.25;r.moon=.3}
+    else{
+      r.sun=Math.max(0,1-cl/100*1.15);
+      if(w==='cloudy'&&r.sun>.5)r.sun=.5;
+      if(w==='partly'&&r.sun>.85)r.sun=.85;
+      r.moon=Math.max(.1,.85-cl/100*.8);
+    }
+    if(w==='drizzle')r.rain=.38;
+    else if(w==='rain')r.rain=.72;
+    else if(w==='heavy-rain')r.rain=1;
+    else if(w==='thunder')r.rain=1.3;
+    if(w==='snow')r.snow=.85;else if(w==='sleet')r.snow=.45;
+    if(w==='fog')r.fog=1;else if(w==='haze')r.fog=.65;
+    if(w==='thunder')r.flash=1;
+    r.gust=1+(WX.wind||0)/40;
+    return r;
+  }
+  function wxSync(){
+    var r=wxRecipe(),cl=r.cloud;
+    H.setAttribute('data-cloud',cl<15?'0':(cl<50?'1':(cl<85?'2':'3')));
+    var vv=el('wxveil');if(vv)vv.style.opacity=String(Math.max(0,Math.min(1,r.veil)));
+    paintClouds(r);paintFog(r);
+    if(typeof orbTick==='function')orbTick(new Date());
+    weatherFX();
+  }
+  function paintClouds(r){
+    var box=el('clouds');if(!box)return;
+    if(SYN||!r.cops){box.style.opacity='0';box.innerHTML='';box._n=0;return;}
+    var n=r.cloud<35?2:(r.cloud<60?4:(r.cloud<85?5:7));
+    if(box._n!==n){var s='';for(var i=0;i<n;i++)s+='<i><b></b><b></b><b></b></i>';box.innerHTML=s;box._n=n;}
+    var ws=(r.w==='thunder'||r.w==='heavy-rain')?Math.max(WX.wind||0,24):(WX.wind==null?8:WX.wind);
+    var per=Math.max(40,Math.round(2600/(12+ws))),kids=box.children;
+    for(var k=0;k<kids.length;k++){
+      var e=kids[k],sd=((k*29)%13)/13;
+      var w2=(52+((k*7)%4)*10)*(0.9+sd*0.25);
+      e.style.width=w2.toFixed(1)+'vw';e.style.height=(w2*0.30).toFixed(1)+'vw';
+      e.style.left=(-8+((k*31)%78)+sd*4).toFixed(1)+'vw';
+      e.style.top=(4+((k%3)*9)+sd*5).toFixed(1)+'vh';
+      var base=r.cloud<35?.5:(r.cloud<60?.72:(r.cloud<85?.88:1));
+      e.style.opacity=(base*(0.85+sd*0.3)).toFixed(2);
+      e.style.setProperty('--d',(per*(0.85+sd*0.5)).toFixed(0)+'s');
+      e.style.animationDelay='-'+(sd*per).toFixed(1)+'s';
+    }
+    box.style.opacity='1';
+  }
+  function paintFog(r){
+    var box=el('fogband');if(!box)return;
+    if(SYN||!r.fog){box.style.opacity='0';box.innerHTML='';box._n=0;return;}
+    if(!box._n){var s='';for(var i=0;i<4;i++)s+='<i></i>';box.innerHTML=s;box._n=1;}
+    var kids=box.children;
+    for(var k=0;k<kids.length;k++){
+      var e=kids[k],sd=((k*17)%7)/7;
+      e.style.setProperty('--h',(7+sd*9).toFixed(1)+'vh');
+      e.style.setProperty('--o',(0.5+sd*0.45).toFixed(2));
+      e.style.setProperty('--d',(26+sd*24).toFixed(0)+'s');
+      e.style.top=(4+k*11+sd*5).toFixed(1)+'vh';
+      e.style.animationDelay='-'+(sd*20).toFixed(1)+'s';
+      e.style.opacity=(0.55+sd*0.45).toFixed(2);
+    }
+    box.style.opacity=String(r.fog);
+  }
+
+  /* 降水粒子：雨雪共用一块 canvas，强度按配方分级，首帧立即出画面 */
   function weatherFX(w,win){
     var box=el('rain'),flash=el('flash');
     if(!box)return;
     if(box._t){clearInterval(box._t);box._t=null}
     if(box._fx){try{box._fx()}catch(e){};box._fx=null}
     box.innerHTML='';
-    if(SYN||w!=='rain'&&w!=='snow'&&w!=='thunder')return;
-    if(w==='snow'){var h='',sz;
-      for(var i=0;i<54;i++){sz=(2.2+Math.random()*2.4).toFixed(1);
-        h+='<i class="sf" style="--t:'+(-Math.random()*7).toFixed(2)+'s;--d:'+(4.5+Math.random()*4).toFixed(2)+'s;left:'+Math.round(Math.random()*104-2)+'%;--x:'+(Math.random()*8-4).toFixed(1)+'vw;width:'+sz+'px;height:'+sz+'px"></i>';}
-      box.innerHTML=h;return;}
-    /* 电影雨：Canvas 直线下落，近粗远细 + 速度拖影 */
+    var r=wxRecipe();
+    if(r.flash&&flash){
+      var tkk=function(){
+        if(D.hidden)return;
+        if(Math.random()<.75){
+          flash.classList.remove('on','far');void flash.offsetWidth;
+          flash.classList.add('on');if(Math.random()<.5)flash.classList.add('far');
+        }
+      };
+      box._t=setInterval(tkk,4200);setTimeout(tkk,600+Math.random()*1800);
+    }
+    if(SYN)return;
+    var snow=r.snow>0,rain=r.rain>0;
+    if(!snow&&!rain)return;
+    var inten=snow?r.snow:r.rain;
+    var rgb=snow?wxRGB('--wx-snowrgb','230,238,252'):wxRGB('--wx-rainrgb','90,110,142');
     var c=document.createElement('canvas');
     c.style.cssText='position:absolute;inset:0;width:100%;height:100%;display:block';
     box.appendChild(c);
     var ctx=c.getContext('2d');
     function rs(){c.width=c.clientWidth||innerWidth;c.height=c.clientHeight||innerHeight}
-    var PAL=(function(){var sk=H.getAttribute('data-sky')||'';if(sk==='day'||sk==='dawn'||sk==='dusk')return {a:'rgba(104,124,160,',b:'rgba(112,132,168,',c:'rgba(96,112,148,'};return {a:'rgba(210,228,255,',b:'rgba(216,233,255,',c:'rgba(182,202,255,'}})();
     rs();
-    var n=Math.min(220,Math.round(72+(win||14)*4)),drops=[];
-    for(var i=0;i<n;i++){
-      var z=Math.random(),sp=390+z*z*1020+Math.random()*190,ln=8+z*z*50+Math.random()*7;
-      drops.push({x:Math.random()*c.width,y:Math.random()*c.height*1.3-c.height,z:z,len:ln,sp:sp,
-        w:.6+z*1.7,a:.12+z*.4,ph:Math.random()*6.283,gf:.6+Math.random()*1.6,
-        tail:z>.68&&Math.random()<.6});
+    var wnd=Math.abs(win==null?(WX.wind==null?12:WX.wind):win*3.6);
+    var parts=[],i;
+    if(snow){
+      var ns=Math.min(240,Math.round(48+inten*150));
+      for(i=0;i<ns;i++){
+        var z=Math.random();
+        parts.push({x:Math.random()*c.width,y:Math.random()*c.height,z:z,
+          r:1+z*2.6,sp:(16+z*26)*(0.7+inten*0.6),ph:Math.random()*6.283,
+          sw:12+z*26,a:.45+z*.5});
+      }
+    }else{
+      var nr=Math.min(340,Math.round(60+inten*130+wnd*3));
+      for(i=0;i<nr;i++){
+        var z2=Math.random();
+        parts.push({x:Math.random()*c.width,y:Math.random()*c.height*1.3,z:z2,
+          len:9+z2*z2*52+inten*22,sp:300+z2*z2*900+Math.random()*180,
+          w:0.7+z2*2.1,a:.16+z2*.42,sk:0.35+Math.min(.5,wnd/90)});
+      }
     }
     var alive=true,last=0;
     function resize(){rs()}
@@ -692,41 +930,31 @@ html[data-wxm] .wxc2{opacity:1}
       if(!alive)return;
       var dt=Math.min(.05,(t-last)/1000||.016);last=t;
       ctx.clearRect(0,0,c.width,c.height);
-      for(var i=0;i<drops.length;i++){
-        var d=drops[i];
-        d.y+=d.sp*dt;
-        d.x+=(Math.sin(d.ph+t*.002*d.gf)*.5)*d.w;
-        if(d.y-d.len>c.height||d.x<-90||d.x>c.width+90){
-          d.y=-d.len-Math.random()*300;d.x=Math.random()*c.width;
-          d.sp=390+d.z*d.z*1020+Math.random()*190;
-          d.w=.6+d.z*1.7;d.len=8+d.z*d.z*50+Math.random()*7;}
-        /* 细核心线（头部实） */
-        ctx.strokeStyle=PAL.a+(d.a*.9).toFixed(3)+')';
-        ctx.lineWidth=d.w*.45;ctx.lineCap='round';
-        ctx.beginPath();ctx.moveTo(d.x,d.y);ctx.lineTo(d.x+d.w*.15,d.y-d.len*.14);ctx.stroke();
-        /* 弥散光晕（亮头渐隐） */
-        var g=ctx.createLinearGradient(0,d.y,0,d.y+d.len*.6);
-        g.addColorStop(0,PAL.b+(d.a*.7).toFixed(3)+')');
-        g.addColorStop(1,PAL.b+'0)');
-        ctx.strokeStyle=g;ctx.lineWidth=d.w;ctx.beginPath();
-        ctx.moveTo(d.x,d.y);ctx.lineTo(d.x,d.y+d.len*.62);ctx.stroke();
-        /* 近景随机拖尾 */
-        if(d.tail){
-          var g2=ctx.createLinearGradient(0,d.y+d.len*.55,0,d.y+d.len*2);
-          g2.addColorStop(0,PAL.c+(d.a*.15).toFixed(3)+')');
-          g2.addColorStop(1,PAL.c+'0)');
-          ctx.strokeStyle=g2;ctx.lineWidth=d.w*.5;
-          ctx.beginPath();ctx.moveTo(d.x,d.y+d.len*.6);ctx.lineTo(d.x+d.w*.2,d.y+d.len*2);ctx.stroke();
+      for(var j=0;j<parts.length;j++){
+        var d=parts[j];
+        if(snow){
+          d.y+=d.sp*dt;d.x+=Math.sin(d.ph+t*.0008*(1+d.z))*d.sw*dt;
+          if(d.y-d.r>c.height){d.y=-d.r-Math.random()*60;d.x=Math.random()*c.width;}
+          ctx.beginPath();
+          ctx.fillStyle='rgba('+rgb+','+(d.a*inten).toFixed(3)+')';
+          ctx.arc(d.x,d.y,d.r,0,6.283);ctx.fill();
+          if(d.z>.62){
+            ctx.strokeStyle='rgba('+rgb+','+(d.a*inten*.35).toFixed(3)+')';
+            ctx.lineWidth=d.r*.5;ctx.beginPath();ctx.arc(d.x,d.y,d.r*1.9,0,6.283);ctx.stroke();
+          }
+        }else{
+          d.y+=d.sp*(0.6+inten*0.4)*dt;d.x+=d.sp*d.sk*0.34*dt;
+          if(d.y-d.len>c.height||d.x>c.width+80){d.y=-d.len-Math.random()*260;d.x=Math.random()*c.width*0.6-40*d.sk;}
+          ctx.strokeStyle='rgba('+rgb+','+(d.a*Math.min(1.3,inten)).toFixed(3)+')';
+          ctx.lineWidth=d.w*(0.6+inten*0.5);ctx.lineCap='round';
+          ctx.beginPath();ctx.moveTo(d.x,d.y);
+          ctx.lineTo(d.x-d.len*d.sk,d.y-d.len*(1-d.sk*0.35));ctx.stroke();
         }
       }
       requestAnimationFrame(tick);
     }
-    box._fx=function(){alive=false;removeEventListener('resize',resize);ctx.clearRect(0,0,c.width,c.height);c.width=0;c.height=0};
-    requestAnimationFrame(tick);
-    if(w==='thunder'&&flash&&D.body){box._t=setInterval(function(){
-      if(D.hidden||(H.getAttribute('data-sky')!=='night'&&H.getAttribute('data-sky')!=='evening'))return;D.body.appendChild(flash);
-      flash.style.animation='flash 1.5s linear 1';
-      setTimeout(function(){flash.style.animation=''},1700);},42000);}
+    box._fx=function(){alive=false;removeEventListener('resize',resize)};
+    tick(performance.now());
   }
   /* ---------- 首屏：天色与钟 ---------- */
   function hourLine(){
@@ -734,17 +962,27 @@ html[data-wxm] .wxc2{opacity:1}
     var g=h<5?'夜深了':h<8?'早上好':h<11?'上午好':h<14?'中午好':h<17?'下午好':h<19?'傍晚好':h<23?'晚上好':'夜深了';
     return '<span class="dot"><\/span>'+g+' · '+bjClock(now);
   }
-  /* 地图：把天气画进城市 */
+  /* 地图：把天气画进城市（12 类） */
   function cityFX(w){
-    if(!w||w==='clear')return '<circle class="fxc" r="33"/>';
-    if(w==='cloud')return '<g class="fxcl"><ellipse cx="-17" cy="-46" rx="15" ry="6.5"/><ellipse cx="2" cy="-52" rx="19" ry="8.5"/><ellipse cx="19" cy="-45" rx="13" ry="5.5"/></g>'+
-      '<g class="fxcl d2"><ellipse cx="-8" cy="-38" rx="12" ry="5"/><ellipse cx="10" cy="-40" rx="14" ry="6"/></g>';
-    if(w==='fog')return '<rect class="fxf" x="-38" y="-42" width="76" height="6.5" rx="3.2"/><rect class="fxf" style="animation-delay:-4s" x="-32" y="-26" width="64" height="5.5" rx="2.7"/>';
-    if(w==='snow'){var h='',i;for(i=0;i<10;i++)h+='<circle class="fxs" cx="'+(-40+Math.random()*80).toFixed(0)+'" cy="-52" r="1.8" style="--d:'+(2.4+Math.random()*1.8).toFixed(2)+'s;--t:'+(-Math.random()*4).toFixed(2)+'s"/>';return h}
-    var h='',i;
-    for(i=0;i<9;i++)h+='<line class="fxr" x1="'+(-40+i*10)+'" y1="-46" x2="'+(-42+i*10)+'" y2="-38" style="--d:'+(0.9+Math.random()*0.7).toFixed(2)+'s;--t:'+(-Math.random()*1.5).toFixed(2)+'s"/>';
-    if(w==='thunder')h+='<polygon class="fxb" points="-4,-58 7,-58 -1,-44 7,-44 -10,-26 -3,-38 -9,-38"/>';
-    return h;
+    if(!w||w==='clear'||w==='clear-night')return '<circle class="fxc" r="30"/><circle class="fxc2" r="15"/>';
+    if(w==='partly')return '<circle class="fxc" r="21" cx="12" cy="-14"/><g class="fxcl"><ellipse cx="-14" cy="-40" rx="19" ry="8"/></g>';
+    if(w==='cloudy')return '<g class="fxcl"><ellipse cx="-17" cy="-46" rx="15" ry="6.5"/><ellipse cx="2" cy="-52" rx="19" ry="8.5"/><ellipse cx="19" cy="-45" rx="13" ry="5.5"/></g>'+
+      '<g class="fxcl d2"><ellipse cx="-8" cy="-38" rx="12" ry="5"/><ellipse cx="10" cy="-40" rx="14" ry="6"/></g>'+
+      '<circle class="fxc" r="11" cx="-21" cy="-29"/>';
+    if(w==='overcast')return '<g class="fxcl"><ellipse cx="0" cy="-50" rx="30" ry="11"/></g>'+
+      '<g class="fxcl d2"><ellipse cx="-10" cy="-40" rx="24" ry="9"/><ellipse cx="14" cy="-38" rx="20" ry="8"/></g>';
+    if(w==='haze')return '<g class="fxcl"><ellipse cx="0" cy="-48" rx="26" ry="9"/></g>'+
+      '<rect class="fxf hz" x="-40" y="-34" width="80" height="4.5" rx="2.2"/>'+
+      '<rect class="fxf hz" style="animation-delay:-4s" x="-34" y="-22" width="68" height="4" rx="2"/>';
+    if(w==='fog')return '<rect class="fxf" x="-38" y="-46" width="76" height="6.5" rx="3.2"/>'+
+      '<rect class="fxf" style="animation-delay:-4s" x="-32" y="-32" width="64" height="5.5" rx="2.7"/>'+
+      '<rect class="fxf" style="animation-delay:-7.5s" x="-36" y="-19" width="72" height="5" rx="2.5"/>';
+    if(w==='snow'){var s='',i;for(i=0;i<11;i++)s+='<circle class="fxs" cx="'+(-40+Math.random()*80).toFixed(0)+'" cy="-54" r="2" style="--d:'+(2.4+Math.random()*1.8).toFixed(2)+'s;--t:'+(-Math.random()*4).toFixed(2)+'s"/>';return s}
+    var k='',j;
+    for(j=0;j<9;j++)k+='<line class="fxr" x1="'+(-40+j*10)+'" y1="-48" x2="'+(-42+j*10)+'" y2="-40" style="--d:'+(0.9+Math.random()*0.7).toFixed(2)+'s;--t:'+(-Math.random()*1.5).toFixed(2)+'s"/>';
+    if(w==='sleet')k+='<circle class="fxs" cx="-12" cy="-52" r="2"/><circle class="fxs" style="--d:2.8s" cx="14" cy="-50" r="1.8"/>';
+    if(w==='thunder')k+='<polygon class="fxb" points="-4,-58 7,-58 -1,-44 7,-44 -10,-26 -3,-38 -9,-38"/>';
+    return k;
   }
   function setCityFX(id,w){
     var g=el(id);if(!g)return;
@@ -777,14 +1015,16 @@ html[data-wxm] .wxc2{opacity:1}
     if(!orb2){orb2=D.createElement('div');orb2.id='skyorb2';D.body.appendChild(orb2);}
     /* 天气遮日月：降水(雨/雪/雷)太阳全隐，阴/雾太阳变淡；月亮不受影响 */
     function wxMask(){
-      var w=H.getAttribute('data-wx')||'';
-      if(w==='rain'||w==='snow'||w==='thunder')return 0;
-      if(w==='cloud'||w==='fog')return 0.35;
-      return 1;
+      if(!WX.ok&&!WX.forced)return 0.34;      /* 三个源全挂：中性阴天，不假装晴天 */
+      return wxRecipe().sun;
+    }
+    function moonMask(){
+      if(!WX.ok&&!WX.forced)return 0.3;
+      return wxRecipe().moon;
     }
     function apply(o,on,tt){
-      var sun=(o===orb),mask=sun?wxMask():1;
-      o.style.opacity=on?(sun?String(.95*mask):'.85'):'0';
+      var sun=(o===orb),mask=sun?wxMask():moonMask();
+      o.style.opacity=on?String((sun?.95:.85)*mask):'0';
       if(on){o.style.left=(8+tt*80)+'vw';o.style.top=(17-Math.sin(Math.PI*tt)*8)+'vh';}
     }
     var day,moon,t,mt;
@@ -839,7 +1079,8 @@ html[data-wxm] .wxc2{opacity:1}
     if(D.hidden||SYN)return;
     var sk=H.getAttribute('data-sky');if(sk!=='night'&&sk!=='evening')return;
     var w=H.getAttribute('data-wx');
-    if(w&&w!=='clear'&&w!=='cloud')return;
+    if(w&&w!=='clear'&&w!=='cloud'&&w!=='partly')return;
+    if(WX.ok&&WX.cloud!=null&&WX.cloud>55)return;
     if(Math.random()<.42){
       var m2=el('meteor');
       if(!m2){m2=D.createElement('div');m2.id='meteor';D.body.appendChild(m2);}
