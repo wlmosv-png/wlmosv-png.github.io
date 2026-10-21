@@ -264,7 +264,7 @@ html[data-wx="haze"] #wxveil{background:var(--wx-veil-haze);opacity:.72}
 html[data-wx="haze"] #fogband i{background:linear-gradient(90deg,transparent,var(--wx-hazec),transparent)}
 html[data-wx="snow"] #wxveil,html[data-wx="sleet"] #wxveil{background:var(--wx-veil-snow);opacity:.85}
 #clouds{position:fixed;left:0;right:0;top:0;height:54vh;z-index:0;pointer-events:none;opacity:0;transition:opacity 2s linear;overflow:hidden}
-#clouds i{position:absolute;display:block;filter:blur(5px);
+#clouds i{position:absolute;display:block;filter:blur(3.5px);
   animation:cldsway var(--d,60s) ease-in-out infinite alternate}
 #clouds i b{position:absolute;display:block;background:var(--wx-cf);border-radius:50%}
 #clouds i b:nth-child(1){width:34%;height:58%;left:0;bottom:6%}
@@ -274,7 +274,7 @@ html[data-wx="snow"] #wxveil,html[data-wx="sleet"] #wxveil{background:var(--wx-v
 #clouds i b:nth-child(5){width:22%;height:40%;left:79%;bottom:0;background:var(--wx-cf2)}
 @keyframes cldsway{from{transform:translateX(-2.6vw)}to{transform:translateX(2.6vw)}}
 #fogband{position:fixed;left:0;right:0;top:0;height:56vh;z-index:0;pointer-events:none;opacity:0;transition:opacity 2s linear;overflow:hidden}
-#fogband i{position:absolute;left:-30vw;width:160vw;height:var(--h,10vh);border-radius:50%;filter:blur(10px);
+#fogband i{position:absolute;left:-30vw;width:160vw;height:var(--h,10vh);border-radius:50%;filter:blur(8px);
   background:linear-gradient(90deg,transparent,var(--wx-fogc),transparent);opacity:var(--o,.7);
   animation:fogdrift var(--d,40s) ease-in-out infinite alternate}
 @keyframes fogdrift{from{transform:translateX(-6vw)}to{transform:translateX(6vw)}}
@@ -294,6 +294,12 @@ html[data-cloud="3"][data-sky="night"] #cast,html[data-cloud="3"][data-sky="even
 #flash.on.far{animation-name:flzf;animation-duration:1.15s}
 @keyframes flz{0%{opacity:0}3%{opacity:.85}8%{opacity:.06}12%{opacity:.7}20%{opacity:.02}30%{opacity:.32}100%{opacity:0}}
 @keyframes flzf{0%{opacity:0}7%{opacity:.34}15%{opacity:.04}100%{opacity:0}}
+html[data-wx="drizzle"] #rain,html[data-wx="rain"] #rain,html[data-wx="heavy-rain"] #rain,html[data-wx="thunder"] #rain{
+  background:repeating-linear-gradient(99deg,rgba(190,205,235,.03) 0 1px,transparent 1px 8px)}
+html[data-sky="day"][data-wx="rain"] #rain,html[data-sky="day"][data-wx="heavy-rain"] #rain,
+html[data-sky="dawn"][data-wx="rain"] #rain,html[data-sky="dawn"][data-wx="heavy-rain"] #rain,
+html[data-sky="dusk"][data-wx="rain"] #rain,html[data-sky="dusk"][data-wx="heavy-rain"] #rain{
+  background:repeating-linear-gradient(99deg,rgba(64,86,118,.05) 0 1px,transparent 1px 8px)}
 html.no-motion #clouds,html.no-motion #fogband,html.no-motion #wxveil{display:none}
 html[data-wx="rain"] .arc,html[data-wx="snow"] .arc{opacity:.4}
 html[data-wx="cloud"],html[data-wx="rain"],html[data-wx="snow"],html[data-wx="fog"]{--glow:0 0 44px 4px rgba(150,150,160,.10)}
@@ -877,7 +883,7 @@ html[data-wxm] .wxc2{opacity:1}
     box.style.opacity=String(r.fog);
   }
 
-  /* 降水粒子：雨雪共用一块 canvas，强度按配方分级，首帧立即出画面 */
+  /* 降水粒子 v2：分景深 + 短雨丝 + 按透明度批处理（每帧仅 4 次 draw call）+ DPR 限幅 + 掉帧自适应 */
   function weatherFX(w,win){
     var box=el('rain'),flash=el('flash');
     if(!box)return;
@@ -904,54 +910,86 @@ html[data-wxm] .wxc2{opacity:1}
     c.style.cssText='position:absolute;inset:0;width:100%;height:100%;display:block';
     box.appendChild(c);
     var ctx=c.getContext('2d');
-    function rs(){c.width=c.clientWidth||innerWidth;c.height=c.clientHeight||innerHeight}
+    var DPR=Math.min(2,window.devicePixelRatio||1);
+    var W=0,H=0;
+    function rs(){
+      W=c.clientWidth||innerWidth;H=c.clientHeight||innerHeight;
+      c.width=Math.round(W*DPR);c.height=Math.round(H*DPR);
+      ctx.setTransform(DPR,0,0,DPR,0,0);
+    }
     rs();
     var wnd=Math.abs(win==null?(WX.wind==null?12:WX.wind):win*3.6);
-    var parts=[],i;
+    var skew=Math.min(.40,.10+wnd/170);
+    var LAY=[[.55,.55,.75],[.8,.85,.95],[1,1,1.1]];
+    var parts=[],i,z,L;
     if(snow){
-      var ns=Math.min(240,Math.round(48+inten*150));
+      var ns=Math.min(150,Math.round(30+inten*74));
       for(i=0;i<ns;i++){
-        var z=Math.random();
-        parts.push({x:Math.random()*c.width,y:Math.random()*c.height,z:z,
-          r:1+z*2.6,sp:(16+z*26)*(0.7+inten*0.6),ph:Math.random()*6.283,
-          sw:12+z*26,a:.45+z*.5});
+        z=Math.random();L=LAY[(z*3)|0];
+        parts.push({x:Math.random()*W,y:Math.random()*H,r:(1+z*2)*(.8+L[1]*.4),
+          sp:(22+z*30)*L[2],ph:Math.random()*6.283,sw:(10+z*22),
+          a:(.28+z*.40)*L[0],b:Math.min(3,(z*3)|0)});
       }
     }else{
-      var nr=Math.min(340,Math.round(60+inten*130+wnd*3));
+      var nr=Math.round((24+inten*46)*1.28);
       for(i=0;i<nr;i++){
-        var z2=Math.random();
-        parts.push({x:Math.random()*c.width,y:Math.random()*c.height*1.3,z:z2,
-          len:9+z2*z2*52+inten*22,sp:300+z2*z2*900+Math.random()*180,
-          w:0.7+z2*2.1,a:.16+z2*.42,sk:0.35+Math.min(.5,wnd/90)});
+        z=Math.random();L=LAY[(z*3)|0];
+        parts.push({x:Math.random()*W,y:Math.random()*H,
+          len:(4+z*z*16+inten*7)*L[1],
+          sp:(250+z*320)*L[2]*.85,
+          w:.55+z*.85,a:(.10+z*.26)*L[0],b:Math.min(3,(z*4)|0)});
       }
     }
-    var alive=true,last=0;
-    function resize(){rs()}
+    var alphas=[.09,.18,.27,.36],widths=[.6,1.05,1.5,1.95];
+    var buckets=[[],[],[],[]];
+    for(i=0;i<parts.length;i++)buckets[parts[i].b].push(parts[i]);
+    c.dataset.n=parts.length;
+    var alive=true,last=0,frames=0,slow=0,trimmed=false;
+    function resize(){rs();for(var p=0;p<parts.length;p++){parts[p].x=Math.random()*W;parts[p].y=Math.random()*H}}
     addEventListener('resize',resize);
+    function regrid(n){
+      parts.length=n;buckets=[[],[],[],[]];
+      for(var q=0;q<n;q++)buckets[parts[q].b].push(parts[q]);
+      if(c.dataset)c.dataset.n=n;
+    }
     function tick(t){
       if(!alive)return;
       var dt=Math.min(.05,(t-last)/1000||.016);last=t;
-      ctx.clearRect(0,0,c.width,c.height);
-      for(var j=0;j<parts.length;j++){
-        var d=parts[j];
-        if(snow){
-          d.y+=d.sp*dt;d.x+=Math.sin(d.ph+t*.0008*(1+d.z))*d.sw*dt;
-          if(d.y-d.r>c.height){d.y=-d.r-Math.random()*60;d.x=Math.random()*c.width;}
-          ctx.beginPath();
-          ctx.fillStyle='rgba('+rgb+','+(d.a*inten).toFixed(3)+')';
-          ctx.arc(d.x,d.y,d.r,0,6.283);ctx.fill();
-          if(d.z>.62){
-            ctx.strokeStyle='rgba('+rgb+','+(d.a*inten*.35).toFixed(3)+')';
-            ctx.lineWidth=d.r*.5;ctx.beginPath();ctx.arc(d.x,d.y,d.r*1.9,0,6.283);ctx.stroke();
+      if(snow){
+        ctx.clearRect(0,0,W,H);
+        for(var b1=0;b1<4;b1++){
+          var arr1=buckets[b1];if(!arr1.length)continue;
+          ctx.fillStyle='rgba('+rgb+','+(alphas[b1]*Math.min(1.2,inten*1.35)).toFixed(3)+')';
+          for(var j1=0;j1<arr1.length;j1++){
+            var d1=arr1[j1];
+            d1.y+=d1.sp*dt;d1.x+=Math.sin(d1.ph+t*.0008)*d1.sw*dt;
+            if(d1.y-d1.r>H){d1.y=-d1.r-Math.random()*40;d1.x=Math.random()*W}
+            if(d1.x<-20)d1.x=W+10;else if(d1.x>W+20)d1.x=-10;
+            ctx.beginPath();ctx.arc(d1.x,d1.y,d1.r,0,6.283);ctx.fill();
           }
-        }else{
-          d.y+=d.sp*(0.6+inten*0.4)*dt;d.x+=d.sp*d.sk*0.34*dt;
-          if(d.y-d.len>c.height||d.x>c.width+80){d.y=-d.len-Math.random()*260;d.x=Math.random()*c.width*0.6-40*d.sk;}
-          ctx.strokeStyle='rgba('+rgb+','+(d.a*Math.min(1.3,inten)).toFixed(3)+')';
-          ctx.lineWidth=d.w*(0.6+inten*0.5);ctx.lineCap='round';
-          ctx.beginPath();ctx.moveTo(d.x,d.y);
-          ctx.lineTo(d.x-d.len*d.sk,d.y-d.len*(1-d.sk*0.35));ctx.stroke();
         }
+      }else{
+        ctx.clearRect(0,0,W,H);
+        for(var b2=0;b2<4;b2++){
+          var arr2=buckets[b2];if(!arr2.length)continue;
+          ctx.strokeStyle='rgba('+rgb+','+(alphas[b2]*Math.min(1.25,inten*1.1)).toFixed(3)+')';
+          ctx.lineWidth=widths[b2]*(.75+inten*.35);
+          ctx.lineCap='round';
+          ctx.beginPath();
+          for(var j2=0;j2<arr2.length;j2++){
+            var d2=arr2[j2];
+            d2.y+=d2.sp*dt;d2.x+=d2.sp*skew*dt*.34;
+            if(d2.y-d2.len>H){d2.y=-d2.len-Math.random()*H*.35;d2.x=Math.random()*W-d2.len*skew}
+            ctx.moveTo(d2.x,d2.y);
+            ctx.lineTo(d2.x-d2.len*skew,d2.y-d2.len);
+          }
+          ctx.stroke();
+        }
+      }
+      frames++;
+      if(!trimmed){
+        if(frames>30&&dt>.032)slow++;else if(frames>30&&dt<.024)slow=0;
+        if(slow>10&&parts.length>28){regrid(Math.floor(parts.length*.6));trimmed=true}
       }
       requestAnimationFrame(tick);
     }
