@@ -330,6 +330,13 @@ html[data-wx="clear"],html[data-wx="partly"]{--haze:rgba(178,206,238,.10)}
 html[data-sky="day"] #skyorb{background:radial-gradient(circle at 46% 42%,#fffdf4 0%,#ffeaa8 40%,#ffd274 62%,rgba(255,198,96,0) 78%)}
 html[data-sky="day"] #skyorb:not(.moon)::before{background:radial-gradient(circle,rgba(255,255,252,.32) 0%,rgba(228,240,255,.13) 48%,rgba(208,226,250,.05) 62%,transparent 74%);opacity:.3}
 html[data-sky="day"] #skyorb:not(.moon)::after{opacity:.18}
+
+/* ---- 蓝天加深：蓝往上铺开、天顶更饱和 ---- */
+html[data-sky="day"]{--wx-veil-clear:linear-gradient(180deg,rgba(62,124,200,.60) 0%,rgba(102,154,214,.34) 26%,rgba(158,194,228,.16) 46%,rgba(212,229,242,.05) 60%,transparent 76%)}
+html[data-sky="dawn"]{--wx-veil-clear:linear-gradient(180deg,rgba(84,138,206,.52) 0%,rgba(148,186,224,.28) 30%,rgba(230,212,200,.14) 50%,transparent 74%)}
+html[data-sky="dusk"]{--wx-veil-clear:linear-gradient(180deg,rgba(80,118,192,.52) 0%,rgba(150,168,216,.28) 30%,rgba(236,198,176,.16) 52%,transparent 74%)}
+html[data-sky="night"],html[data-sky="evening"]{--wx-veil-clear:linear-gradient(180deg,rgba(30,46,96,.56) 0%,rgba(26,40,78,.24) 40%,transparent 72%)}
+html[data-wx="partly"] #wxveil{background:linear-gradient(180deg,rgba(72,132,202,.54) 0%,rgba(116,162,214,.30) 28%,rgba(174,202,232,.10) 52%,transparent 74%);opacity:1}
 html[data-wx="rain"] .arc,html[data-wx="snow"] .arc{opacity:.4}
 html[data-wx="cloud"],html[data-wx="rain"],html[data-wx="snow"],html[data-wx="fog"]{--glow:0 0 44px 4px rgba(150,150,160,.10)}
 @media (max-width:520px){
