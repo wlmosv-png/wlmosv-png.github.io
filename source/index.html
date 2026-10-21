@@ -318,6 +318,18 @@ html[data-sky="day"] #skyorb{background:radial-gradient(circle at 46% 42%,#fff8e
 html[data-wx="clear"] #skyorb,html[data-wx="partly"] #skyorb{width:30px;height:30px}
 #clouds,#fogband,#wxveil{transition:opacity 1.3s linear}
 #skyorb,#skyorb2{transition:opacity 1.3s linear,background 1.3s linear,box-shadow 1.3s linear}
+
+/* ---- 蓝天精修：白天以蓝为主，压掉黄白 ---- */
+html[data-sky="day"]{--wx-veil-clear:linear-gradient(180deg,rgba(86,140,204,.50) 0%,rgba(128,170,220,.24) 30%,rgba(196,218,238,.10) 52%,transparent 72%)}
+html[data-sky="dawn"]{--wx-veil-clear:linear-gradient(180deg,rgba(108,152,208,.44) 0%,rgba(176,198,224,.22) 34%,rgba(240,214,196,.12) 52%,transparent 72%)}
+html[data-sky="dusk"]{--wx-veil-clear:linear-gradient(180deg,rgba(104,132,196,.44) 0%,rgba(178,178,214,.22) 34%,rgba(242,200,172,.14) 54%,transparent 72%)}
+html[data-sky="night"],html[data-sky="evening"]{--wx-veil-clear:linear-gradient(180deg,rgba(36,52,96,.50) 0%,rgba(30,44,82,.20) 40%,transparent 70%)}
+html[data-wx="clear"] #wxveil{background:var(--wx-veil-clear);opacity:1}
+html[data-wx="partly"] #wxveil{background:linear-gradient(180deg,rgba(94,146,206,.46) 0%,rgba(136,176,220,.20) 32%,rgba(200,220,238,.06) 54%,transparent 72%);opacity:.95}
+html[data-wx="clear"],html[data-wx="partly"]{--haze:rgba(178,206,238,.10)}
+html[data-sky="day"] #skyorb{background:radial-gradient(circle at 46% 42%,#fffdf4 0%,#ffeaa8 40%,#ffd274 62%,rgba(255,198,96,0) 78%)}
+html[data-sky="day"] #skyorb:not(.moon)::before{background:radial-gradient(circle,rgba(255,255,252,.32) 0%,rgba(228,240,255,.13) 48%,rgba(208,226,250,.05) 62%,transparent 74%);opacity:.3}
+html[data-sky="day"] #skyorb:not(.moon)::after{opacity:.18}
 html[data-wx="rain"] .arc,html[data-wx="snow"] .arc{opacity:.4}
 html[data-wx="cloud"],html[data-wx="rain"],html[data-wx="snow"],html[data-wx="fog"]{--glow:0 0 44px 4px rgba(150,150,160,.10)}
 @media (max-width:520px){
