@@ -966,7 +966,7 @@ html[data-wxm] .wxc2{opacity:1}
   }
   /* 地图：把天气画进城市（12 类） */
   function cityFX(w){
-    if(!w||w==='clear'||w==='clear-night')return '<circle class="fxc" r="30"/><circle class="fxc2" r="15"/>';
+    if(!w||w==='clear'||w==='clear-night')return '<circle class="fxc" r="30"/>';
     if(w==='partly')return '<circle class="fxc" r="21" cx="12" cy="-14"/><g class="fxcl"><ellipse cx="-14" cy="-40" rx="19" ry="8"/></g>';
     if(w==='cloudy')return '<g class="fxcl"><ellipse cx="-17" cy="-46" rx="15" ry="6.5"/><ellipse cx="2" cy="-52" rx="19" ry="8.5"/><ellipse cx="19" cy="-45" rx="13" ry="5.5"/></g>'+
       '<g class="fxcl d2"><ellipse cx="-8" cy="-38" rx="12" ry="5"/><ellipse cx="10" cy="-40" rx="14" ry="6"/></g>'+
@@ -974,8 +974,8 @@ html[data-wxm] .wxc2{opacity:1}
     if(w==='overcast')return '<g class="fxcl"><ellipse cx="0" cy="-50" rx="30" ry="11"/></g>'+
       '<g class="fxcl d2"><ellipse cx="-10" cy="-40" rx="24" ry="9"/><ellipse cx="14" cy="-38" rx="20" ry="8"/></g>';
     if(w==='haze')return '<g class="fxcl"><ellipse cx="0" cy="-48" rx="26" ry="9"/></g>'+
-      '<rect class="fxf hz" x="-40" y="-34" width="80" height="4.5" rx="2.2"/>'+
-      '<rect class="fxf hz" style="animation-delay:-4s" x="-34" y="-22" width="68" height="4" rx="2"/>';
+      '<rect class="fxf" x="-40" y="-34" width="80" height="4.5" rx="2.2"/>'+
+      '<rect class="fxf" style="animation-delay:-4s" x="-34" y="-22" width="68" height="4" rx="2"/>';
     if(w==='fog')return '<rect class="fxf" x="-38" y="-46" width="76" height="6.5" rx="3.2"/>'+
       '<rect class="fxf" style="animation-delay:-4s" x="-32" y="-32" width="64" height="5.5" rx="2.7"/>'+
       '<rect class="fxf" style="animation-delay:-7.5s" x="-36" y="-19" width="72" height="5" rx="2.5"/>';
