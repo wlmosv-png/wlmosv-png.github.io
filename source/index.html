@@ -1072,11 +1072,11 @@ html[data-wxm] .wxc2{opacity:1}
     if(!orb2){orb2=D.createElement('div');orb2.id='skyorb2';D.body.appendChild(orb2);}
     /* 天气遮日月：降水(雨/雪/雷)太阳全隐，阴/雾太阳变淡；月亮不受影响 */
     function wxMask(){
-      if(!WX.ok&&!WX.forced)return 0.34;      /* 三个源全挂：中性阴天，不假装晴天 */
+      if(!WX.ok&&!WX.forced)return 0.2;       /* 数据未到/三源全挂：先别亮太阳，免得"先渲染太阳" */
       return wxRecipe().sun;
     }
     function moonMask(){
-      if(!WX.ok&&!WX.forced)return 0.3;
+      if(!WX.ok&&!WX.forced)return 0.18;
       return wxRecipe().moon;
     }
     function apply(o,on,tt){
