@@ -228,8 +228,8 @@ html[data-sky="day"],html[data-sky="dawn"],html[data-sky="dusk"]{
   --wx-veil-fog:linear-gradient(180deg,rgba(160,170,186,.95),rgba(170,179,194,.62) 38%,rgba(178,186,198,.26) 60%,transparent 80%);
   --wx-veil-haze:linear-gradient(180deg,rgba(190,168,132,.80),rgba(188,172,142,.48) 42%,transparent 74%);
   --wx-veil-snow:linear-gradient(180deg,rgba(120,136,162,.78),rgba(134,148,172,.40) 44%,transparent 72%);
-  --wx-cf:rgba(120,134,158,.92);
-  --wx-cf2:rgba(98,114,140,.82);
+  --wx-cf:rgba(144,157,178,.92);
+  --wx-cf2:rgba(118,133,158,.8);
   --wx-fogc:rgba(196,205,217,.92);
   --wx-hazec:rgba(206,188,158,.88);
   --wx-snowrgb:206,220,242;
@@ -252,7 +252,7 @@ html[data-sky="night"],html[data-sky="evening"]{
 }
 #wxveil{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0;transition:opacity 2s linear;
   background:linear-gradient(180deg,rgba(96,108,126,.6),transparent 64%)}
-html[data-wx="partly"] #wxveil{background:var(--wx-veil-cloudy);opacity:.5}
+html[data-wx="partly"] #wxveil{background:var(--wx-veil-cloudy);opacity:.24}
 html[data-wx="cloudy"] #wxveil{background:var(--wx-veil-cloudy);opacity:.88}
 html[data-wx="overcast"] #wxveil{background:var(--wx-veil-grey);opacity:1}
 html[data-wx="drizzle"] #wxveil{background:var(--wx-veil-wet);opacity:.65}
@@ -264,12 +264,14 @@ html[data-wx="haze"] #wxveil{background:var(--wx-veil-haze);opacity:.72}
 html[data-wx="haze"] #fogband i{background:linear-gradient(90deg,transparent,var(--wx-hazec),transparent)}
 html[data-wx="snow"] #wxveil,html[data-wx="sleet"] #wxveil{background:var(--wx-veil-snow);opacity:.85}
 #clouds{position:fixed;left:0;right:0;top:0;height:54vh;z-index:0;pointer-events:none;opacity:0;transition:opacity 2s linear;overflow:hidden}
-#clouds i{position:absolute;display:block;filter:blur(9px);
+#clouds i{position:absolute;display:block;filter:blur(5px);
   animation:cldsway var(--d,60s) ease-in-out infinite alternate}
 #clouds i b{position:absolute;display:block;background:var(--wx-cf);border-radius:50%}
-#clouds i b:nth-child(1){width:56%;height:78%;left:0;bottom:0}
-#clouds i b:nth-child(2){width:66%;height:100%;left:19%;bottom:4%}
-#clouds i b:nth-child(3){width:48%;height:66%;left:52%;bottom:0;background:var(--wx-cf2)}
+#clouds i b:nth-child(1){width:34%;height:58%;left:0;bottom:6%}
+#clouds i b:nth-child(2){width:46%;height:88%;left:15%;bottom:16%}
+#clouds i b:nth-child(3){width:40%;height:74%;left:39%;bottom:10%}
+#clouds i b:nth-child(4){width:30%;height:54%;left:62%;bottom:2%;background:var(--wx-cf2)}
+#clouds i b:nth-child(5){width:22%;height:40%;left:79%;bottom:0;background:var(--wx-cf2)}
 @keyframes cldsway{from{transform:translateX(-2.6vw)}to{transform:translateX(2.6vw)}}
 #fogband{position:fixed;left:0;right:0;top:0;height:56vh;z-index:0;pointer-events:none;opacity:0;transition:opacity 2s linear;overflow:hidden}
 #fogband i{position:absolute;left:-30vw;width:160vw;height:var(--h,10vh);border-radius:50%;filter:blur(10px);
@@ -277,10 +279,9 @@ html[data-wx="snow"] #wxveil,html[data-wx="sleet"] #wxveil{background:var(--wx-v
   animation:fogdrift var(--d,40s) ease-in-out infinite alternate}
 @keyframes fogdrift{from{transform:translateX(-6vw)}to{transform:translateX(6vw)}}
 html[data-sky="day"] #skyorb:not(.moon)::before{opacity:.5}
-html[data-wx="partly"] #skyorb:not(.moon)::after,html[data-wx="cloudy"] #skyorb:not(.moon)::after,
-html[data-wx="overcast"] #skyorb:not(.moon)::after{content:'';position:absolute;left:-72%;top:-4%;
-  width:244%;height:76%;border-radius:50%;filter:blur(6px);opacity:.72;
-  background:radial-gradient(closest-side,var(--wx-cf) 86%,transparent 100%)}
+html[data-wx="cloudy"] #skyorb:not(.moon)::after,html[data-wx="overcast"] #skyorb:not(.moon)::after{
+  content:'';position:absolute;left:-56%;top:-2%;width:212%;height:66%;border-radius:50%;
+  filter:blur(5px);opacity:.8;background:radial-gradient(closest-side,var(--wx-cf) 84%,transparent 100%)}
 html[data-wx="partly"] #skyorb:not(.moon)::before,html[data-wx="cloudy"] #skyorb:not(.moon)::before{opacity:.32}
 html[data-wx="drizzle"] #skyorb:not(.moon)::before,html[data-wx="fog"] #skyorb:not(.moon)::before,html[data-wx="haze"] #skyorb:not(.moon)::before{opacity:.22}
 /* 天气压掉地平线暖光（只在本页覆盖取值，不改主题定义） */
@@ -817,7 +818,7 @@ html[data-wxm] .wxc2{opacity:1}
     else{
       r.sun=Math.max(0,1-cl/100*1.15);
       if(w==='cloudy'&&r.sun>.5)r.sun=.5;
-      if(w==='partly'&&r.sun>.85)r.sun=.85;
+      if(w==='partly'){r.sun=Math.max(r.sun,.85);r.moon=Math.max(r.moon,.72)}
       r.moon=Math.max(.1,.85-cl/100*.8);
     }
     if(w==='drizzle')r.rain=.38;
@@ -842,17 +843,18 @@ html[data-wxm] .wxc2{opacity:1}
     var box=el('clouds');if(!box)return;
     if(SYN||!r.cops){box.style.opacity='0';box.innerHTML='';box._n=0;return;}
     var n=r.cloud<35?2:(r.cloud<60?4:(r.cloud<85?5:7));
-    if(box._n!==n){var s='';for(var i=0;i<n;i++)s+='<i><b></b><b></b><b></b></i>';box.innerHTML=s;box._n=n;}
+    if(box._n!==n){var s='';for(var i=0;i<n;i++)s+='<i><b></b><b></b><b></b><b></b><b></b></i>';box.innerHTML=s;box._n=n;}
     var ws=(r.w==='thunder'||r.w==='heavy-rain')?Math.max(WX.wind||0,24):(WX.wind==null?8:WX.wind);
     var per=Math.max(40,Math.round(2600/(12+ws))),kids=box.children;
     for(var k=0;k<kids.length;k++){
       var e=kids[k],sd=((k*29)%13)/13;
-      var w2=(52+((k*7)%4)*10)*(0.9+sd*0.25);
+      var base=r.cloud<35?34:(r.cloud<60?46:(r.cloud<85?56:66));
+      var w2=(base+((k*7)%4)*6)*(0.9+sd*0.3);
       e.style.width=w2.toFixed(1)+'vw';e.style.height=(w2*0.30).toFixed(1)+'vw';
       e.style.left=(-8+((k*31)%78)+sd*4).toFixed(1)+'vw';
       e.style.top=(4+((k%3)*9)+sd*5).toFixed(1)+'vh';
-      var base=r.cloud<35?.5:(r.cloud<60?.72:(r.cloud<85?.88:1));
-      e.style.opacity=(base*(0.85+sd*0.3)).toFixed(2);
+      var cop=r.cloud<35?.34:(r.cloud<60?.55:(r.cloud<85?.75:1));
+      e.style.opacity=(cop*(0.85+sd*0.3)).toFixed(2);
       e.style.setProperty('--d',(per*(0.85+sd*0.5)).toFixed(0)+'s');
       e.style.animationDelay='-'+(sd*per).toFixed(1)+'s';
     }
